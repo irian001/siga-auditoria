@@ -6,10 +6,11 @@ aliases:
   - Vocabulário Controlado do SIGA
 type: documento-estruturante
 domain: conhecimento
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-28
 updated: 2026-07-28
+approved: 2026-07-28
 owner: responsavel-projeto
 audience:
   - auditor
@@ -44,7 +45,7 @@ tags:
   - glossario
   - vocabulario-controlado
   - conhecimento
-  - em-revisao
+  - aprovado
 ---
 
 # Glossário do SIGA
@@ -496,7 +497,7 @@ O Glossário controla o vocabulário sem criar regras novas. O SIGA mantém rast
 
 ### Fontes e versionamento
 
-Este material deriva exclusivamente das fontes aprovadas declaradas no YAML deste documento: Constituição e documentos constitucionais na versão indicada, Matriz Mestra v1.2 e Visão do Produto v1.0. A versão desta minuta é 0.9, atualizada em 2026-07-28; alterações futuras devem informar fonte, versão, data, público e responsável.
+Este material deriva exclusivamente das fontes aprovadas declaradas no YAML deste documento: Constituição e documentos constitucionais na versão indicada, Matriz Mestra v1.2 e Visão do Produto v1.0. A versão aprovada é 1.0, em 2026-07-28; alterações futuras devem informar fonte, versão, data, público e responsável.
 
 ## Relações principais
 
@@ -512,5 +513,6 @@ Este material deriva exclusivamente das fontes aprovadas declaradas no YAML dest
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.9 | 2026-07-28 | Minuta inicial do Glossário do SIGA para revisão humana | Em revisão |
-| 0.9 | 2026-07-28 | Correção da rodada 1/5: entradas ausentes, fontes rastreáveis e bloco educacional | Em revisão |
+| 0.9 | 2026-07-28 | Minuta inicial do Glossário do SIGA para revisão humana | Substituída |
+| 0.9 | 2026-07-28 | Correção da rodada 1/5: entradas ausentes, fontes rastreáveis e bloco educacional | Substituída |
+| 1.0 | 2026-07-28 | Aprovação humana do Glossário do SIGA | Aprovada |
