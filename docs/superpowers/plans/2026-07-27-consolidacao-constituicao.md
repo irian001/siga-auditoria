@@ -703,7 +703,7 @@ $titleFiles |
       '\[\[Matriz Mestra da Constituição do SIGA\]\]'
   } |
   Select-Object -ExpandProperty Name
-rg -n "Ã|Â|â€”|�" docs/constituicao
+node -e "const fs=require('fs'),path=require('path'),root='docs/constituicao',bad=/\u00c3[\u0080-\u00bf\u00a0-\u00ff]|\u00c2[\u0080-\u00bf\u00a0-\u00ff]|\u00e2\u20ac[\u0080-\u00bf\u2010-\u203a]|\ufffd/;let hits=[];for(const f of fs.readdirSync(root).filter(x=>x.endsWith('.md'))){const s=fs.readFileSync(path.join(root,f),'utf8');s.split(/\r?\n/).forEach((line,i)=>{if(bad.test(line))hits.push(f+':'+(i+1));});}if(hits.length){console.error(hits.join('\n'));process.exit(1)}"
 rg -n "gho_[A-Za-z0-9]+|sk-[A-Za-z0-9_-]{20,}|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY" docs
 ```
 
