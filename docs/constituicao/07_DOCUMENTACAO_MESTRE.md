@@ -6,10 +6,10 @@ aliases:
   - Sistema Documental do SIGA
 type: documento-constitucional
 domain: governanca-documental
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -80,4 +80,5 @@ Exercício: a partir de uma atividade em andamento, identificar as informações
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 39 a 44 | Em revisão |
+| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 39 a 44 | Substituída |
+| 1.0 | 2026-07-28 | Primeira versão constitucional consolidada e aprovada | Aprovada |

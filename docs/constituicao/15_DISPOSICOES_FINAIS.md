@@ -6,10 +6,10 @@ aliases:
   - Governança Final do SIGA
 type: documento-constitucional
 domain: governanca
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -77,4 +77,5 @@ Exercício: verificar se uma Constituição aprovada foi incluída no repositór
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 80 a 82 | Em revisão |
+| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 80 a 82 | Substituída |
+| 1.0 | 2026-07-28 | Primeira versão constitucional consolidada e aprovada | Aprovada |

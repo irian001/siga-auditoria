@@ -6,10 +6,10 @@ aliases:
   - Constituição do Sistema Integrado para Gerenciamento de Auditoria
 type: constituicao-central
 domain: governanca
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-24
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: sun
@@ -29,10 +29,10 @@ tags:
 
 ## Sistema Integrado para Gerenciamento de Auditoria
 
-**Versão:** 0.9
-**Situação:** Em revisão
+**Versão:** 1.0
+**Situação:** Aprovada
 **Data-base:** 24 de julho de 2026
-**Atualizada em:** 27 de julho de 2026
+**Atualizada em:** 28 de julho de 2026
 
 ---
 
@@ -1156,4 +1156,5 @@ __________________________________________________________________
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-07-24 | Minuta inicial fornecida pelo responsável pelo projeto | Em revisão |
-| 0.9 | 2026-07-27 | Consolidação canônica com refinamentos aprovados, YAML e navegação por títulos | Em revisão |
+| 0.9 | 2026-07-27 | Consolidação canônica com refinamentos aprovados, YAML e navegação por títulos | Substituída |
+| 1.0 | 2026-07-28 | Primeira versão constitucional consolidada e aprovada | Aprovada |

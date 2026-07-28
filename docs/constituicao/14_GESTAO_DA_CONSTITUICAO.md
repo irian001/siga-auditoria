@@ -6,10 +6,10 @@ aliases:
   - Alterações da Constituição do SIGA
 type: documento-constitucional
 domain: governanca-documental
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -68,4 +68,5 @@ Exercício: comparar um texto anterior e um texto novo de um artigo, listar os c
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 77 a 79 | Em revisão |
+| 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 77 a 79 | Substituída |
+| 1.0 | 2026-07-28 | Primeira versão constitucional consolidada e aprovada | Aprovada |

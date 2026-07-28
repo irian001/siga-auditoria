@@ -7,9 +7,9 @@ aliases:
 type: matriz-mestra
 domain: governanca-documental
 status: aprovado
-version: 1.1
+version: 1.2
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: hub
@@ -57,15 +57,15 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 | IV — Estrutura Funcional | SIGA-CON-04 | [[Estrutura Funcional do SIGA]] | 20–24 | 1.0 | aprovado |
 | V — Arquitetura Tecnológica | SIGA-CON-05 | [[Arquitetura Tecnológica do SIGA]] | 25–31 | 1.0 | aprovado |
 | VI — Governança do Desenvolvimento | SIGA-CON-06 | [[Governança do Desenvolvimento do SIGA]] | 32–38 | 1.0 | aprovado |
-| VII — Documentação Mestre | SIGA-CON-07 | [[Documentação Mestre do SIGA]] | 39–44 | 0.9 | em-revisao |
+| VII — Documentação Mestre | SIGA-CON-07 | [[Documentação Mestre do SIGA]] | 39–44 | 1.0 | aprovado |
 | VIII — Conhecimento, Treinamento e NotebookLM | SIGA-CON-08 | [[Conhecimento, Treinamento e Produção Educacional do SIGA]] | 45–53 | 1.0 | aprovado |
 | IX — Regras de Negócio e Metodologia | SIGA-CON-09 | [[Regras de Negócio e Metodologia de Auditoria]] | 54–58 | 1.0 | aprovado |
 | X — Dados, Segurança e Histórico | SIGA-CON-10 | [[Dados, Segurança, Privacidade e Histórico do SIGA]] | 59–64 | 1.0 | aprovado |
 | XI — Qualidade e Testes | SIGA-CON-11 | [[Qualidade, Testes e Validação do SIGA]] | 65–68 | 1.0 | aprovado |
 | XII — Agentes de Inteligência Artificial | SIGA-CON-12 | [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]] | 69–73 | 1.0 | aprovado |
 | XIII — Roadmap e Priorização | SIGA-CON-13 | [[Roadmap, Evolução e Continuidade do SIGA]] | 74–76 | 1.0 | aprovado |
-| XIV — Alterações da Constituição | SIGA-CON-14 | [[Gestão da Constituição do SIGA]] | 77–79 | 0.9 | em-revisao |
-| XV — Disposições Finais | SIGA-CON-15 | [[Disposições Finais do SIGA]] | 80–82 | 0.9 | em-revisao |
+| XIV — Alterações da Constituição | SIGA-CON-14 | [[Gestão da Constituição do SIGA]] | 77–79 | 1.0 | aprovado |
+| XV — Disposições Finais | SIGA-CON-15 | [[Disposições Finais do SIGA]] | 80–82 | 1.0 | aprovado |
 
 ## Cobertura constitucional
 
@@ -129,3 +129,4 @@ Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturante
 | 0.1 | 2026-07-27 | Matriz inicial dos títulos e artigos 1–78 | Substituída |
 | 1.0 | 2026-07-27 | Normalização como hub Obsidian, aliases, navegação, matriz e pendências explícitas | Aprovada |
 | 1.1 | 2026-07-27 | Realinhamento ao conjunto canônico de 15 títulos, 82 artigos e Constituição central | Aprovada |
+| 1.2 | 2026-07-28 | Registro da aprovação da Constituição central e dos Títulos VII, XIV e XV na versão 1.0 | Aprovada |
