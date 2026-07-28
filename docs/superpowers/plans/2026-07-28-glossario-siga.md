@@ -70,7 +70,7 @@ Executar `git diff --check` e procurar `TODO`, `TBD`, `preencher` e `definir dep
 
 Criar o commit `docs: cria glossário do SIGA`, contendo somente o Glossário em revisão.
 
-- [ ] **Step 8: Interromper para aprovação humana**
+- [x] **Step 8: Interromper para aprovação humana**
 
 Apresentar o arquivo v0.9. Não promover, publicar ou alterar a Matriz até receber aprovação expressa.
 
@@ -85,15 +85,15 @@ Apresentar o arquivo v0.9. Não promover, publicar ou alterar a Matriz até rece
 
 **Produces:** Glossário v1.0 aprovado, com backlink da Matriz Mestra e publicação em `main` por pull request.
 
-- [ ] **Step 1: Registrar aprovação**
+- [x] **Step 1: Registrar aprovação**
 
 Atualizar apenas o Glossário para `status: aprovado`, `version: 1.0`, data de aprovação e histórico preservando a linha 0.9 como substituída.
 
-- [ ] **Step 2: Atualizar a Matriz Mestra**
+- [x] **Step 2: Atualizar a Matriz Mestra**
 
 Adicionar [[Glossário do SIGA]] na navegação para documentos estruturantes, sem alterar regras constitucionais.
 
-- [ ] **Step 3: Validar e revisar**
+- [x] **Step 3: Validar e revisar**
 
 Executar `git diff --check origin/main..HEAD` e revisar YAML, wikilinks, termos canônicos e ausência de mudanças fora do escopo.
 
