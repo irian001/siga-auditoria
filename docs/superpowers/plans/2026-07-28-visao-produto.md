@@ -33,7 +33,7 @@
 - Consumes: Constituição 1.0 e documentos constitucionais aprovados.
 - Produces: `SIGA-PRD-001`, fonte estratégica para Glossário, Arquitetura, Modelo de Domínio e Roadmap.
 
-- [ ] **Step 1: Ler as fontes obrigatórias**
+- [x] **Step 1: Ler as fontes obrigatórias**
 
 Ler integralmente:
 
@@ -50,7 +50,7 @@ docs/superpowers/specs/2026-07-28-visao-produto-design.md
 
 Registrar no relatório de execução as fontes efetivamente consultadas.
 
-- [ ] **Step 2: Criar o diretório e o YAML**
+- [x] **Step 2: Criar o diretório e o YAML**
 
 Criar o arquivo com este front matter:
 
@@ -94,7 +94,7 @@ tags:
 ---
 ```
 
-- [ ] **Step 3: Escrever o resumo executivo**
+- [x] **Step 3: Escrever o resumo executivo**
 
 O resumo deverá explicar, em linguagem não técnica:
 
@@ -106,7 +106,7 @@ O resumo deverá explicar, em linguagem não técnica:
 
 Limite recomendado: seis parágrafos curtos.
 
-- [ ] **Step 4: Escrever propósito, problema e públicos**
+- [x] **Step 4: Escrever propósito, problema e públicos**
 
 Criar:
 
@@ -127,7 +127,7 @@ Os públicos deverão incluir:
 
 Não criar a seção “Proposta de valor”.
 
-- [ ] **Step 5: Escrever princípios, diferenciais e experiência**
+- [x] **Step 5: Escrever princípios, diferenciais e experiência**
 
 Criar:
 
@@ -151,7 +151,7 @@ Cobrir:
 
 A experiência deverá ser descrita por público, sem especificar telas ainda inexistentes.
 
-- [ ] **Step 6: Separar produto inicial e visão futura**
+- [x] **Step 6: Separar produto inicial e visão futura**
 
 Criar:
 
@@ -190,7 +190,7 @@ A visão futura poderá mencionar:
 
 Declarar que esses itens não integram automaticamente o MVP.
 
-- [ ] **Step 7: Definir limites, resultados e riscos**
+- [x] **Step 7: Definir limites, resultados e riscos**
 
 Criar:
 
@@ -228,7 +228,7 @@ Riscos estratégicos:
 - acesso inadequado a dados;
 - treinamento insuficiente.
 
-- [ ] **Step 8: Relacionar a Constituição e os próximos documentos**
+- [x] **Step 8: Relacionar a Constituição e os próximos documentos**
 
 Criar:
 
@@ -254,7 +254,7 @@ Listar como próximos documentos:
 
 O Glossário será tratado como documento auxiliar de harmonização antes dos demais detalhamentos.
 
-- [ ] **Step 9: Criar o material educacional**
+- [x] **Step 9: Criar o material educacional**
 
 Criar:
 
@@ -270,7 +270,7 @@ Criar:
 
 O roteiro deverá permitir adaptação para auditores e futuros clientes.
 
-- [ ] **Step 10: Registrar o histórico**
+- [x] **Step 10: Registrar o histórico**
 
 Adicionar:
 
@@ -282,7 +282,7 @@ Adicionar:
 | 0.9 | 2026-07-28 | Criação da versão inicial para revisão | Em revisão |
 ```
 
-- [ ] **Step 11: Validar a versão 0.9**
+- [x] **Step 11: Validar a versão 0.9**
 
 Executar:
 
@@ -334,14 +334,14 @@ Esperado:
 - `git diff --check` sem saída;
 - buscas sem resultados.
 
-- [ ] **Step 12: Commit da versão para revisão**
+- [x] **Step 12: Commit da versão para revisão**
 
 ```powershell
 git add docs/estruturantes/01_VISAO_DO_PRODUTO.md
 git commit -m "docs: cria visão do produto do SIGA"
 ```
 
-- [ ] **Step 13: Interromper para aprovação humana**
+- [x] **Step 13: Interromper para aprovação humana**
 
 Apresentar:
 
@@ -365,7 +365,7 @@ Não promover para `1.0`, não atualizar a Matriz e não enviar à `main` antes 
 - Consumes: aprovação humana expressa da versão 0.9.
 - Produces: Visão do Produto 1.0 integrada ao mapa documental.
 
-- [ ] **Step 1: Registrar a aprovação**
+- [x] **Step 1: Registrar a aprovação**
 
 No YAML da Visão:
 
@@ -381,7 +381,7 @@ No histórico, substituir a situação de `0.9` por `Substituída` e adicionar:
 | 1.0 | YYYY-MM-DD da aprovação humana expressa | Primeira versão aprovada da Visão do Produto | Aprovada |
 ```
 
-- [ ] **Step 2: Atualizar a Matriz Mestra**
+- [x] **Step 2: Atualizar a Matriz Mestra**
 
 Na seção “Navegação para a próxima camada”, assegurar que o primeiro link seja:
 
@@ -391,7 +391,7 @@ Na seção “Navegação para a próxima camada”, assegurar que o primeiro li
 
 Preservar todos os demais links e conteúdos.
 
-- [ ] **Step 3: Validar a versão aprovada**
+- [x] **Step 3: Validar a versão aprovada**
 
 Executar:
 
@@ -406,7 +406,7 @@ Esperado:
 - link encontrado na Matriz;
 - nenhuma falha de whitespace.
 
-- [ ] **Step 4: Commit da aprovação**
+- [x] **Step 4: Commit da aprovação**
 
 ```powershell
 git add docs/estruturantes/01_VISAO_DO_PRODUTO.md docs/constituicao/MATRIZ_MESTRA_DA_CONSTITUICAO_DO_SIGA.md
