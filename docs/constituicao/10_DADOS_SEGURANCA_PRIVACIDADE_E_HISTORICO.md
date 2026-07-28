@@ -3,7 +3,7 @@ id: SIGA-CON-10
 title: Dados, Segurança, Privacidade e Histórico do SIGA
 aliases:
   - Título X
-  - Segurança e Histórico do SIGA
+  - Dados, Segurança e Histórico do SIGA
 type: documento-constitucional
 domain: dados-seguranca
 status: aprovado
