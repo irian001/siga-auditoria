@@ -1,7 +1,7 @@
 # Desenho — Visão do Produto do SIGA
 
-**Data:** 2026-07-28  
-**Situação:** aprovado para especificação  
+**Data:** 2026-07-28<br>
+**Situação:** aprovado para especificação<br>
 **Documento resultante:** `docs/estruturantes/01_VISAO_DO_PRODUTO.md`
 
 ## 1. Objetivo
