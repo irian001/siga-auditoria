@@ -384,9 +384,9 @@ Segurança, integridade, confidencialidade, menor privilégio, minimização de 
 
 ### 9.1 Documento recebido
 
-- **Finalidade:** registrar o material entregue em resposta a uma solicitação ou no contexto autorizado do trabalho.
+- **Finalidade:** registrar o material entregue pelo cliente em resposta a uma solicitação.
 - **Identidade conceitual:** o [[Documento Recebido]] preserva o material fornecido, sua origem, versão e vínculos aplicáveis antes da avaliação do auditor.
-- **Relações:** cliente ou outra origem autorizada, solicitação, instrução, anexo, versão, histórico e evidência.
+- **Relações:** cliente, solicitação, instrução, anexo, versão, histórico e evidência.
 - **Responsabilidades:** o remetente e o recebimento devem ser identificáveis; o auditor avalia o material antes de incorporá-lo como evidência.
 - **Estados:** recebimento, substituição, avaliação, revogação ou retenção podem ser registrados conforme o contexto, preservando versões e histórico.
 - **Limites:** documento recebido não é, por si só, evidência validada. Substituição silenciosa é proibida pelas fontes.
@@ -560,7 +560,7 @@ Os vínculos precisam mostrar a origem e o contexto sem sugerir suficiência aut
 
 ### 15.1 Núcleo do MVP
 
-O núcleo valida um trabalho de auditoria do início ao fim e inclui, de forma progressiva, organização usuária, usuários, cliente, trabalho, planejamento, balancete, mapeamento de contas, riscos, controles, procedimentos, amostras, solicitações, instruções, documentos recebidos, evidências, papéis de trabalho, achados, revisão, conclusões e relatório.
+O núcleo valida um trabalho de auditoria do início ao fim e inclui, de forma progressiva, organização usuária, usuários, cliente, segmento, aceitação e continuidade, trabalho, planejamento, base metodológica, processos, balancete, mapeamento de contas, riscos, controles, procedimentos, amostras, solicitações, instruções, documentos recebidos, evidências, papéis de trabalho, achados, revisão, conclusões e relatório. Segmento, aceitação e continuidade, base metodológica e processos são mantidos como contextos e referências conceituais alinhados à Estrutura Funcional constitucional, sem acrescentar regras novas.
 
 Mesmo quando a apresentação ou automação for simplificada, o núcleo preserva:
 
