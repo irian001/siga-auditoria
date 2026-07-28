@@ -1,8 +1,8 @@
 ---
-id: SIGA-CON-11
+id: SIGA-CON-13
 title: Roadmap, Evolução e Continuidade do SIGA
 aliases:
-  - Título XI
+  - Título XIII
   - Roadmap do SIGA
 type: documento-constitucional
 domain: estrategia-produto
@@ -16,7 +16,7 @@ obsidian:
   graph_role: primary
   backlinks_expected: true
   dataview_ready: true
-constitution: [Art. 66, Art. 67, Art. 68, Art. 69, Art. 70, Art. 71]
+constitution: [Art. 74, Art. 75, Art. 76]
 related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
@@ -29,14 +29,14 @@ related:
 tags: [siga, constituicao, roadmap, evolucao, continuidade, mvp]
 ---
 
-# TÍTULO XI — ROADMAP, EVOLUÇÃO E CONTINUIDADE DO SIGA
+# TÍTULO XIII — ROADMAP, EVOLUÇÃO E CONTINUIDADE DO SIGA
 
 ## Navegação constitucional
 
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
-- Anterior: [[Qualidade, Testes e Validação do SIGA]]
-- Próximo: [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]]
+- Anterior: [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]]
+- Próximo: [[Gestão da Constituição do SIGA]]
 
 ## Função do roadmap
 

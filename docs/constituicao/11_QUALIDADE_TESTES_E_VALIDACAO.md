@@ -1,8 +1,8 @@
 ---
-id: SIGA-CON-10
+id: SIGA-CON-11
 title: Qualidade, Testes e Validação do SIGA
 aliases:
-  - Título X
+  - Título XI
   - Qualidade e Testes do SIGA
 type: documento-constitucional
 domain: qualidade
@@ -16,7 +16,7 @@ obsidian:
   graph_role: primary
   backlinks_expected: true
   dataview_ready: true
-constitution: [Art. 59, Art. 60, Art. 61, Art. 62, Art. 63, Art. 64, Art. 65]
+constitution: [Art. 65, Art. 66, Art. 67, Art. 68]
 related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
@@ -27,14 +27,14 @@ related:
 tags: [siga, constituicao, qualidade, testes, validacao, revisao]
 ---
 
-# TÍTULO X — QUALIDADE, TESTES E VALIDAÇÃO DO SIGA
+# TÍTULO XI — QUALIDADE, TESTES E VALIDAÇÃO DO SIGA
 
 ## Navegação constitucional
 
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
-- Anterior: [[Regras de Negócio e Metodologia de Auditoria]]
-- Próximo: [[Roadmap, Evolução e Continuidade do SIGA]]
+- Anterior: [[Dados, Segurança, Privacidade e Histórico do SIGA]]
+- Próximo: [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]]
 
 ## Dimensões de qualidade
 

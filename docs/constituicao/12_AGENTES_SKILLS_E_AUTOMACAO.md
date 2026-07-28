@@ -16,7 +16,7 @@ obsidian:
   graph_role: primary
   backlinks_expected: true
   dataview_ready: true
-constitution: [Art. 72, Art. 73, Art. 74, Art. 75, Art. 76, Art. 77, Art. 78]
+constitution: [Art. 69, Art. 70, Art. 71, Art. 72, Art. 73]
 related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
@@ -33,8 +33,8 @@ tags: [siga, constituicao, agentes, skills, automacao, revisao]
 
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
-- Anterior: [[Roadmap, Evolução e Continuidade do SIGA]]
-- Próximo núcleo: [[Glossário do SIGA]]
+- Anterior: [[Qualidade, Testes e Validação do SIGA]]
+- Próximo: [[Roadmap, Evolução e Continuidade do SIGA]]
 
 ## Agente e skill
 
