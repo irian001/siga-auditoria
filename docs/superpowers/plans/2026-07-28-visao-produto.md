@@ -372,13 +372,13 @@ No YAML da Visão:
 ```yaml
 status: aprovado
 version: 1.0
-updated: <data real da aprovação>
+updated: YYYY-MM-DD da aprovação humana expressa
 ```
 
 No histórico, substituir a situação de `0.9` por `Substituída` e adicionar:
 
 ```markdown
-| 1.0 | <data real da aprovação> | Primeira versão aprovada da Visão do Produto | Aprovada |
+| 1.0 | YYYY-MM-DD da aprovação humana expressa | Primeira versão aprovada da Visão do Produto | Aprovada |
 ```
 
 - [ ] **Step 2: Atualizar a Matriz Mestra**
