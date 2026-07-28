@@ -90,7 +90,6 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 ## Navegação para a próxima camada
 
 - [[Visão do Produto do SIGA]]
-- [[Glossário do SIGA]]
 - [[Modelo de Domínio do SIGA]]
 - [[Modelo de Dados do SIGA]]
 - [[Matriz de Rastreabilidade do SIGA]]
@@ -99,6 +98,10 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 - [[Spec-Driven Development]]
 - [[Registro de Agentes do SIGA]]
 - [[Catálogo de Skills do SIGA]]
+
+### Documentos estruturantes
+
+- [[Glossário do SIGA]]
 
 ## Uso no Obsidian
 
@@ -121,7 +124,7 @@ Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturante
 
 ## Pendências explícitas
 
-1. Os links para Glossário, Modelo de Domínio, Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
+1. Os links para Modelo de Domínio, Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
 
 ## Histórico de alterações
 
