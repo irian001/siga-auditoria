@@ -161,7 +161,7 @@ O sucesso será avaliado como critério estratégico e qualitativo, antes da def
 
 ## Relação com a Constituição
 
-Esta visão deriva da [[Constituição do SIGA]], que permanece como norma superior. Ela relaciona a identidade, finalidade e objetivos gerais dos Arts. 1–4; os princípios fundamentais dos Arts. 5–15; os públicos e perfis dos Arts. 16–19; a estrutura funcional e o desenvolvimento gradual dos Arts. 20–24; a governança de desenvolvimento dos Arts. 32–44; a base de conhecimento e a finalidade educacional dos Arts. 45–53; as regras e relações metodológicas dos Arts. 54–58; a qualidade, validação e uso assistivo de ferramentas dos Arts. 66–82.
+Esta visão deriva da [[Constituição do SIGA]], que permanece como norma superior. Ela relaciona a identidade, finalidade e objetivos gerais dos Arts. 1–4; os princípios fundamentais dos Arts. 5–15; os públicos e perfis dos Arts. 16–19; a estrutura funcional e o desenvolvimento gradual dos Arts. 20–24; a governança de desenvolvimento dos Arts. 32–44; a base de conhecimento e a finalidade educacional dos Arts. 45–53; as regras e relações metodológicas dos Arts. 54–58; os Arts. 66–73 abrangem qualidade, testes e agentes; os Arts. 74–76 abrangem roadmap e priorização; os Arts. 77–82 abrangem alterações constitucionais, disposições finais e próximos documentos.
 
 Esta relação orienta o documento sem reproduzir integralmente os artigos. Em caso de conflito, prevalece a Constituição e as decisões expressamente aprovadas conforme a hierarquia documental.
 
