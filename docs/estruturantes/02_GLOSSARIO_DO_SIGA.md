@@ -26,6 +26,19 @@ related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
   - "[[Visão do Produto do SIGA]]"
+sources:
+  - "[[Constituição do SIGA]] (v1.0)"
+  - "[[Matriz Mestra da Constituição do SIGA]] (v1.2)"
+  - "[[Visão do Produto do SIGA]] (v1.0)"
+  - "[[Públicos e Perfis de Uso do SIGA]] (v1.0)"
+  - "[[Estrutura Funcional do SIGA]] (v1.0)"
+  - "[[Arquitetura Tecnológica do SIGA]] (v1.0)"
+  - "[[Documentação Mestre do SIGA]] (v1.0)"
+  - "[[Conhecimento, Treinamento e Produção Educacional do SIGA]] (v1.0)"
+  - "[[Regras de Negócio e Metodologia de Auditoria]] (v1.0)"
+  - "[[Dados, Segurança, Privacidade e Histórico do SIGA]] (v1.0)"
+  - "[[Qualidade, Testes e Validação do SIGA]] (v1.0)"
+  - "[[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]] (v1.0)"
 tags:
   - siga
   - glossario
@@ -63,6 +76,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 **Uso no SIGA.** Apoia procedimentos e não resulta de percentual único aplicado indistintamente; o auditor valida, altera e justifica a seleção.
 
 **Relações.** [[Procedimento]], [[Risco]], [[Evidência]].
+
+### **Conclusão**
+
+**Definição.** Resultado profissional registrado pelo auditor sobre um assunto, sustentado por documentação suficiente, apropriada, compreensível e revisável.
+
+**Uso no SIGA.** Consolida a avaliação do conjunto de riscos, procedimentos, evidências, papéis de trabalho, achados e revisões antes de apoiar o relatório.
+
+**Relações.** [[Evidência]], [[Papel de Trabalho]], [[Achado]], [[Relatório]].
 
 ### **Controle**
 
@@ -162,6 +183,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 
 **Relações.** [[Organização Usuária]], [[Cliente]], [[Trabalho de Auditoria]], [[Autorização]].
 
+### **Menor privilégio**
+
+**Definição.** Princípio de conceder a cada usuário, vínculo ou agente somente o acesso necessário à sua organização, função, responsabilidade, finalidade e período de atuação.
+
+**Uso no SIGA.** Orienta autorizações, links temporários, acessos excepcionais e automações, sem permitir acesso administrativo irrestrito ou proteção apenas pela interface.
+
+**Relações.** [[Autorização]], [[Função no Trabalho]], [[Responsabilidade por Item]], [[Isolamento Multiempresa]].
+
 ### **Trilha de auditoria**
 
 **Definição.** Reconstrução cronológica e contextual dos eventos para responder quem fez o quê, quando, onde, por quê, com qual estado, aprovação e consequência.
@@ -171,6 +200,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 **Relações.** [[Histórico]], [[Autorização]], [[Relatório]].
 
 ## Desenvolvimento, arquitetura e qualidade
+
+### **Ambiente**
+
+**Definição.** Contexto separado de operação do SIGA, como desenvolvimento, homologação ou produção, com credenciais e dados próprios.
+
+**Uso no SIGA.** Separa a construção e a validação da operação efetiva; em desenvolvimento, dados pessoais devem ser fictícios, anonimizados ou mascarados.
+
+**Relações.** [[Homologação]], [[Migração]], [[Teste]], [[Autorização]].
 
 ### **Branch**
 
@@ -196,6 +233,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 
 **Relações.** [[Teste]], [[Aprovação Humana]], [[Commit]].
 
+### **Migração**
+
+**Definição.** Alteração versionada da estrutura ou dos dados persistidos, planejada para preservar integridade, rastreabilidade e continuidade.
+
+**Uso no SIGA.** Migrações de banco são versionadas, exigem aprovação humana quando aplicável e devem ser testadas; uma migração destrutiva bloqueia a liberação.
+
+**Relações.** [[Ambiente]], [[Teste]], [[Reversão]], [[Aprovação Humana]].
+
 ### **Pull request**
 
 **Definição.** Proposta de integração no GitHub sujeita a revisão, com histórico e escopo verificáveis.
@@ -203,6 +248,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 **Uso no SIGA.** Apoia a revisão de alterações antes de a branch principal receber versões revisadas e aprovadas.
 
 **Relações.** [[GitHub]], [[Branch]], [[Commit]].
+
+### **Reversão**
+
+**Definição.** Retorno controlado de uma alteração a estado anterior ou seguro por meio de branch, commit, versão, backup ou migração.
+
+**Uso no SIGA.** É prevista para mudanças pequenas, verificáveis e reversíveis, especialmente antes de liberações que envolvam dados, segurança ou produção.
+
+**Relações.** [[Branch]], [[Commit]], [[Migração]], [[Teste]].
 
 ### **Teste**
 
@@ -221,6 +274,22 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 **Uso no SIGA.** Ajuda a navegar entre hubs, títulos constitucionais, documentos estruturantes e SDDs no Obsidian.
 
 **Relações.** [[Wikilink]], [[Obsidian]], [[Matriz Mestra da Constituição do SIGA]].
+
+### **Canvas**
+
+**Definição.** Recurso auxiliar para representar visualmente relações entre notas e conceitos da base de conhecimento.
+
+**Uso no SIGA.** Pode apoiar a navegação e a compreensão do grafo documental, mas não substitui Markdown, YAML, wikilinks ou a versão oficial no GitHub.
+
+**Relações.** [[Obsidian]], [[Wikilink]], [[Backlink]], [[Fonte Oficial]].
+
+### **Fonte oficial**
+
+**Definição.** Repositório ou sistema reconhecido como referência autoritativa para uma classe de informação do SIGA.
+
+**Uso no SIGA.** O GitHub é a fonte oficial de código e documentação versionada; quando formalmente implantado, o Supabase é a fonte oficial dos dados persistidos. Apoios, cópias e conversas não substituem a versão oficial.
+
+**Relações.** [[GitHub]], [[Obsidian]], [[NotebookLM]], [[Tarefa]].
 
 ### **GitHub**
 
@@ -288,6 +357,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 
 **Relações.** [[Agente]], [[Autonomia]], [[Aprovação Humana]].
 
+### **Tarefa**
+
+**Definição.** Unidade de trabalho registrada que conecta objetivo, escopo, fontes, situação, arquivos autorizados, ações e resultado verificável.
+
+**Uso no SIGA.** Orienta a atuação de pessoas e agentes dentro do escopo aprovado e integra a rastreabilidade entre SDDs, planos, decisões, código e evidências.
+
+**Relações.** [[Agente]], [[Skill]], [[Aprovação Humana]], [[Fonte Oficial]].
+
 ## Produto, organizações e módulos
 
 ### **Cliente**
@@ -297,6 +374,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 **Uso no SIGA.** Pode responder solicitações, enviar documentos e acompanhar pendências no limite de acesso necessário, sem acesso a julgamentos profissionais ou informações internas reservadas.
 
 **Relações.** [[Organização Usuária]], [[Trabalho de Auditoria]], [[Documento Recebido]].
+
+### **Função no trabalho**
+
+**Definição.** Papel exercido por uma pessoa em um trabalho de auditoria específico.
+
+**Uso no SIGA.** É uma dimensão de acesso distinta do perfil geral e da responsabilidade por item; participa da autorização e da segregação no contexto daquele trabalho.
+
+**Relações.** [[Perfil Geral]], [[Responsabilidade por Item]], [[Trabalho de Auditoria]], [[Autorização]].
 
 ### **Módulo**
 
@@ -314,6 +399,22 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 
 **Relações.** [[Cliente]], [[Trabalho de Auditoria]], [[Isolamento Multiempresa]].
 
+### **Perfil geral**
+
+**Definição.** Posição do usuário na organização usuária.
+
+**Uso no SIGA.** Compõe, com a função no trabalho e a responsabilidade por item, a avaliação de permissões; não substitui os vínculos específicos do trabalho.
+
+**Relações.** [[Função no Trabalho]], [[Responsabilidade por Item]], [[Organização Usuária]], [[Autorização]].
+
+### **Responsabilidade por item**
+
+**Definição.** Atribuição de responsabilidade sobre um risco, procedimento, papel de trabalho, solicitação, achado ou relatório específico.
+
+**Uso no SIGA.** Delimita responsabilidade e acesso no nível do item, em conjunto com organização, perfil geral, função no trabalho, estado, confidencialidade e segregação.
+
+**Relações.** [[Perfil Geral]], [[Função no Trabalho]], [[Trabalho de Auditoria]], [[Autorização]].
+
 ### **Trabalho de auditoria**
 
 **Definição.** Execução individual de auditoria que organiza planejamento, riscos, procedimentos, documentos, evidências, papéis, achados, revisão, conclusões e relatório.
@@ -328,6 +429,12 @@ Os wikilinks de conceitos deste Glossário que ainda não possuem arquivo própr
 
 ## Material para treinamento
 
+**Público.** Auditores, gestores, clientes, desenvolvedores e agentes de IA, conforme as permissões e o conteúdo aplicável.
+
+**Nível.** Introdutório, com aplicação orientada para leitores que já participam do contexto do SIGA.
+
+**Pré-requisitos.** Leitura da [[Constituição do SIGA]] e familiaridade básica com Markdown, `[[wikilinks]]`, documentação versionada e o fluxo de um trabalho de auditoria.
+
 ### Objetivos de aprendizagem
 
 - Usar o nome oficial dos conceitos centrais do SIGA.
@@ -341,6 +448,20 @@ Os wikilinks de conceitos deste Glossário que ainda não possuem arquivo própr
 - Documento recebido registra o material entregue; evidência é avaliada pelo auditor.
 - Histórico registra eventos; trilha de auditoria os organiza em contexto.
 - GitHub é fonte oficial; Obsidian e NotebookLM são apoios complementares.
+
+### Erros comuns
+
+- Tratar documento recebido como evidência antes da avaliação do auditor.
+- Confundir perfil geral, função no trabalho e responsabilidade por item ao definir acesso.
+- Usar cópias, conversas ou ferramentas de apoio como se substituíssem a fonte oficial.
+- Considerar uma interface pronta, um teste isolado ou um agente autônomo como aprovação suficiente.
+
+### Boas práticas
+
+- Usar o termo oficial e registrar a fonte, versão e contexto quando propor nova entrada.
+- Relacionar cada decisão, procedimento e resultado aos seus elementos de suporte.
+- Aplicar menor privilégio e verificar permissões também fora da interface.
+- Versionar, testar e prever reversão para mudanças, especialmente em migrações e produção.
 
 ### Roteiro de apresentação
 
@@ -369,6 +490,14 @@ Em um trabalho de auditoria, um risco gera procedimento e solicitação. O clien
 4. Quais são os quatro níveis de autonomia de agentes previstos para o SIGA?
 5. Quando uma nota futura pode receber um wikilink neste Glossário?
 
+### Resumo
+
+O Glossário controla o vocabulário sem criar regras novas. O SIGA mantém rastreabilidade entre o trabalho de auditoria e seus resultados, protege acessos por contexto e registra a evolução em fontes oficiais e versionadas.
+
+### Fontes e versionamento
+
+Este material deriva exclusivamente das fontes aprovadas declaradas no YAML deste documento: Constituição e documentos constitucionais na versão indicada, Matriz Mestra v1.2 e Visão do Produto v1.0. A versão desta minuta é 0.9, atualizada em 2026-07-28; alterações futuras devem informar fonte, versão, data, público e responsável.
+
 ## Relações principais
 
 - [[Constituição do SIGA]]
@@ -384,3 +513,4 @@ Em um trabalho de auditoria, um risco gera procedimento e solicitação. O clien
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.9 | 2026-07-28 | Minuta inicial do Glossário do SIGA para revisão humana | Em revisão |
+| 0.9 | 2026-07-28 | Correção da rodada 1/5: entradas ausentes, fontes rastreáveis e bloco educacional | Em revisão |
