@@ -1,7 +1,7 @@
 # Desenho — Glossário do SIGA
 
-**Data:** 2026-07-28  
-**Situação:** aprovado para especificação  
+**Data:** 2026-07-28
+**Situação:** aprovado para especificação
 **Documento resultante:** `docs/estruturantes/02_GLOSSARIO_DO_SIGA.md`
 
 ## 1. Objetivo
