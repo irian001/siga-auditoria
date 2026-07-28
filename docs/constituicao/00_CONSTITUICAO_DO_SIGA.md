@@ -1081,8 +1081,6 @@ Esta Constituição poderá ser alterada quando:
 - surgirem novas necessidades metodológicas;
 - o responsável pelo projeto aprovar a alteração.
 
-
-**Refinamento aprovado:** A alteração deverá seguir procedimento formal, rastreável e limitado ao necessário.
 ## Art. 78 — Registro
 
 Toda alteração deverá registrar:
@@ -1157,5 +1155,5 @@ __________________________________________________________________
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.1 | 2026-07-24 | Fonte antiga reconstruída, preservada como origem normativa | Histórico preservado |
+| 0.1 | 2026-07-24 | Minuta inicial fornecida pelo responsável pelo projeto | Em revisão |
 | 0.9 | 2026-07-27 | Consolidação canônica com refinamentos aprovados, YAML e navegação por títulos | Em revisão |
