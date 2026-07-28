@@ -42,31 +42,31 @@
 
 **Produces:** Glossário em revisão, com YAML e categorias de auditoria; produto; dados e segurança; desenvolvimento; IA; documentação e treinamento.
 
-- [ ] **Step 1: Extrair os termos canônicos das fontes**
+- [x] **Step 1: Extrair os termos canônicos das fontes**
 
 Montar lista de termos efetivamente usados, com fonte principal. Incluir: risco, controle, procedimento, amostra, documento recebido, evidência, papel de trabalho, achado e relatório; organização usuária, cliente e trabalho; autenticação, autorização, isolamento multiempresa e histórico; branch, commit, pull request, teste e homologação; agente, skill, autonomia e aprovação humana; GitHub, Obsidian, wikilink, backlink e NotebookLM.
 
-- [ ] **Step 2: Criar YAML e navegação estrutural**
+- [x] **Step 2: Criar YAML e navegação estrutural**
 
 Usar `SIGA-GLS-001`, título `Glossário do SIGA`, aliases `Glossário SIGA` e `Vocabulário Controlado do SIGA`, tipo `documento-estruturante`, domínio `conhecimento`, status `em-revisao`, versão `0.9`, datas `2026-07-28`, owner `responsavel-projeto`, e propriedades Obsidian `note_type: glossary`, `graph_role: vocabulary-hub`, `backlinks_expected: true`, `dataview_ready: true`. Relacionar [[Constituição do SIGA]], [[Matriz Mestra da Constituição do SIGA]] e [[Visão do Produto do SIGA]].
 
-- [ ] **Step 3: Escrever convenções e critérios de uso**
+- [x] **Step 3: Escrever convenções e critérios de uso**
 
 Definir o termo em negrito como oficial; sinônimos como auxiliares; termos ausentes como propostas de inclusão; e Constituição/documentos específicos como prevalentes em conflitos.
 
-- [ ] **Step 4: Escrever as seis categorias em ordem alfabética**
+- [x] **Step 4: Escrever as seis categorias em ordem alfabética**
 
 Cada entrada terá termo, definição, uso no SIGA e relações. Incluir sinônimos ou expressão a evitar apenas quando reduzirem ambiguidade.
 
-- [ ] **Step 5: Incluir termos futuros, bloco educacional e histórico**
+- [x] **Step 5: Incluir termos futuros, bloco educacional e histórico**
 
 Declarar wikilinks ainda inexistentes como notas futuras. Adicionar objetivos de aprendizagem, conceitos-chave, roteiro de apresentação, estudo de caso, perguntas e questões de avaliação. Registrar `0.9` como minuta em revisão no histórico.
 
-- [ ] **Step 6: Validar o conteúdo**
+- [x] **Step 6: Validar o conteúdo**
 
 Executar `git diff --check` e procurar `TODO`, `TBD`, `preencher` e `definir depois` no Glossário. Conferir manualmente os pares documento recebido/evidência, histórico/trilha de auditoria e agente/skill; confirmar ausência de regras novas.
 
-- [ ] **Step 7: Commit para revisão humana**
+- [x] **Step 7: Commit para revisão humana**
 
 Criar o commit `docs: cria glossário do SIGA`, contendo somente o Glossário em revisão.
 
