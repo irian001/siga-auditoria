@@ -34,7 +34,7 @@ tags: [siga, constituicao, conhecimento, treinamento, obsidian, notebooklm]
 
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
-- Anterior: [[Dados, Segurança, Privacidade e Histórico do SIGA]]
+- Anterior: [[Documentação Mestre do SIGA]]
 - Próximo: [[Regras de Negócio e Metodologia de Auditoria]]
 
 ## Base interligada

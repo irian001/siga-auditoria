@@ -35,7 +35,7 @@ tags: [siga, constituicao, governanca, desenvolvimento, sdd, git]
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
 - Anterior: [[Arquitetura Tecnológica do SIGA]]
-- Próximo: [[Dados, Segurança, Privacidade e Histórico do SIGA]]
+- Próximo: [[Documentação Mestre do SIGA]]
 
 ## Ciclo obrigatório
 
