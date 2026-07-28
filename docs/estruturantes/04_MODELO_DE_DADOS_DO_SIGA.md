@@ -407,7 +407,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `code`, `version_label`, `effective_from`, `effective_to` | texto curto, texto curto, data, data | `code`, `version_label`, `effective_from`: Sim |
 | `status` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label`. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `effective_from, effective_to`. **Preservação:** versões aprovadas ou aplicadas não são alteradas silenciosamente. **Integridade:** aplica `fk_reference_chart_versions_economic_segments_titularidade` da seção 2.4.1; ANEEL, COSIF e outros referenciais são parametrizações, nunca regras embutidas.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label`. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `effective_from, effective_to`. **Preservação:** versões aprovadas ou aplicadas não são alteradas silenciosamente. **Integridade:** referência a `economic_segments` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; ANEEL, COSIF e outros referenciais são parametrizações, nunca regras embutidas.
 
 ### `reference_accounts`
 
@@ -420,7 +420,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `account_code`, `account_name`, `account_level` | texto curto, texto curto, inteiro | Sim |
 | `account_kind`, `status` | texto curto, texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations`, versão e própria tabela; único por `ownership_scope`, `organization_id` quando existente, `reference_chart_version_id` e `account_code`. **Índices:** `ownership_scope, organization_id`; `reference_chart_version_id, parent_reference_account_id`; `account_code`. **Preservação:** a versão do plano é preservada. **Integridade:** aplica `fk_reference_accounts_reference_chart_versions_titularidade` da seção 2.4.1; pai pertence à mesma versão e titularidade; a conta não é conta do cliente.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations`, versão e própria tabela; único por `ownership_scope`, `organization_id` quando existente, `reference_chart_version_id` e `account_code`. **Índices:** `ownership_scope, organization_id`; `reference_chart_version_id, parent_reference_account_id`; `account_code`. **Preservação:** a versão do plano é preservada. **Integridade:** referência a `reference_chart_versions` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; pai pertence à mesma versão e titularidade; a conta não é conta do cliente.
 
 ### `account_mappings`
 
@@ -480,7 +480,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `code`, `name`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `name`, `status`: Sim |
 | `version_label` | texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** aplica `fk_business_processes_economic_segments_titularidade` da seção 2.4.1; processo referencial não se confunde com seleção no trabalho.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** referência a `economic_segments` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; processo referencial não se confunde com seleção no trabalho.
 
 ### `engagement_processes`
 
@@ -504,7 +504,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `code`, `title`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `title`, `status`: Sim |
 | `version_label` | texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** aplica `fk_risks_business_processes_titularidade` da seção 2.4.1; risco referencial é modelo e não avaliação efetiva.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** referência a `business_processes` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; risco referencial é modelo e não avaliação efetiva.
 
 ### `engagement_risks`
 
@@ -527,7 +527,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `ownership_scope`, `organization_id`, `business_process_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `name`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `name`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente e `code`. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** aplica `fk_controls_business_processes_titularidade` da seção 2.4.1; controle não é evidência de operação efetiva.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente e `code`. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** referência a `business_processes` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; controle não é evidência de operação efetiva.
 
 ### `risk_controls`
 
@@ -549,7 +549,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `name`, `description`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `name`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** aplica `fk_audit_programs_economic_segments_titularidade` da seção 2.4.1; não altera programa aplicado em trabalho iniciado.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** referência a `economic_segments` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; não altera programa aplicado em trabalho iniciado.
 
 ### `audit_procedures`
 
@@ -610,7 +610,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `title`, `content`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `title`, `content`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** o template não altera a instrução já aplicada. **Integridade:** aplica `fk_evidence_instruction_templates_economic_segments_titularidade` da seção 2.4.1; instrução não é solicitação, documento recebido ou evidência.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** o template não altera a instrução já aplicada. **Integridade:** referência a `economic_segments` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; instrução não é solicitação, documento recebido ou evidência.
 
 ### `document_request_templates`
 
@@ -621,7 +621,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `title`, `content`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `title`, `content`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão aplicada é reconstruível. **Integridade:** aplica `fk_document_request_templates_economic_segments_titularidade` da seção 2.4.1; modelo é ponto de partida e não decisão efetiva de solicitação.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão aplicada é reconstruível. **Integridade:** referência a `economic_segments` com escopo de catálogo selecionado para a relação, observando os três caminhos lógicos da seção 2.4.1; modelo é ponto de partida e não decisão efetiva de solicitação.
 
 ### `document_requests`
 
