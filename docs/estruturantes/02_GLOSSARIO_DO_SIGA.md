@@ -110,6 +110,14 @@ Use o termo em **negrito** como forma oficial. Sinônimos são auxiliares de bus
 
 **Relações.** [[Documento Recebido]], [[Papel de Trabalho]], [[Achado]], [[Relatório]].
 
+### **Instrução**
+
+**Definição.** Orientação que define como localizar, extrair, filtrar, preparar e enviar um material; não é documento recebido nem evidência.
+
+**Uso no SIGA.** Uma solicitação pode possuir nenhuma, uma ou várias instruções. A instrução orienta a extração, e a versão efetivamente enviada deve ser preservada. O documento recebido só se torna evidência após avaliação do auditor.
+
+**Relações.** [[Solicitação]], [[Documento Recebido]], [[Evidência]].
+
 ### **Papel de trabalho**
 
 **Definição.** Registro que vincula, conforme aplicável, conta, grupo, processo, ciclo, risco, procedimento, afirmação e evidência.
