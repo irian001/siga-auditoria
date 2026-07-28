@@ -102,6 +102,7 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 ### Documentos estruturantes
 
 - [[Glossário do SIGA]]
+- [[Modelo de Domínio do SIGA]]
 
 ## Uso no Obsidian
 
@@ -124,7 +125,7 @@ Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturante
 
 ## Pendências explícitas
 
-1. Os links para Modelo de Domínio, Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
+1. Os links para Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
 
 ## Histórico de alterações
 

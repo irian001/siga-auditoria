@@ -6,10 +6,11 @@ aliases:
   - Domínio do SIGA
 type: documento-estruturante
 domain: arquitetura-funcional
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-28
 updated: 2026-07-28
+approved: 2026-07-28
 owner: responsavel-projeto
 audience:
   - auditor
@@ -46,7 +47,7 @@ tags:
   - arquitetura-funcional
   - metodologia
   - rastreabilidade
-  - em-revisao
+  - aprovado
 ---
 
 # Modelo de Domínio do SIGA
@@ -702,7 +703,7 @@ O Modelo de Domínio organiza o SIGA em uma cadeia rastreável que começa na or
 
 ### 17.14 Fontes e versão do treinamento
 
-Este material deriva exclusivamente das fontes aprovadas declaradas no YAML. Utiliza o [[Glossário do SIGA]] v1.0 como vocabulário controlado e está vinculado ao Modelo de Domínio v0.9, de 2026-07-28, em revisão humana.
+Este material deriva exclusivamente das fontes aprovadas declaradas no YAML. Utiliza o [[Glossário do SIGA]] v1.0 como vocabulário controlado e está vinculado ao Modelo de Domínio v1.0, aprovado em 2026-07-28.
 
 ## 18. Fontes normativas e estruturantes
 
@@ -720,4 +721,7 @@ Este material deriva exclusivamente das fontes aprovadas declaradas no YAML. Uti
 
 ## 19. Histórico de alterações
 
-- **Versão 0.9 — 2026-07-28 — Em revisão:** criação do Modelo de Domínio do SIGA para revisão humana, com mapa, entidades conceituais, relações, estados, rastreabilidade, extensões e material educacional.
+| Versão | Data | Alteração | Situação |
+|---|---|---|---|
+| 0.9 | 2026-07-28 | Criação do Modelo de Domínio do SIGA para revisão humana, com mapa, entidades conceituais, relações, estados, rastreabilidade, extensões e material educacional | Substituída |
+| 1.0 | 2026-07-28 | Aprovação humana do Modelo de Domínio do SIGA | Aprovada |
