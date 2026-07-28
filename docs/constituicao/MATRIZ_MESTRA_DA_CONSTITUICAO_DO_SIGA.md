@@ -7,9 +7,9 @@ aliases:
 type: matriz-mestra
 domain: governanca-documental
 status: aprovado
-version: 1.0
+version: 1.2
 created: 2026-07-27
-updated: 2026-07-27
+updated: 2026-07-28
 owner: responsavel-projeto
 obsidian:
   note_type: hub
@@ -37,7 +37,15 @@ tags: [siga, constituicao, matriz-mestra, hub, obsidian, governanca]
 
 ## Função da matriz
 
-Esta nota é o hub de navegação e controle da Constituição. Não substitui a [[Constituição do SIGA]] nem os doze documentos dos Títulos I a XII. Liga a Constituição aos documentos constitucionais, documentos estruturantes, SDDs, planos, tarefas e testes.
+Esta nota é o hub de navegação e controle da Constituição. Não substitui a [[Constituição do SIGA]] nem os quinze documentos dos Títulos I a XV. Liga a Constituição aos documentos constitucionais, documentos estruturantes, SDDs, planos, tarefas e código.
+
+## Resumo constitucional
+
+- Constituição central: 1
+- Títulos constitucionais: 15
+- Artigos: 1–82
+- Lacunas: nenhuma
+- Sobreposições: nenhuma
 
 ## Títulos constitucionais
 
@@ -49,17 +57,21 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 | IV — Estrutura Funcional | SIGA-CON-04 | [[Estrutura Funcional do SIGA]] | 20–24 | 1.0 | aprovado |
 | V — Arquitetura Tecnológica | SIGA-CON-05 | [[Arquitetura Tecnológica do SIGA]] | 25–31 | 1.0 | aprovado |
 | VI — Governança do Desenvolvimento | SIGA-CON-06 | [[Governança do Desenvolvimento do SIGA]] | 32–38 | 1.0 | aprovado |
-| VII — Dados, Segurança, Privacidade e Histórico | SIGA-CON-07 | [[Dados, Segurança, Privacidade e Histórico do SIGA]] | 39–44 | 1.0 | aprovado |
-| VIII — Conhecimento e Treinamento | SIGA-CON-08 | [[Conhecimento, Treinamento e Produção Educacional do SIGA]] | 45–53 | 1.0 | aprovado |
+| VII — Documentação Mestre | SIGA-CON-07 | [[Documentação Mestre do SIGA]] | 39–44 | 1.0 | aprovado |
+| VIII — Conhecimento, Treinamento e NotebookLM | SIGA-CON-08 | [[Conhecimento, Treinamento e Produção Educacional do SIGA]] | 45–53 | 1.0 | aprovado |
 | IX — Regras de Negócio e Metodologia | SIGA-CON-09 | [[Regras de Negócio e Metodologia de Auditoria]] | 54–58 | 1.0 | aprovado |
-| X — Qualidade, Testes e Validação | SIGA-CON-10 | [[Qualidade, Testes e Validação do SIGA]] | 59–65 | 1.0 | aprovado |
-| XI — Roadmap, Evolução e Continuidade | SIGA-CON-11 | [[Roadmap, Evolução e Continuidade do SIGA]] | 66–71 | 1.0 | aprovado |
-| XII — Agentes, Skills e Automação | SIGA-CON-12 | [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]] | 72–78 | 1.0 | aprovado |
+| X — Dados, Segurança e Histórico | SIGA-CON-10 | [[Dados, Segurança, Privacidade e Histórico do SIGA]] | 59–64 | 1.0 | aprovado |
+| XI — Qualidade e Testes | SIGA-CON-11 | [[Qualidade, Testes e Validação do SIGA]] | 65–68 | 1.0 | aprovado |
+| XII — Agentes de Inteligência Artificial | SIGA-CON-12 | [[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]] | 69–73 | 1.0 | aprovado |
+| XIII — Roadmap e Priorização | SIGA-CON-13 | [[Roadmap, Evolução e Continuidade do SIGA]] | 74–76 | 1.0 | aprovado |
+| XIV — Alterações da Constituição | SIGA-CON-14 | [[Gestão da Constituição do SIGA]] | 77–79 | 1.0 | aprovado |
+| XV — Disposições Finais | SIGA-CON-15 | [[Disposições Finais do SIGA]] | 80–82 | 1.0 | aprovado |
 
 ## Cobertura constitucional
 
+- Constituição central: [[Constituição do SIGA]];
 - primeiro artigo: Art. 1;
-- último artigo: Art. 78;
+- último artigo: Art. 82;
 - lacunas de numeração: nenhuma;
 - sobreposição de faixas: nenhuma;
 - títulos sem documento complementar: nenhum.
@@ -89,13 +101,13 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 
 ## Uso no Obsidian
 
-Esta nota deve funcionar como hub. Os doze documentos constitucionais possuem links de retorno para esta matriz, permitindo backlinks. A propriedade `obsidian.graph_role: central` identifica sua posição no grafo. Links para notas futuras permanecem intencionais e indicam a próxima camada documental.
+Esta nota deve funcionar como hub. Os quinze documentos constitucionais possuem links de retorno para esta matriz, permitindo backlinks. A propriedade `obsidian.graph_role: central` identifica sua posição no grafo. Links para notas futuras permanecem intencionais e indicam a próxima camada documental.
 
 Consulta Dataview sugerida:
 
 ```dataview
 TABLE id, version, status
-FROM "outputs/siga-constituicao-obsidian"
+FROM "docs/constituicao"
 WHERE type = "documento-constitucional"
 SORT id ASC
 ```
@@ -103,14 +115,12 @@ SORT id ASC
 Canvas conceitual:
 
 ```text
-Constituição → Matriz Mestra → Títulos I–XII → Documentos estruturantes → SDDs → Tarefas → Código
+Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturantes → SDDs → Tarefas → Código
 ```
 
 ## Pendências explícitas
 
-1. A nota integral `[[Constituição do SIGA]]` não estava disponível no workspace e deve ser adicionada a partir do arquivo oficial antes da publicação final.
-2. Os links para Glossário, Modelo de Domínio, Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
-3. A pasta final do repositório GitHub deverá substituir o caminho local usado na consulta Dataview.
+1. Os links para Glossário, Modelo de Domínio, Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
 
 ## Histórico de alterações
 
@@ -118,3 +128,5 @@ Constituição → Matriz Mestra → Títulos I–XII → Documentos estruturant
 |---|---|---|---|
 | 0.1 | 2026-07-27 | Matriz inicial dos títulos e artigos 1–78 | Substituída |
 | 1.0 | 2026-07-27 | Normalização como hub Obsidian, aliases, navegação, matriz e pendências explícitas | Aprovada |
+| 1.1 | 2026-07-27 | Realinhamento ao conjunto canônico de 15 títulos, 82 artigos e Constituição central | Aprovada |
+| 1.2 | 2026-07-28 | Registro da aprovação da Constituição central e dos Títulos VII, XIV e XV na versão 1.0 | Aprovada |

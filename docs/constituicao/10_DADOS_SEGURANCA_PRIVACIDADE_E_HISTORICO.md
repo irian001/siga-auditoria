@@ -1,9 +1,9 @@
 ---
-id: SIGA-CON-07
+id: SIGA-CON-10
 title: Dados, Segurança, Privacidade e Histórico do SIGA
 aliases:
-  - Título VII
-  - Segurança e Histórico do SIGA
+  - Título X
+  - Dados, Segurança e Histórico do SIGA
 type: documento-constitucional
 domain: dados-seguranca
 status: aprovado
@@ -16,7 +16,7 @@ obsidian:
   graph_role: primary
   backlinks_expected: true
   dataview_ready: true
-constitution: [Art. 39, Art. 40, Art. 41, Art. 42, Art. 43, Art. 44]
+constitution: [Art. 59, Art. 60, Art. 61, Art. 62, Art. 63, Art. 64]
 related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
@@ -27,14 +27,14 @@ related:
 tags: [siga, constituicao, dados, seguranca, privacidade, historico, multiempresa]
 ---
 
-# TÍTULO VII — DADOS, SEGURANÇA, PRIVACIDADE E HISTÓRICO DO SIGA
+# TÍTULO X — DADOS, SEGURANÇA, PRIVACIDADE E HISTÓRICO DO SIGA
 
 ## Navegação constitucional
 
 - [[Constituição do SIGA]]
 - [[Matriz Mestra da Constituição do SIGA]]
-- Anterior: [[Governança do Desenvolvimento do SIGA]]
-- Próximo: [[Conhecimento, Treinamento e Produção Educacional do SIGA]]
+- Anterior: [[Regras de Negócio e Metodologia de Auditoria]]
+- Próximo: [[Qualidade, Testes e Validação do SIGA]]
 
 ## Multiempresa e menor privilégio
 
