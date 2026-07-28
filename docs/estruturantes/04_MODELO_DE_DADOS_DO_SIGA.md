@@ -62,7 +62,7 @@ Este documento traduz o [[Modelo de Domínio do SIGA]] para um modelo relacional
 
 O escopo cobre o fluxo central do SIGA: organização, cliente, trabalho, planejamento, balancete, riscos, controles, procedimentos, solicitações, instruções, documentos recebidos, evidências, papéis de trabalho, achados, revisão, conclusões, relatório e histórico. O modelo não substitui o Glossário, não cria regras de negócio, não encerra pendências de cardinalidade ou estados e não autoriza alterar fontes aprovadas.
 
-`action_plans` é **escopo pendente**. A tabela é documentada para preservar a divergência identificada entre as fontes, mas não é classificada como MVP nem como extensão futura e não autoriza implementação até decisão documental superior ou aprovação explícita.
+Por decisão humana registrada em 2026-07-28, `action_plans` é **Extensão futura** e fica fora do núcleo MVP. A decisão resolve, para este modelo, a divergência anteriormente registrada entre as fontes sem alterar os documentos aprovados. A ficha permanece para orientar especificação futura, mas não autoriza antecipação no núcleo.
 
 Nenhum CSV, nome de cliente, código empresarial, saldo, conta real ou outro dado real foi consultado ou incorporado. O balancete mencionado é apenas referência conceitual do setor elétrico.
 
@@ -74,7 +74,8 @@ Nenhum CSV, nome de cliente, código empresarial, saldo, conta real ou outro dad
 - `Obrigatório` significa obrigatório no registro lógico normal; condicionais dependem do contexto expresso pela fonte e serão fechados em SDD.
 - Tabelas associativas representam relações N:N. Chaves estrangeiras entre objetos de contexto organizacional devem preservar a mesma `organization_id`.
 - Os campos abaixo são parte de cada ficha. Para evitar repetição, são apresentados uma vez; a coluna “campos próprios” de cada tabela soma-se a eles quando aplicável.
-- “Situação” usa somente `MVP`, `Extensão futura` ou `Escopo pendente`. Estados de negócio não são enumerados universalmente.
+- “Situação” usa `MVP` ou `Extensão futura` conforme a decisão de escopo vigente. Estados de negócio não são enumerados universalmente.
+- Colunas alternativas de destino são FKs explícitas e anuláveis. Toda ficha que as utiliza exige **exatamente uma** preenchida; zero ou mais de uma são inválidos.
 
 ### 2.2 Tipos lógicos
 
@@ -98,8 +99,8 @@ Nenhum CSV, nome de cliente, código empresarial, saldo, conta real ou outro dad
 | `id` | uuid | Sim | PK de toda tabela persistida. |
 | `organization_id` | uuid | Sim, quando o dado pertence a uma firma | FK para `organizations`; integra o isolamento e as chaves compostas contextuais. Referências de plataforma somente podem omiti-lo após decisão documentada. |
 | `created_at`, `updated_at` | data_hora | Sim | Registro técnico de criação e atualização. |
-| `created_by`, `updated_by` | uuid | Sim, quando houver atuação identificável | FK lógica para `user_profiles`; preserva o responsável técnico sem substituir eventos. |
-| `deleted_at`, `deleted_by` | data_hora, uuid | Quando aplicável | Exclusão lógica; não é usada para apagar fato metodológico ou histórico. |
+| `created_by_user_profile_id`, `updated_by_user_profile_id` | uuid | Sim, quando houver atuação identificável | FKs explícitas para `user_profiles`; preservam os atores técnicos sem substituir eventos. |
+| `deleted_at`, `deleted_by_user_profile_id` | data_hora, uuid | Quando aplicável | Exclusão lógica e FK explícita do ator para `user_profiles`; não são usadas para apagar fato metodológico ou histórico. |
 | `status` | texto curto | Quando aplicável | Estado próprio do conceito, definido por SDD; não existe catálogo universal aprovado. |
 | `classification` | texto curto | Quando aplicável | Classificação pública, interna, restrita, confidencial ou cliente específico, conforme fonte constitucional. |
 
@@ -120,17 +121,20 @@ organization_memberships → membership_roles → roles → role_permissions ←
 organizations → clients → audit_engagements → engagement_periods → engagement_plans
                                    ├→ engagement_team_members → engagement_roles
                                    ├→ trial_balance_imports → trial_balance_import_rows → client_accounts
-                                   │                                      └→ account_mappings → reference_accounts
+                                   │                                      ├→ account_mappings → reference_accounts
+                                   │                                      └→ account_group_client_accounts ← account_groups
+                                   │                                                                    → account_group_reference_accounts
                                    ├→ engagement_processes → engagement_risks → risk_controls
                                    │                         └→ procedure_risks ← audit_procedures ← audit_programs
                                    │                                                        └→ audit_samples → sample_items
-                                   ├→ document_requests → document_request_items → received_documents → evidence_items
+                                   ├→ document_requests → document_request_items → received_documents → received_document_files → file_versions
+                                   │                                                └→ evidence_items
                                    │                         ↕ evidence_instruction_templates          ↕ evidence_links
                                    ├→ working_papers → working_paper_links ← evidence_items
                                    │                  └→ review_notes → review_actions
                                    └→ findings → recommendations; area_conclusions → audit_reports → report_items
 
-stored_files → file_versions → evidence_links / working_paper_links / received_documents
+stored_files → file_versions → received_document_files / evidence_links / working_paper_links
 status_history, audit_events, entity_versions, comments e notifications registram contexto transversal.
 ```
 
@@ -412,11 +416,32 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `engagement_id` | uuid | Condicional |
+| `organization_id` | uuid | Sim |
+| `engagement_id` | uuid | Condicional |
 | `reference_chart_version_id` | uuid | Condicional |
 | `code`, `name`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `name`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs condicionais para trabalho e plano referencial; único no escopo do trabalho ou versão definido em SDD. **Índices:** `engagement_id, status`; `reference_chart_version_id`. **Preservação:** versionamento/inativação conforme contexto. **Integridade:** composição de grupos e relação direta com contas serão fechadas em SDD, sem inferir regras não aprovadas.
+**PK, FKs e unicidade.** PK `id`; FK obrigatória para `organizations` e FKs condicionais para trabalho e plano referencial; único no escopo da organização, trabalho ou versão definido em SDD. **Índices:** `organization_id, status`; `engagement_id`; `reference_chart_version_id`. **Preservação:** versionamento/inativação conforme contexto. **Integridade:** a composição é sempre explícita por `account_group_client_accounts` e/ou `account_group_reference_accounts`; o grupo e seus membros devem compartilhar `organization_id`, e referências aplicadas a trabalho devem respeitar o plano referencial versionado desse contexto.
+
+### `account_group_client_accounts`
+
+**Finalidade e situação.** Associação N:N entre grupo de contas e conta do cliente; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id`, `account_group_id`, `client_account_id` | uuid | Sim |
+
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `organizations`, `account_groups` e `client_accounts`; único `organization_id, account_group_id, client_account_id`. **Índices:** `organization_id, account_group_id`; `organization_id, client_account_id`. **Preservação:** exclusão lógica ou encerramento do vínculo, com evento. **Integridade:** grupo e conta pertencem à mesma organização; quando o grupo estiver ligado a trabalho, a conta deve pertencer ao cliente desse trabalho.
+
+### `account_group_reference_accounts`
+
+**Finalidade e situação.** Associação N:N entre grupo de contas e conta referencial; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id`, `account_group_id`, `reference_account_id` | uuid | Sim |
+
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `organizations`, `account_groups` e `reference_accounts`; único `organization_id, account_group_id, reference_account_id`. **Índices:** `organization_id, account_group_id`; `reference_account_id`. **Preservação:** exclusão lógica ou encerramento do vínculo, com evento. **Integridade:** se a conta referencial for organizacional, sua organização deve coincidir; sua `reference_chart_version_id` deve coincidir com a versão indicada pelo grupo, quando informada. Referencial de plataforma não autoriza vínculo entre dados de firmas diferentes.
 
 ## 8. Processos, riscos, controles, programas, procedimentos e amostras
 
@@ -606,9 +631,20 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 |---|---|---:|
 | `organization_id`, `engagement_id`, `document_request_id` | uuid | Sim |
 | `received_at`, `source_description`, `status` | data_hora, texto longo, texto curto | Sim |
-| `received_from_membership_id` | uuid | Condicional |
+| `received_from_user_profile_id` | uuid | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs para trabalho, solicitação e membership quando identificável. **Índices:** `document_request_id, received_at`; `engagement_id, status`. **Preservação:** recebimento, substituição ou revogação geram eventos; material não se torna evidência por si. **Integridade:** uma solicitação pode receber vários documentos; arquivo é ligado por `evidence_links` ou vínculo futuro controlado, não confundido com o documento.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para trabalho, solicitação e `user_profiles` quando a pessoa de origem for identificável. **Índices:** `document_request_id, received_at`; `engagement_id, status`; `received_from_user_profile_id`. **Preservação:** recebimento, substituição ou revogação geram eventos; material não se torna evidência por si. **Integridade:** a pessoa de origem deve possuir vínculo autorizado no contexto; uma solicitação pode receber vários documentos; cada documento recebido deve possuir ao menos um vínculo em `received_document_files`, sem que esse vínculo promova o documento ou arquivo a evidência.
+
+### `received_document_files`
+
+**Finalidade e situação.** Associação N:N explícita entre documento recebido e versão de arquivo controlado; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id`, `received_document_id`, `file_version_id` | uuid | Sim |
+| `sequence`, `link_purpose` | inteiro, texto curto | `sequence`: Sim |
+
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `organizations`, `received_documents` e `file_versions`; único `organization_id, received_document_id, file_version_id` e `received_document_id, sequence`. **Índices:** `organization_id, received_document_id`; `file_version_id`. **Preservação:** substituição cria nova versão/vínculo e preserva o anterior; revogação é eventada. **Integridade:** documento, arquivo e versão compartilham organização; o vínculo representa material recebido e não cria `evidence_items`.
 
 ### `stored_files`
 
@@ -653,10 +689,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `evidence_item_id` | uuid | Sim |
-| `file_version_id` | uuid | Condicional |
-| `linked_entity_type`, `linked_entity_id`, `link_purpose` | texto curto, uuid, texto curto | Condicional |
+| `file_version_id`, `engagement_risk_id`, `audit_procedure_id`, `audit_sample_id` | uuid | Exatamente um destino |
+| `working_paper_id`, `finding_id`, `area_conclusion_id`, `report_item_id` | uuid | Exatamente um destino |
+| `link_purpose` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs para evidência e versão de arquivo quando aplicável; único por evidência, destino e finalidade. **Índices:** `evidence_item_id`; `file_version_id`; `linked_entity_type, linked_entity_id`. **Preservação:** revogação/inativação sem apagar vínculo histórico. **Integridade:** o tipo do destino deve ser permitido por SDD e pertencer ao mesmo contexto; o vínculo não converte arquivo em evidência.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `evidence_items` e para cada coluna alternativa: `file_versions`, `engagement_risks`, `audit_procedures`, `audit_samples`, `working_papers`, `findings`, `area_conclusions` e `report_items`. Único por evidência, destino não nulo e finalidade. **Índices:** `organization_id, evidence_item_id`; índice parcial lógico para cada FK de destino. **Preservação:** revogação/inativação sem apagar vínculo histórico. **Integridade:** exatamente uma FK de destino deve estar preenchida; evidência e destino compartilham organização e trabalho quando aplicável; vínculo com arquivo não converte o arquivo em evidência.
 
 ## 10. Papéis de trabalho, vínculos, revisão e pendências
 
@@ -679,10 +716,12 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `working_paper_id` | uuid | Sim |
-| `linked_entity_type`, `linked_entity_id` | texto curto, uuid | Sim |
+| `client_account_id`, `account_group_id`, `engagement_process_id`, `engagement_risk_id` | uuid | Exatamente um destino |
+| `control_id`, `audit_procedure_id`, `audit_sample_id`, `evidence_item_id` | uuid | Exatamente um destino |
+| `finding_id`, `area_conclusion_id` | uuid | Exatamente um destino |
 | `link_purpose`, `coverage_note` | texto curto, texto longo | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FK para papel; único por papel, entidade e finalidade. **Índices:** `working_paper_id`; `linked_entity_type, linked_entity_id`. **Preservação:** exclusão lógica/eventos. **Integridade:** somente tipos de vínculo aprovados pelo SDD são admitidos; destino pertence ao mesmo trabalho/organização quando aplicável; o vínculo sustenta rastreabilidade, não suficiência automática.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `working_papers`, `client_accounts`, `account_groups`, `engagement_processes`, `engagement_risks`, `controls`, `audit_procedures`, `audit_samples`, `evidence_items`, `findings` e `area_conclusions`. Único por papel, destino não nulo e finalidade. **Índices:** `organization_id, working_paper_id`; índice parcial lógico para cada FK de destino. **Preservação:** exclusão lógica/eventos. **Integridade:** exatamente uma FK de destino deve estar preenchida; papel e destino pertencem à mesma organização e, quando aplicável, ao mesmo trabalho; o vínculo sustenta rastreabilidade, não suficiência automática.
 
 ### `review_notes`
 
@@ -691,10 +730,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `engagement_id` | uuid | Sim |
-| `subject_entity_type`, `subject_entity_id` | texto curto, uuid | Sim |
-| `note`, `status`, `reviewed_by_membership_id` | texto longo, texto curto, uuid | Sim |
+| `engagement_plan_id`, `engagement_risk_id`, `audit_procedure_id`, `evidence_item_id` | uuid | Exatamente um alvo |
+| `working_paper_id`, `finding_id`, `area_conclusion_id`, `audit_report_id` | uuid | Exatamente um alvo |
+| `note`, `status`, `reviewed_by_user_profile_id` | texto longo, texto curto, uuid | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs para trabalho e membership revisor; o alvo polimórfico será validado por SDD. **Índices:** `engagement_id, status`; `subject_entity_type, subject_entity_id`; `reviewed_by_membership_id`. **Preservação:** pendência e sua revisão permanecem registradas. **Integridade:** revisor e objeto compartilham organização; vedar autorrevisão quando a independência for exigida.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para trabalho, `user_profiles` e cada coluna alternativa de alvo. **Índices:** `engagement_id, status`; `reviewed_by_user_profile_id`; índice parcial lógico para cada FK de alvo. **Preservação:** pendência e sua revisão permanecem registradas. **Integridade:** exatamente uma FK de alvo deve estar preenchida; revisor, alvo e trabalho compartilham organização; vedar autorrevisão quando a independência for exigida.
 
 ### `review_actions`
 
@@ -703,10 +743,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `review_note_id` | uuid | Sim |
-| `action_description`, `actioned_by_membership_id`, `actioned_at` | texto longo, uuid, data_hora | Sim |
+| `action_description`, `actioned_by_user_profile_id`, `actioned_at` | texto longo, uuid, data_hora | Sim |
 | `status` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FKs para nota e membership atuante. **Índices:** `review_note_id, status`; `actioned_by_membership_id`. **Preservação:** ações adicionais não substituem a anterior. **Integridade:** tratamento não encerra automaticamente a pendência sem nova revisão ou decisão aplicável.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para nota e `user_profiles`. **Índices:** `review_note_id, status`; `actioned_by_user_profile_id`. **Preservação:** ações adicionais não substituem a anterior. **Integridade:** ator deve possuir membership autorizado na organização da nota; tratamento não encerra automaticamente a pendência sem nova revisão ou decisão aplicável.
 
 ## 11. Achados, recomendações, conclusões, relatórios e planos de ação
 
@@ -720,7 +760,7 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `title`, `condition`, `criterion`, `cause`, `effect` | texto curto, texto longo, texto longo, texto longo, texto longo | `title`: Sim |
 | `status`, `classification` | texto curto, texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK para trabalho; unicidade de código de achado dependerá de SDD. **Índices:** `engagement_id, status`; `classification`. **Preservação:** revisão, comunicação, resposta, conclusão e reabertura permanecem rastreáveis. **Integridade:** vínculos com riscos, evidências e papéis usam `working_paper_links` ou associações específicas a definir sem fundir conceitos.
+**PK, FKs e unicidade.** PK `id`; FK para trabalho; unicidade de código de achado dependerá de SDD. **Índices:** `engagement_id, status`; `classification`. **Preservação:** revisão, comunicação, resposta, conclusão e reabertura permanecem rastreáveis. **Integridade:** vínculos com riscos, evidências e papéis usam as FKs alternativas explícitas de `evidence_links` e `working_paper_links`, sem fundir conceitos.
 
 ### `recommendations`
 
@@ -764,21 +804,22 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `audit_report_id` | uuid | Sim |
-| `sequence`, `item_type`, `source_entity_id`, `content` | inteiro, texto curto, uuid, texto longo | `sequence`, `item_type`, `content`: Sim |
+| `sequence`, `content` | inteiro, texto longo | Sim |
+| `finding_id`, `area_conclusion_id` | uuid | Exatamente uma origem |
 
-**PK, FKs e unicidade.** PK `id`; FK para relatório; único `audit_report_id, sequence`. **Índices:** `audit_report_id`; `item_type, source_entity_id`. **Preservação:** alteração após emissão requer nova versão do relatório. **Integridade:** tipo e origem são restritos por SDD a conceitos suportáveis; não duplica ou substitui o objeto de origem.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para relatório, `findings` e `area_conclusions`; único `audit_report_id, sequence`. **Índices:** `audit_report_id`; `finding_id`; `area_conclusion_id`. **Preservação:** alteração após emissão requer nova versão do relatório. **Integridade:** exatamente uma FK de origem deve estar preenchida; relatório e origem pertencem à mesma organização e trabalho; o item não substitui o objeto de origem.
 
 ### `action_plans`
 
-**Finalidade e situação.** Registro potencial de plano de ação associado a recomendação ou achado; **Escopo pendente**.
+**Finalidade e situação.** Plano de ação associado a recomendação ou achado, retirado do núcleo por decisão humana de 2026-07-28; **Extensão futura**.
 
-| Campos próprios propostos, sem autorização de implantação | Tipo lógico | Obrigatório |
+| Campos próprios para especificação futura | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `engagement_id` | uuid | Sim |
 | `recommendation_id`, `finding_id` | uuid | Condicional |
 | `description`, `responsible_reference`, `due_date`, `status` | texto longo, texto curto, data, texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK proposta `id`; FKs propostas para trabalho, recomendação e achado; unicidade, índices e ciclo permanecem sem decisão. **Preservação:** se e quando aprovado, deverá preservar respostas, prazos, mudanças e histórico. **Integridade:** a presença desta ficha não torna plano de ação MVP nem extensão futura e não autoriza antecipar portal, responsável do cliente, fluxo ou regras de acompanhamento.
+**PK, FKs e unicidade.** PK proposta `id`; FKs propostas para trabalho, recomendação e achado; unicidade, índices e ciclo serão definidos no SDD da extensão. **Preservação:** quando priorizada, deverá preservar respostas, prazos, mudanças e histórico. **Integridade:** exatamente uma entre `recommendation_id` e `finding_id` deverá ser preenchida; a classificação como extensão futura não autoriza antecipar portal, responsável do cliente, fluxo ou regras de acompanhamento.
 
 ## 12. Histórico, versões, eventos e trilha
 
@@ -788,11 +829,16 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `entity_type`, `entity_id` | uuid, texto curto, uuid | Sim |
+| `organization_id` | uuid | Sim |
+| `organization_membership_id`, `client_id`, `acceptance_assessment_id`, `audit_engagement_id` | uuid | Exatamente um alvo |
+| `engagement_plan_id`, `trial_balance_import_id`, `account_mapping_id`, `engagement_process_id` | uuid | Exatamente um alvo |
+| `engagement_risk_id`, `audit_procedure_id`, `audit_sample_id`, `document_request_id` | uuid | Exatamente um alvo |
+| `received_document_id`, `evidence_item_id`, `working_paper_id`, `review_note_id` | uuid | Exatamente um alvo |
+| `finding_id`, `area_conclusion_id`, `audit_report_id` | uuid | Exatamente um alvo |
 | `previous_status`, `new_status`, `changed_at` | texto curto, texto curto, data_hora | `new_status`, `changed_at`: Sim |
-| `reason`, `changed_by` | texto longo, uuid | Condicional |
+| `reason`, `changed_by_user_profile_id` | texto longo, uuid | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FK para ator quando identificável; alvo polimórfico validado por SDD. **Índices:** `organization_id, entity_type, entity_id, changed_at`; `changed_by`. **Preservação:** append-only para usuários comuns. **Integridade:** não cria catálogo universal ou transições universais; só registra transição autorizada pelo ciclo da entidade.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `user_profiles` e cada coluna alternativa de alvo. **Índices:** `organization_id, changed_at`; `changed_by_user_profile_id`; índice parcial lógico para cada FK de alvo. **Preservação:** append-only para usuários comuns. **Integridade:** exatamente uma FK de alvo deve estar preenchida; ator e alvo pertencem ao contexto autorizado; não cria catálogo ou transições universais e só registra transição válida no ciclo da entidade.
 
 ### `audit_events`
 
@@ -800,11 +846,16 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `event_type`, `entity_type`, `entity_id` | uuid, texto curto, texto curto, uuid | Sim |
+| `organization_id`, `event_type` | uuid, texto curto | Sim |
 | `occurred_at`, `actor_user_profile_id` | data_hora, uuid | `occurred_at`: Sim |
+| `organization_target_id`, `user_profile_target_id`, `organization_membership_target_id`, `client_target_id` | uuid | Exatamente um alvo |
+| `audit_engagement_target_id`, `trial_balance_import_target_id`, `account_mapping_target_id`, `engagement_risk_target_id` | uuid | Exatamente um alvo |
+| `audit_procedure_target_id`, `audit_sample_target_id`, `document_request_target_id`, `received_document_target_id` | uuid | Exatamente um alvo |
+| `file_version_target_id`, `evidence_item_target_id`, `working_paper_target_id`, `review_note_target_id` | uuid | Exatamente um alvo |
+| `finding_target_id`, `area_conclusion_target_id`, `audit_report_target_id` | uuid | Exatamente um alvo |
 | `engagement_id`, `reason`, `context` | uuid, texto longo, json estruturado | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs para ator e trabalho quando aplicáveis. **Índices:** `organization_id, occurred_at`; `entity_type, entity_id, occurred_at`; `engagement_id, occurred_at`. **Preservação:** append-only para usuários comuns. **Integridade:** registra criação, consulta relevante, alteração, estado, aprovação, envio, recebimento, compartilhamento, download, revogação, substituição, exclusão lógica e acesso excepcional conforme aplicável; não é a trilha por si só.
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para ator, trabalho contextual e cada tabela nomeada nas colunas `*_target_id`. **Índices:** `organization_id, occurred_at`; `actor_user_profile_id, occurred_at`; `engagement_id, occurred_at`; índice parcial lógico para cada alvo. **Preservação:** append-only para usuários comuns. **Integridade:** exatamente uma FK de alvo deve estar preenchida; ator, alvo e trabalho contextual pertencem à organização autorizada; registra os eventos relevantes conforme aplicável e não é a trilha por si só.
 
 ### `entity_versions`
 
@@ -812,11 +863,14 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `entity_type`, `entity_id` | uuid, texto curto, uuid | Sim |
+| `organization_id` | uuid | Sim |
+| `engagement_plan_id`, `reference_chart_version_id`, `risk_id`, `audit_program_id` | uuid | Exatamente um alvo |
+| `evidence_instruction_template_id`, `document_request_template_id`, `document_request_id` | uuid | Exatamente um alvo |
+| `evidence_item_id`, `working_paper_id`, `finding_id`, `area_conclusion_id`, `audit_report_id` | uuid | Exatamente um alvo |
 | `version_number`, `snapshot`, `created_at` | inteiro, json estruturado, data_hora | Sim |
 | `supersedes_version_id`, `status` | uuid, texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FK autorreferente para versão anterior; único `organization_id, entity_type, entity_id, version_number`. **Índices:** `entity_type, entity_id, version_number`; `status`. **Preservação:** versões anteriores permanecem disponíveis; conteúdo enviado/aprovado não é alterado silenciosamente. **Integridade:** entidades versionáveis e grau de snapshot serão definidos por SDD; versão não duplica o evento de alteração.
+**PK, FKs e unicidade.** PK `id`; FK autorreferente para versão anterior e FKs explícitas para cada coluna alternativa de alvo. Único por alvo não nulo e `version_number`. **Índices:** `organization_id, created_at`; `status`; índice composto lógico de cada FK de alvo com `version_number`. **Preservação:** versões anteriores permanecem disponíveis; conteúdo enviado/aprovado não é alterado silenciosamente. **Integridade:** exatamente uma FK de alvo deve estar preenchida; alvo e versão anterior compartilham organização e tipo de destino; versão não duplica o evento de alteração.
 
 ### `comments`
 
@@ -824,10 +878,12 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `entity_type`, `entity_id` | uuid, texto curto, uuid | Sim |
-| `content`, `author_membership_id`, `status` | texto longo, uuid, texto curto | Sim |
+| `organization_id` | uuid | Sim |
+| `document_request_id`, `received_document_id`, `evidence_item_id`, `working_paper_id` | uuid | Exatamente um alvo |
+| `review_note_id`, `finding_id`, `area_conclusion_id`, `audit_report_id` | uuid | Exatamente um alvo |
+| `content`, `author_user_profile_id`, `status` | texto longo, uuid, texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK para membership autor; alvo polimórfico validado em SDD. **Índices:** `entity_type, entity_id, created_at`; `author_membership_id`. **Preservação:** exclusão lógica e evento, sem apagar comentário necessário à trilha. **Integridade:** autor e alvo possuem contexto organizacional compatível; comentário não substitui revisão, aprovação ou evidência.
+**PK, FKs e unicidade.** PK `id`; FK explícita para `user_profiles` e FKs explícitas para cada coluna alternativa de alvo. **Índices:** `organization_id, created_at`; `author_user_profile_id`; índice parcial lógico para cada alvo. **Preservação:** exclusão lógica e evento, sem apagar comentário necessário à trilha. **Integridade:** exatamente uma FK de alvo deve estar preenchida; autor deve possuir membership autorizado na organização do alvo; comentário não substitui revisão, aprovação ou evidência.
 
 ### `notifications`
 
@@ -836,16 +892,17 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `recipient_membership_id` | uuid | Sim |
-| `subject_entity_type`, `subject_entity_id` | texto curto, uuid | Condicional |
+| `document_request_id`, `evidence_item_id`, `working_paper_id`, `review_note_id` | uuid | Exatamente um alvo |
+| `finding_id`, `area_conclusion_id`, `audit_report_id` | uuid | Exatamente um alvo |
 | `notification_type`, `content`, `read_at`, `status` | texto curto, texto longo, data_hora, texto curto | Sim, exceto `read_at` |
 
-**PK, FKs e unicidade.** PK `id`; FK para membership destinatário; índice `recipient_membership_id, status, created_at`; índice do objeto quando existente. **Preservação:** eventos de entrega/leitura quando relevantes; expiração não apaga fatos do objeto. **Integridade:** notificação não amplia autorização; o destinatário deve manter acesso ao conteúdo no momento da consulta.
+**PK, FKs e unicidade.** PK `id`; FK para membership destinatário e FKs explícitas para cada coluna alternativa de alvo. **Índices:** `recipient_membership_id, status, created_at`; índice parcial lógico para cada alvo. **Preservação:** eventos de entrega/leitura quando relevantes; expiração não apaga fatos do objeto. **Integridade:** exatamente uma FK de alvo deve estar preenchida; notificação não amplia autorização e o destinatário deve manter acesso ao alvo no momento da consulta.
 
 ## 13. Extensões futuras
 
-As extensões abaixo não recebem tabelas físicas neste ciclo: portal avançado do cliente, funções ampliadas de qualidade, auditoria dos pares, gestão comercial, propostas, contratos, faturamento, indicadores, painéis, integrações e agentes integrados ao produto. Seus SDDs deverão reutilizar os limites organizacionais, de rastreabilidade, arquivo, versão e autorização definidos aqui, sem antecipar seu escopo.
+As extensões abaixo ficam fora do núcleo MVP: planos de ação, portal avançado do cliente, funções ampliadas de qualidade, auditoria dos pares, gestão comercial, propostas, contratos, faturamento, indicadores, painéis, integrações e agentes integrados ao produto. Seus SDDs deverão reutilizar os limites organizacionais, de rastreabilidade, arquivo, versão e autorização definidos aqui, sem antecipar seu escopo.
 
-Planos de ação não pertencem a esta seção: permanecem em **escopo pendente**, conforme a seção 11.
+`action_plans` possui ficha lógica na seção 11 porque constava da lista mínima documental, mas sua implementação depende de priorização e SDD próprios da extensão. Esta classificação decorre da decisão humana de 2026-07-28 e não modifica as fontes aprovadas.
 
 ## 14. Integridade, índices, exclusão lógica e ordem futura de implantação
 
@@ -853,8 +910,9 @@ Planos de ação não pertencem a esta seção: permanecem em **escopo pendente*
 
 - Toda FK organizacional deve impedir associação entre organizações distintas; o modelo físico deverá usar chaves contextuais ou controles equivalentes testáveis.
 - `organization_id` é obrigatório para dados da firma. A possibilidade de referência global, da plataforma ou por segmento continua pendente e não pode causar compartilhamento implícito.
-- Relações N:N são explícitas: `role_permissions`, `membership_roles`, `client_segments`, `risk_controls`, `procedure_risks`, `evidence_links` e `working_paper_links`; outras associações surgirão apenas por SDD.
-- Objetos polimórficos usam `*_entity_type` e `*_entity_id` somente quando a fonte exige vínculo transversal. Cada conjunto permitido, FK física, validação e índice deverá ser decidido em SDD para não enfraquecer integridade.
+- Relações N:N são explícitas: `role_permissions`, `membership_roles`, `client_segments`, `account_group_client_accounts`, `account_group_reference_accounts`, `risk_controls`, `procedure_risks`, `received_document_files`, `evidence_links` e `working_paper_links`.
+- Vínculos transversais usam somente colunas alternativas com FKs nomeadas. `evidence_links`, `working_paper_links`, `review_notes`, `report_items`, `status_history`, `audit_events`, `entity_versions`, `comments` e `notifications` exigem exatamente um destino preenchido; identificadores genéricos de tipo/entidade não são admitidos.
+- Toda FK de ator termina em `*_user_profile_id` e aponta explicitamente para `user_profiles`. Memberships continuam sendo usados apenas quando o próprio vínculo organizacional é o objeto ou destinatário contextual, não como identidade do ator.
 - Valores, listas de estados, ciclos, obrigatoriedades condicionais, classificações e regras de transição são fechados por entidade em SDD. Não existe enumeração universal autorizada.
 
 ### 14.2 Índices principais
@@ -874,7 +932,7 @@ Catálogos e vínculos administrativos admitem inativação ou término de vigê
 5. Solicitações, instruções, documentos recebidos, evidências e vínculos.
 6. Papéis de trabalho, revisão, achados, recomendações, conclusões e relatórios.
 7. Eventos, histórico, versões, comentários e notificações transversais.
-8. SDD específico que resolva, ou mantenha bloqueado, o escopo de planos de ação; depois, extensões aprovadas.
+8. Extensões aprovadas e priorizadas, incluindo SDD específico de planos de ação.
 
 Cada etapa exige SDD, critérios de aceite, testes positivos e negativos de permissões, isolamento, integridade, histórico, arquivos e rastreabilidade antes de migration.
 
@@ -912,7 +970,7 @@ Em conflito, prevalece a Constituição e sua hierarquia documental. Pendências
 4. Relacione risco, procedimento, amostra, solicitação, instrução, documento recebido, evidência e papel de trabalho.
 5. Demonstre a reconstrução de um achado até suas evidências e a emissão de relatório suportado.
 
-**Erros comuns.** Usar arquivo como se fosse evidência; tratar documento recebido como evidência sem avaliação; conceder acesso apenas por papel geral; alterar versão enviada; misturar dados de organizações; entender `action_plans` como escopo decidido; considerar a existência de vínculos como prova de suficiência.
+**Erros comuns.** Usar arquivo como se fosse evidência; tratar documento recebido como evidência sem avaliação; conceder acesso apenas por papel geral; alterar versão enviada; misturar dados de organizações; incluir `action_plans` no núcleo MVP; usar destino genérico sem FK explícita; considerar a existência de vínculos como prova de suficiência.
 
 **Resumo.** O modelo lógico mantém cada conceito metodológico no seu limite, registra a origem e a evolução dos fatos e prepara a implantação futura sem transferir julgamento profissional para o banco ou para automações.
 
@@ -921,3 +979,4 @@ Em conflito, prevalece a Constituição e sua hierarquia documental. Pendências
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.9 | 2026-07-28 | Minuta inicial do modelo relacional lógico, com limites, rastreabilidade e escopo pendente de planos de ação | Em revisão |
+| 0.9 | 2026-07-28 | Correção 1/5: planos de ação classificados como extensão futura; arquivos recebidos, grupos de contas, alvos transversais e atores explicitados | Em revisão |
