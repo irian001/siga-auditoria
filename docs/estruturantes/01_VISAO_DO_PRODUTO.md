@@ -6,8 +6,8 @@ aliases:
   - Visão Estratégica do SIGA
 type: documento-estruturante
 domain: produto
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-28
 updated: 2026-07-28
 owner: responsavel-projeto
@@ -232,4 +232,5 @@ Uma equipe inicia a auditoria de uma cooperativa usando planilhas, e-mails e pas
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.9 | 2026-07-28 | Criação da versão inicial para revisão | Em revisão |
+| 0.9 | 2026-07-28 | Criação da versão inicial para revisão | Substituída |
+| 1.0 | 2026-07-28 | Primeira versão aprovada da Visão do Produto | Aprovada |
