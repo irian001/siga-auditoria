@@ -40,3 +40,9 @@ Commit final: `docs: atualiza matriz e inventário constitucional`
 ## Preocupações e próximos passos
 
 A Constituição central e os três novos detalhamentos permanecem em revisão, como previsto no desenho aprovado. A promoção para versão 1.0 exige aprovação humana; esta tarefa não promoveu versões nem fez merge.
+
+## Correção posterior do único achado
+
+- Corrigido o rótulo do Título VIII na Matriz para `Conhecimento, Treinamento e NotebookLM`, igual ao nome canônico da Constituição central.
+- Atualizado no inventário o registro real da Matriz: 6101 bytes e SHA-256 `c1377ab4207b84f9929da9112d66f9c3c1e2a68a074a23c1264358bce2a4aff2`.
+- Commit corretivo: `docs: corrige rótulo canônico do título VIII`.

@@ -58,7 +58,7 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 | V — Arquitetura Tecnológica | SIGA-CON-05 | [[Arquitetura Tecnológica do SIGA]] | 25–31 | 1.0 | aprovado |
 | VI — Governança do Desenvolvimento | SIGA-CON-06 | [[Governança do Desenvolvimento do SIGA]] | 32–38 | 1.0 | aprovado |
 | VII — Documentação Mestre | SIGA-CON-07 | [[Documentação Mestre do SIGA]] | 39–44 | 0.9 | em-revisao |
-| VIII — Conhecimento e Treinamento | SIGA-CON-08 | [[Conhecimento, Treinamento e Produção Educacional do SIGA]] | 45–53 | 1.0 | aprovado |
+| VIII — Conhecimento, Treinamento e NotebookLM | SIGA-CON-08 | [[Conhecimento, Treinamento e Produção Educacional do SIGA]] | 45–53 | 1.0 | aprovado |
 | IX — Regras de Negócio e Metodologia | SIGA-CON-09 | [[Regras de Negócio e Metodologia de Auditoria]] | 54–58 | 1.0 | aprovado |
 | X — Dados, Segurança e Histórico | SIGA-CON-10 | [[Dados, Segurança, Privacidade e Histórico do SIGA]] | 59–64 | 1.0 | aprovado |
 | XI — Qualidade e Testes | SIGA-CON-11 | [[Qualidade, Testes e Validação do SIGA]] | 65–68 | 1.0 | aprovado |
