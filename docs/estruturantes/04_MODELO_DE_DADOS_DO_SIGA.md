@@ -29,7 +29,7 @@ sources:
   - "[[Dados, Segurança, Privacidade e Histórico do SIGA]] (v1.0)"
   - "[[Glossário do SIGA]] (v1.0)"
   - "[[Modelo de Domínio do SIGA]] (v1.0)"
-  - "[[Desenho — Modelo de Dados do SIGA]] (2026-07-28)"
+  - "[[docs/superpowers/specs/2026-07-28-modelo-dados-siga-design|Desenho — Modelo de Dados do SIGA]] (2026-07-28)"
 related:
   - "[[Constituição do SIGA]]"
   - "[[Matriz Mestra da Constituição do SIGA]]"
@@ -104,6 +104,10 @@ Nenhum CSV, nome de cliente, código empresarial, saldo, conta real ou outro dad
 | `status` | texto curto | Quando aplicável | Estado próprio do conceito, definido por SDD; não existe catálogo universal aprovado. |
 | `classification` | texto curto | Quando aplicável | Classificação pública, interna, restrita, confidencial ou cliente específico, conforme fonte constitucional. |
 
+### 2.4 Titularidade condicional de catálogos e referenciais
+
+`ownership_scope` distingue `platform` de `organization` nos catálogos e referenciais cuja titularidade ainda depende de decisão. Nesses registros, `organization_id` é condicional: é obrigatório no escopo `organization` e ausente no escopo `platform`. A unicidade é contextual ao escopo, à organização quando existente, ao código e à versão ou ao pai quando aplicáveis. Isso se aplica a `permissions`, segmentos, planos e contas referenciais, modelos metodológicos, riscos, controles, programas, templates de instrução e templates de solicitação. O uso de `platform` não presume que um registro seja global nem autoriza compartilhamento entre firmas; a decisão de titularidade e publicação continua documentada em SDD.
+
 ## 3. Isolamento multiempresa e segurança
 
 `organizations` delimita a empresa de auditoria usuária. Clientes, trabalhos, registros metodológicos, arquivos, eventos e vínculos devem carregar `organization_id` quando pertencentes a uma firma. Uma FK ou associação entre registros de organizações distintas é inválida; o modelo físico deverá reforçar isso por chaves contextuais e testes diretos, além das políticas de autorização futuras. Filtro de interface não é controle suficiente.
@@ -120,7 +124,7 @@ organization_memberships → membership_roles → roles → role_permissions ←
 
 organizations → clients → audit_engagements → engagement_periods → engagement_plans
                                    ├→ engagement_team_members → engagement_roles
-                                   ├→ trial_balance_imports → trial_balance_import_rows → client_accounts
+                                   ├→ trial_balance_imports → trial_balance_import_rows → client_accounts (vigência)
                                    │                                      ├→ account_mappings → reference_accounts
                                    │                                      └→ account_group_client_accounts ← account_groups
                                    │                                                                    → account_group_reference_accounts
@@ -128,17 +132,17 @@ organizations → clients → audit_engagements → engagement_periods → engag
                                    │                         └→ procedure_risks ← audit_procedures ← audit_programs
                                    │                                                        └→ audit_samples → sample_items
                                    ├→ document_requests → document_request_items → received_documents → received_document_files → file_versions
-                                   │                                                └→ evidence_items
-                                   │                         ↕ evidence_instruction_templates          ↕ evidence_links
+                                   │                   └→ document_request_instructions → evidence_instruction_templates
+                                   │                                                └→ evidence_items ↔ evidence_links
                                    ├→ working_papers → working_paper_links ← evidence_items
                                    │                  └→ review_notes → review_actions
-                                   └→ findings → recommendations; area_conclusions → audit_reports → report_items
+                                   └→ findings → recommendations; findings ↔ finding_area_conclusions ↔ area_conclusions → audit_reports → report_items
 
-stored_files → file_versions → received_document_files / evidence_links / working_paper_links
+stored_files / file_versions → file_access_grants; file_versions → received_document_files / evidence_links / working_paper_links
 status_history, audit_events, entity_versions, comments e notifications registram contexto transversal.
 ```
 
-O mapa mostra dependências lógicas, não suficiência automática de auditoria. O percurso direto e reverso deve permitir reconstruir origem, tratamento, responsável e resultado.
+O mapa mostra dependências lógicas, não suficiência automática de auditoria. O percurso direto e reverso deve permitir reconstruir origem, tratamento, responsável e resultado. O documento detalha 64 fichas lógicas: 63 do MVP e `action_plans` como uma extensão futura.
 
 ## 5. Tabelas organizacionais e de acesso
 
@@ -195,10 +199,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
+| `ownership_scope`, `organization_id` | texto curto, uuid | `ownership_scope`: Sim; `organization_id`: Condicional |
 | `code`, `name`, `description` | texto curto, texto curto, texto longo | `code`, `name`: Sim |
 | `status` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; sem FK organizacional até decisão sobre catálogo global ou por firma. Único por `code`. **Índices:** `status`. **Preservação:** inativação. **Integridade:** representa permissão, não decisão final de acesso.
+**PK, FKs e unicidade.** PK `id`; FK condicional para `organizations`; único por `ownership_scope`, `organization_id` quando existente e `code`. **Índices:** `ownership_scope, organization_id, status`; `code`. **Preservação:** inativação. **Integridade:** `organization_id` é obrigatório somente no escopo `organization`; o escopo `platform` não presume catálogo global nem autoriza compartilhar dados de firmas. Representa permissão, não decisão final de acesso.
 
 ### `role_permissions`
 
@@ -241,11 +246,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id` | texto curto, uuid | `ownership_scope`: Sim; `organization_id`: Condicional |
 | `code`, `name`, `description` | texto curto, texto curto, texto longo | `code`, `name`: Sim |
 | `status` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para `organizations`; único no escopo de titularidade definido em SDD. **Índices:** `organization_id, status`; `code`. **Preservação:** inativação. **Integridade:** a titularidade plataforma/organização permanece pendente; não se presume compartilhamento entre firmas.
+**PK, FKs e unicidade.** PK `id`; FK condicional para `organizations`; único por `ownership_scope`, `organization_id` quando existente e `code`. **Índices:** `ownership_scope, organization_id, status`; `code`. **Preservação:** inativação. **Integridade:** escopo e organização obedecem à seção 2.4; não se presume compartilhamento entre firmas.
 
 ### `client_segments`
 
@@ -353,12 +358,13 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
 | `organization_id`, `trial_balance_import_id` | uuid | Sim |
+| `client_account_id` | uuid | Condicional |
 | `source_row_number`, `raw_values` | inteiro, json estruturado | Sim |
 | `normalized_account_code`, `normalized_description` | texto curto, texto longo | Condicional |
 | `normalized_debit`, `normalized_credit`, `normalized_balance` | decimal | Condicional |
 | `validation_status`, `validation_notes` | texto curto, texto longo | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK para `trial_balance_imports`; único `trial_balance_import_id, source_row_number`. **Índices:** `trial_balance_import_id`; `normalized_account_code`. **Preservação:** append-only para a carga recebida; correção gera novo lote ou evento. **Integridade:** valores brutos não são confundidos com normalizados; não contém dados reais neste documento.
+**PK, FKs e unicidade.** PK `id`; FKs para `trial_balance_imports` e, quando a linha for conciliada, `client_accounts`; único `trial_balance_import_id, source_row_number`. **Índices:** `trial_balance_import_id`; `client_account_id`; `normalized_account_code`. **Preservação:** append-only para a carga recebida; correção gera novo lote ou evento. **Integridade:** a conta vinculada pertence ao cliente e à organização do lote e conserva a vigência aplicável à linha; valores brutos não são confundidos com normalizados; não contém dados reais neste documento.
 
 ### `client_accounts`
 
@@ -369,9 +375,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `organization_id`, `client_id` | uuid | Sim |
 | `parent_account_id` | uuid | Condicional |
 | `account_code`, `account_name`, `account_level` | texto curto, texto curto, inteiro | Sim |
+| `valid_from`, `valid_to` | data | `valid_from`: Sim |
 | `account_kind`, `status` | texto curto, texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs para cliente e para a própria tabela; único `client_id, account_code`. **Índices:** `client_id, parent_account_id`; `account_code`. **Preservação:** inativação e histórico de vigência; sem reescrever estrutura de carga usada. **Integridade:** pai pertence ao mesmo cliente e organização; hierarquia preserva contas sintéticas e analíticas.
+**PK, FKs e unicidade.** PK `id`; FKs para cliente e para a própria tabela; único `client_id, account_code, valid_from`. **Índices:** `client_id, parent_account_id`; `client_id, account_code, valid_from`; `account_code`. **Preservação:** inativação e histórico de vigência; sem reescrever estrutura de carga usada. **Integridade:** pai pertence ao mesmo cliente e organização e à estrutura aplicável; a FK de `trial_balance_import_rows` aponta para a conta preservada, permitindo reconstruir linha, conta, hierarquia e vigência mesmo após nova estrutura; a hierarquia preserva contas sintéticas e analíticas.
 
 ### `reference_chart_versions`
 
@@ -379,11 +386,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `economic_segment_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `version_label`, `effective_from`, `effective_to` | texto curto, texto curto, data, data | `code`, `version_label`, `effective_from`: Sim |
 | `status` | texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK para segmento; único por plano, versão e titularidade definida em SDD. **Índices:** `economic_segment_id, status`; `effective_from, effective_to`. **Preservação:** versões aprovadas ou aplicadas não são alteradas silenciosamente. **Integridade:** ANEEL, COSIF e outros referenciais são parametrizações, nunca regras embutidas.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label`. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `effective_from, effective_to`. **Preservação:** versões aprovadas ou aplicadas não são alteradas silenciosamente. **Integridade:** escopo e organização obedecem à seção 2.4; ANEEL, COSIF e outros referenciais são parametrizações, nunca regras embutidas.
 
 ### `reference_accounts`
 
@@ -391,11 +398,12 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
+| `ownership_scope`, `organization_id` | texto curto, uuid | `ownership_scope`: Sim; `organization_id`: Condicional |
 | `reference_chart_version_id`, `parent_reference_account_id` | uuid | `reference_chart_version_id`: Sim |
 | `account_code`, `account_name`, `account_level` | texto curto, texto curto, inteiro | Sim |
 | `account_kind`, `status` | texto curto, texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FKs para versão e própria tabela; único `reference_chart_version_id, account_code`. **Índices:** `reference_chart_version_id, parent_reference_account_id`; `account_code`. **Preservação:** a versão do plano é preservada. **Integridade:** pai pertence à mesma versão; a conta não é conta do cliente.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations`, versão e própria tabela; único por `ownership_scope`, `organization_id` quando existente, `reference_chart_version_id` e `account_code`. **Índices:** `ownership_scope, organization_id`; `reference_chart_version_id, parent_reference_account_id`; `account_code`. **Preservação:** a versão do plano é preservada. **Integridade:** escopo e organização devem coincidir com a versão do plano; pai pertence à mesma versão e titularidade; a conta não é conta do cliente.
 
 ### `account_mappings`
 
@@ -451,11 +459,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `economic_segment_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `name`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `name`, `status`: Sim |
 | `version_label` | texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para segmento; único no escopo de titularidade, versão e código definido em SDD. **Índices:** `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** processo referencial não se confunde com seleção no trabalho.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** escopo e organização obedecem à seção 2.4; processo referencial não se confunde com seleção no trabalho.
 
 ### `engagement_processes`
 
@@ -475,11 +483,11 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `business_process_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `business_process_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `title`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `title`, `status`: Sim |
 | `version_label` | texto curto | Condicional |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para processo; único por escopo, versão e código definido em SDD. **Índices:** `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** risco referencial é modelo e não avaliação efetiva.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** escopo e organização obedecem à seção 2.4; risco referencial é modelo e não avaliação efetiva.
 
 ### `engagement_risks`
 
@@ -499,10 +507,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `business_process_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `business_process_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `name`, `description`, `status` | texto curto, texto curto, texto longo, texto curto | `code`, `name`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para processo; único por escopo e código definidos em SDD. **Índices:** `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** controle não é evidência de operação efetiva.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e processo; único por `ownership_scope`, `organization_id` quando existente e `code`. **Índices:** `ownership_scope, organization_id, status`; `business_process_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** escopo e organização obedecem à seção 2.4; controle não é evidência de operação efetiva.
 
 ### `risk_controls`
 
@@ -521,10 +529,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `economic_segment_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `name`, `description`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `name`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para segmento; único por escopo, versão e código definido em SDD. **Índices:** `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** não altera programa aplicado em trabalho iniciado.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão/inativação. **Integridade:** escopo e organização obedecem à seção 2.4; não altera programa aplicado em trabalho iniciado.
 
 ### `audit_procedures`
 
@@ -582,10 +590,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `economic_segment_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `title`, `content`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `title`, `content`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para segmento; único por escopo, código e versão definidos em SDD. **Índices:** `economic_segment_id, status`; `code`. **Preservação:** versão enviada não é alterada. **Integridade:** instrução não é solicitação, documento recebido ou evidência.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** o template não altera a instrução já aplicada. **Integridade:** escopo e organização obedecem à seção 2.4; instrução não é solicitação, documento recebido ou evidência.
 
 ### `document_request_templates`
 
@@ -593,10 +601,10 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 
 | Campos próprios | Tipo lógico | Obrigatório |
 |---|---|---:|
-| `organization_id`, `economic_segment_id` | uuid | Condicional |
+| `ownership_scope`, `organization_id`, `economic_segment_id` | texto curto, uuid, uuid | `ownership_scope`: Sim; demais: Condicional |
 | `code`, `title`, `content`, `version_label`, `status` | texto curto, texto curto, texto longo, texto curto, texto curto | `code`, `title`, `content`, `status`: Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK condicional para segmento; único por escopo, código e versão definidos em SDD. **Índices:** `economic_segment_id, status`; `code`. **Preservação:** versão aplicada é reconstruível. **Integridade:** modelo é ponto de partida e não decisão efetiva de solicitação.
+**PK, FKs e unicidade.** PK `id`; FKs condicionais para `organizations` e segmento; único por `ownership_scope`, `organization_id` quando existente, `code` e `version_label` quando existente. **Índices:** `ownership_scope, organization_id, status`; `economic_segment_id, status`; `code`. **Preservação:** versão aplicada é reconstruível. **Integridade:** escopo e organização obedecem à seção 2.4; modelo é ponto de partida e não decisão efetiva de solicitação.
 
 ### `document_requests`
 
@@ -610,6 +618,19 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `sent_version`, `sent_at` | texto longo, data_hora | Condicional |
 
 **PK, FKs e unicidade.** PK `id`; FKs para trabalho, período, modelo e procedimento; unicidade de referência de solicitação é definida em SDD. **Índices:** `engagement_id, status, due_date`; `audit_procedure_id`. **Preservação:** conteúdo e instruções efetivamente enviados permanecem imutáveis como fato; nova comunicação cria nova versão/evento. **Integridade:** não confundir solicitação com instrução ou documento recebido.
+
+### `document_request_instructions`
+
+**Finalidade e situação.** Associação explícita de cada instrução efetivamente aplicada a uma solicitação; uma solicitação pode ter zero ou muitas instruções aplicadas, separadas do template; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id`, `document_request_id` | uuid | Sim |
+| `evidence_instruction_template_id` | uuid | Condicional |
+| `sequence` | inteiro | Sim |
+| `instruction_snapshot`, `sent_version_label`, `sent_at` | json estruturado, texto curto, data_hora | Sim |
+
+**PK, FKs e unicidade.** PK `id`; FKs para `organizations`, `document_requests` e, quando houver origem reutilizada, `evidence_instruction_templates`; único `document_request_id, sequence`. **Índices:** `organization_id, document_request_id`; `evidence_instruction_template_id`; `sent_at`. **Preservação:** snapshot e versão efetivamente enviados são imutáveis; nova instrução aplicada cria outro vínculo e evento. **Integridade:** solicitação e template, quando informado, respeitam o contexto organizacional; o snapshot registra a instrução aplicada mesmo que o template seja alterado ou inativado; a ausência de template não elimina a preservação da instrução enviada.
 
 ### `document_request_items`
 
@@ -669,6 +690,22 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `created_at`, `status` | data_hora, texto curto | Sim |
 
 **PK, FKs e unicidade.** PK `id`; FK para `stored_files`; único `stored_file_id, version_number` e `organization_id, content_hash` segundo estratégia definida em SDD. **Índices:** `stored_file_id, version_number`; `content_hash`. **Preservação:** não alterar conteúdo de versão; substituição cria outra. **Integridade:** tamanho não é negativo; versão compartilha organização do arquivo.
+
+### `file_access_grants`
+
+**Finalidade e situação.** Concessão temporária e rastreável de acesso a um arquivo ou a uma versão específica; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id` | uuid | Sim |
+| `client_id`, `engagement_id` | uuid | Condicional |
+| `stored_file_id`, `file_version_id` | uuid | Exatamente um alvo |
+| `recipient_reference`, `recipient_user_profile_id` | texto curto, uuid | `recipient_reference`: Sim; perfil: Condicional |
+| `purpose`, `granted_permissions` | texto curto, texto curto | Sim |
+| `granted_at`, `expires_at` | data_hora, data_hora | Sim |
+| `granted_by_user_profile_id`, `revoked_at`, `revoked_by_user_profile_id`, `revocation_reason` | uuid, data_hora, uuid, texto longo | Condicional |
+
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `organizations`, cliente, trabalho, arquivo, versão e os perfis de destinatário, concessão e revogação quando identificados; unicidade contextual por alvo, destinatário, finalidade e vigência definida em SDD. **Índices:** `organization_id, expires_at`; `client_id`; `engagement_id`; índices parciais lógicos para arquivo e versão. **Preservação:** concessão, expiração e revogação não apagam o registro; eventos referenciam a concessão para formar a trilha. **Integridade:** exatamente um entre arquivo e versão é o alvo; cliente e trabalho, quando informados, pertencem à organização; a versão pertence ao arquivo quando ambos forem contextualizados; a concessão não amplia permissões além das registradas e a posse do endereço não é autorização.
 
 ### `evidence_items`
 
@@ -783,7 +820,18 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `organization_id`, `engagement_id` | uuid | Sim |
 | `area_reference`, `conclusion`, `rationale`, `status` | texto curto, texto longo, texto longo, texto curto | Sim |
 
-**PK, FKs e unicidade.** PK `id`; FK para trabalho; unicidade de área e versão a definir em SDD. **Índices:** `engagement_id, status`; `area_reference`. **Preservação:** conclusão aprovada não é silenciosamente alterada. **Integridade:** deve poder ser suportada por papéis, evidências, achados e revisões por vínculos controlados; a presença desses registros não prova suficiência.
+**PK, FKs e unicidade.** PK `id`; FK para trabalho; unicidade de área e versão a definir em SDD. **Índices:** `engagement_id, status`; `area_reference`. **Preservação:** conclusão aprovada não é silenciosamente alterada. **Integridade:** deve poder ser suportada por papéis, evidências, achados e revisões por vínculos controlados; a associação com achados é registrada em `finding_area_conclusions`; a presença desses registros não prova suficiência.
+
+### `finding_area_conclusions`
+
+**Finalidade e situação.** Associação explícita N:N entre achado e conclusão de área no mesmo trabalho; **MVP**.
+
+| Campos próprios | Tipo lógico | Obrigatório |
+|---|---|---:|
+| `organization_id`, `finding_id`, `area_conclusion_id` | uuid | Sim |
+| `rationale` | texto longo | Condicional |
+
+**PK, FKs e unicidade.** PK `id`; FKs explícitas para `organizations`, `findings` e `area_conclusions`; único `organization_id, finding_id, area_conclusion_id`. **Índices:** `organization_id, finding_id`; `organization_id, area_conclusion_id`. **Preservação:** encerramento ou inativação do vínculo preserva a associação histórica. **Integridade:** achado e conclusão pertencem à mesma organização e ao mesmo trabalho; o vínculo sustenta rastreabilidade e não prova suficiência da conclusão.
 
 ### `audit_reports`
 
@@ -851,8 +899,9 @@ O mapa mostra dependências lógicas, não suficiência automática de auditoria
 | `organization_target_id`, `user_profile_target_id`, `organization_membership_target_id`, `client_target_id` | uuid | Exatamente um alvo |
 | `audit_engagement_target_id`, `trial_balance_import_target_id`, `account_mapping_target_id`, `engagement_risk_target_id` | uuid | Exatamente um alvo |
 | `audit_procedure_target_id`, `audit_sample_target_id`, `document_request_target_id`, `received_document_target_id` | uuid | Exatamente um alvo |
-| `file_version_target_id`, `evidence_item_target_id`, `working_paper_target_id`, `review_note_target_id` | uuid | Exatamente um alvo |
-| `finding_target_id`, `area_conclusion_target_id`, `audit_report_target_id` | uuid | Exatamente um alvo |
+| `document_request_instruction_target_id`, `file_version_target_id`, `file_access_grant_target_id`, `evidence_item_target_id` | uuid | Exatamente um alvo |
+| `working_paper_target_id`, `review_note_target_id`, `finding_target_id`, `area_conclusion_target_id` | uuid | Exatamente um alvo |
+| `finding_area_conclusion_target_id`, `audit_report_target_id` | uuid | Exatamente um alvo |
 | `engagement_id`, `reason`, `context` | uuid, texto longo, json estruturado | Condicional |
 
 **PK, FKs e unicidade.** PK `id`; FKs explícitas para ator, trabalho contextual e cada tabela nomeada nas colunas `*_target_id`. **Índices:** `organization_id, occurred_at`; `actor_user_profile_id, occurred_at`; `engagement_id, occurred_at`; índice parcial lógico para cada alvo. **Preservação:** append-only para usuários comuns. **Integridade:** exatamente uma FK de alvo deve estar preenchida; ator, alvo e trabalho contextual pertencem à organização autorizada; registra os eventos relevantes conforme aplicável e não é a trilha por si só.
@@ -910,7 +959,7 @@ As extensões abaixo ficam fora do núcleo MVP: planos de ação, portal avança
 
 - Toda FK organizacional deve impedir associação entre organizações distintas; o modelo físico deverá usar chaves contextuais ou controles equivalentes testáveis.
 - `organization_id` é obrigatório para dados da firma. A possibilidade de referência global, da plataforma ou por segmento continua pendente e não pode causar compartilhamento implícito.
-- Relações N:N são explícitas: `role_permissions`, `membership_roles`, `client_segments`, `account_group_client_accounts`, `account_group_reference_accounts`, `risk_controls`, `procedure_risks`, `received_document_files`, `evidence_links` e `working_paper_links`.
+- Relações N:N são explícitas: `role_permissions`, `membership_roles`, `client_segments`, `account_group_client_accounts`, `account_group_reference_accounts`, `risk_controls`, `procedure_risks`, `received_document_files`, `evidence_links`, `working_paper_links` e `finding_area_conclusions`. `document_request_instructions` materializa a cardinalidade 0:N de instruções aplicadas por solicitação.
 - Vínculos transversais usam somente colunas alternativas com FKs nomeadas. `evidence_links`, `working_paper_links`, `review_notes`, `report_items`, `status_history`, `audit_events`, `entity_versions`, `comments` e `notifications` exigem exatamente um destino preenchido; identificadores genéricos de tipo/entidade não são admitidos.
 - Toda FK de ator termina em `*_user_profile_id` e aponta explicitamente para `user_profiles`. Memberships continuam sendo usados apenas quando o próprio vínculo organizacional é o objeto ou destinatário contextual, não como identidade do ator.
 - Valores, listas de estados, ciclos, obrigatoriedades condicionais, classificações e regras de transição são fechados por entidade em SDD. Não existe enumeração universal autorizada.
@@ -927,10 +976,10 @@ Catálogos e vínculos administrativos admitem inativação ou término de vigê
 
 1. Organizações, usuários, memberships, papéis, permissões, campos transversais e testes de isolamento.
 2. Clientes, segmentos, aceitação, trabalhos, períodos, equipe e planejamento.
-3. Arquivos/versionamento, balancetes, contas, planos referenciais e mapeamentos.
+3. Arquivos/versionamento, concessões temporárias de acesso, balancetes, contas, planos referenciais e mapeamentos.
 4. Processos, riscos, controles, programas, procedimentos e amostras.
-5. Solicitações, instruções, documentos recebidos, evidências e vínculos.
-6. Papéis de trabalho, revisão, achados, recomendações, conclusões e relatórios.
+5. Solicitações, templates e instruções aplicadas, documentos recebidos, evidências e vínculos.
+6. Papéis de trabalho, revisão, achados, associações com conclusões, recomendações, conclusões e relatórios.
 7. Eventos, histórico, versões, comentários e notificações transversais.
 8. Extensões aprovadas e priorizadas, incluindo SDD específico de planos de ação.
 
@@ -959,18 +1008,18 @@ Em conflito, prevalece a Constituição e sua hierarquia documental. Pendências
 - Diferenciar organização usuária, cliente e trabalho de auditoria.
 - Explicar por que perfil geral, função no trabalho e responsabilidade por item não são a mesma coisa.
 - Seguir a cadeia de rastreabilidade de planejamento a relatório e no sentido reverso.
-- Distinguir solicitação, instrução, documento recebido, arquivo, evidência e papel de trabalho.
+- Distinguir template de instrução, instrução aplicada à solicitação, documento recebido, arquivo, evidência e papel de trabalho.
 - Reconhecer que versão, evento e trilha de auditoria têm finalidades diferentes.
 
 ### Roteiro e estudo de caso conceitual
 
 1. Apresente o isolamento por organização e o membership de um usuário.
 2. Crie conceitualmente um cliente, trabalho, período e planejamento, sem dados reais.
-3. Mostre a referência controlada do balancete ao arquivo original, sua linha bruta e valores normalizados.
-4. Relacione risco, procedimento, amostra, solicitação, instrução, documento recebido, evidência e papel de trabalho.
-5. Demonstre a reconstrução de um achado até suas evidências e a emissão de relatório suportado.
+3. Mostre a referência controlada do balancete ao arquivo original, sua linha bruta, valores normalizados e conta preservada por vigência.
+4. Relacione risco, procedimento, amostra, solicitação, instrução aplicada, documento recebido, evidência e papel de trabalho; depois, mostre uma concessão temporária de arquivo com expiração, revogação e evento.
+5. Demonstre a reconstrução de um achado até suas evidências, a associação explícita à conclusão de área e a emissão de relatório suportado.
 
-**Erros comuns.** Usar arquivo como se fosse evidência; tratar documento recebido como evidência sem avaliação; conceder acesso apenas por papel geral; alterar versão enviada; misturar dados de organizações; incluir `action_plans` no núcleo MVP; usar destino genérico sem FK explícita; considerar a existência de vínculos como prova de suficiência.
+**Erros comuns.** Usar arquivo como se fosse evidência; tratar documento recebido como evidência sem avaliação; conceder acesso apenas por papel geral ou sem prazo e trilha; alterar snapshot ou versão enviada; presumir referencial global antes da decisão de titularidade; misturar dados de organizações; incluir `action_plans` no núcleo MVP; usar destino genérico sem FK explícita; considerar a existência de vínculos como prova de suficiência.
 
 **Resumo.** O modelo lógico mantém cada conceito metodológico no seu limite, registra a origem e a evolução dos fatos e prepara a implantação futura sem transferir julgamento profissional para o banco ou para automações.
 
@@ -980,3 +1029,4 @@ Em conflito, prevalece a Constituição e sua hierarquia documental. Pendências
 |---|---|---|---|
 | 0.9 | 2026-07-28 | Minuta inicial do modelo relacional lógico, com limites, rastreabilidade e escopo pendente de planos de ação | Em revisão |
 | 0.9 | 2026-07-28 | Correção 1/5: planos de ação classificados como extensão futura; arquivos recebidos, grupos de contas, alvos transversais e atores explicitados | Em revisão |
+| 0.9 | 2026-07-28 | Correção final: instruções aplicadas, concessões temporárias de arquivo, vínculo achado–conclusão, contas por vigência e titularidade contextual de referenciais explicitados; mapa, implantação e material atualizados | Em revisão |

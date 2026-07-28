@@ -1,53 +1,30 @@
-# Task 2 — Relatório de execução
-
-**Status:** concluída com preocupações documentais registradas
+# Relatório da Task 2 — Correção final do Modelo de Dados do SIGA
 
 **Data:** 2026-07-28
+**Escopo alterado:** somente `docs/estruturantes/04_MODELO_DE_DADOS_DO_SIGA.md` e este relatório.
 
-## Entregas
+## Correções aplicadas
 
-- Criado `docs/estruturantes/04_MODELO_DE_DADOS_DO_SIGA.md` como modelo relacional lógico único do SIGA.
-- Mantidos inalterados os documentos aprovados.
-- Preservada a separação entre solicitação, instrução, documento recebido, arquivo, evidência e papel de trabalho.
-- Documentadas as 58 tabelas mínimas solicitadas, com campos lógicos, PK, FKs, unicidade, índices, preservação, integridade e situação.
-- Na versão inicial, `action_plans` foi marcada como escopo pendente; a correção 1/5 abaixo substitui essa classificação por **Extensão futura**.
+1. Incluída `document_request_instructions` para a cardinalidade 0:N de instruções efetivamente aplicadas a `document_requests`, com template de origem opcional, snapshot, versão enviada e data de envio imutáveis.
+2. Incluída `file_access_grants` para acesso temporário a arquivo ou versão, com organização, cliente e trabalho condicionais, destinatário, finalidade, permissões, expiração, revogação e referência à trilha por `audit_events`.
+3. Incluída a FK condicional de `trial_balance_import_rows` para `client_accounts`; contas do cliente agora carregam vigência e a linha conserva bruto, normalizado e a conta histórica aplicada.
+4. Incluída `finding_area_conclusions` como associação N:N explícita entre achados e conclusões de área.
+5. Formalizado `ownership_scope` (`platform` ou `organization`) e `organization_id` condicional, com unicidade contextual, para permissões e referenciais semelhantes, sem presumir globalidade.
+6. Corrigido o wikilink da fonte do desenho para o arquivo existente em `docs/superpowers/specs/2026-07-28-modelo-dados-siga-design.md`, sem alterar o desenho.
+7. Mantida `action_plans` como extensão futura, fora do núcleo MVP.
 
-## Verificações executadas
+## Atualizações de coerência
 
-- Conferência textual das 58 tabelas mínimas exigidas no brief.
-- Conferência de YAML obrigatório, fontes, relações, propriedades Obsidian, treinamento e histórico.
-- Busca por marcadores de pendência incompleta: nenhuma ocorrência.
-- Conferência inicial da classificação então vigente de `action_plans`; substituída pela verificação da correção 1/5.
-- Conferência de que o documento não contém SQL, migrations, políticas RLS executáveis, credenciais, CSVs ou dados reais.
-- `git diff --check` executado sem saída de erro.
+- Mapa relacional, contagem de fichas, ordem futura de implantação, integridade transversal, material de treinamento e histórico de alterações foram atualizados.
+- A contagem final é de 64 fichas lógicas: 63 do MVP e `action_plans` como extensão futura.
 
-## Autorrevisão
+## Verificações
 
-Foi revisada a coerência entre isolamento multiempresa, campos transversais, vínculos N:N, integridade contextual, preservação histórica e a cadeia metodológica. A revisão corrigiu a explicitação de `organization_id` em `role_permissions` e `membership_roles`, evitando associações de acesso sem contexto organizacional direto.
+- Verificação textual das três novas estruturas, das relações, da ligação de linhas de balancete a contas, do escopo contextual e da manutenção de `action_plans` como extensão futura.
+- Verificação da resolução textual do destino do desenho.
+- `git diff --check` executado sem apontamentos.
 
-## Preocupações que permanecem
+## Preocupações remanescentes
 
-- A titularidade de alguns referenciais entre plataforma e organização, os catálogos e transições de estado, o alcance do versionamento e a matriz de exclusão lógica exigem SDDs futuros; o modelo não inventa essas decisões.
-- `action_plans` foi classificada como extensão futura por decisão humana na correção 1/5 e permanece fora do núcleo MVP.
-- Nenhum CSV real foi acessado, aberto, copiado ou utilizado; não há dados reais no documento.
-
-## Correção 1/5 — decisão humana e achados do revisor
-
-**Decisão registrada:** em 2026-07-28, `action_plans` passou de escopo pendente para **Extensão futura** e foi retirada do núcleo MVP. A decisão foi aplicada somente ao Modelo de Dados e a este relatório; nenhuma fonte aprovada foi alterada.
-
-**Correções documentais:**
-
-- criado `received_document_files`, com FKs explícitas para `received_documents` e `file_versions`, permitindo um ou vários arquivos sem promoção automática a evidência;
-- criados `account_group_client_accounts` e `account_group_reference_accounts`, com composição N:N explícita e integridade organizacional;
-- substituídos destinos genéricos por FKs alternativas nomeadas e regra de exatamente um destino em evidências, papéis, revisão, itens de relatório, históricos, versões, comentários e notificações;
-- padronizadas FKs de ator como `*_user_profile_id`, com alvo explícito em `user_profiles`;
-- preservadas todas as tabelas mínimas exigidas e adicionadas somente as associativas necessárias à integridade lógica.
-
-**Verificações concretas da rodada:**
-
-- cobertura: 58 tabelas mínimas preservadas e 3 associativas explícitas adicionadas;
-- classificação: `action_plans` encontrada como Extensão futura, sem marcação de MVP ou escopo pendente em sua ficha vigente;
-- destinos: 9 fichas com regra de exatamente um alvo; nenhum campo genérico `entity_type`/`entity_id` ou equivalente;
-- atores: nenhuma FK legada de ator; padrão `*_user_profile_id` conferido;
-- escopo: somente o Modelo de Dados e este relatório alterados;
-- higiene: `git diff --check` sem erros.
+- A decisão de quais catálogos serão efetivamente publicados no escopo da plataforma ou no escopo de cada organização permanece para SDD, como o documento registra.
+- Não foram criadas regras operacionais, SQL, migrations ou políticas de acesso; esses detalhes permanecem fora do escopo desta correção documental.
