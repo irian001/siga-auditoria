@@ -43,31 +43,31 @@
 
 **Produces:** Modelo de Domínio v0.9 com mapa, entidades conceituais, relações, estados, rastreabilidade, extensões e bloco educacional.
 
-- [ ] **Step 1: Consolidar conceitos e fontes**
+- [x] **Step 1: Consolidar conceitos e fontes**
 
 Usar o Glossário como vocabulário controlado e consolidar, para cada domínio, a fonte constitucional ou estruturante correspondente. Incluir organização usuária, usuário, perfil, função, cliente, trabalho, planejamento, balancete, conta, risco, controle, procedimento, amostra, solicitação, instrução, documento recebido, evidência, papel de trabalho, achado, revisão, conclusão, relatório, histórico, trilha, permissão, versão e anexo.
 
-- [ ] **Step 2: Criar YAML, navegação e limites**
+- [x] **Step 2: Criar YAML, navegação e limites**
 
 Usar `SIGA-DOM-001`, título `Modelo de Domínio do SIGA`, aliases `Modelo de Domínio` e `Domínio do SIGA`, tipo `documento-estruturante`, domínio `arquitetura-funcional`, status `em-revisao`, versão `0.9`, datas `2026-07-28`, owner `responsavel-projeto`; Obsidian `note_type: domain-model`, `graph_role: domain-hub`, `backlinks_expected: true`, `dataview_ready: true`. Relacionar Constituição, Matriz, Visão, Glossário e futuro Modelo de Dados.
 
-- [ ] **Step 3: Escrever mapa e fundamentos transversais**
+- [x] **Step 3: Escrever mapa e fundamentos transversais**
 
 Apresentar a cadeia metodológica aprovada como mapa textual. Explicar multiempresa, permissões, responsabilidades, histórico, trilha de auditoria, versões, estados, anexos e segurança como fundamentos que atravessam os domínios.
 
-- [ ] **Step 4: Escrever entidades do núcleo do MVP**
+- [x] **Step 4: Escrever entidades do núcleo do MVP**
 
 Organizar entidades por: organização e acesso; trabalho e planejamento; contabilidade, riscos e procedimentos; documentos, evidências e papéis; achados, revisão, conclusões e relatório. Para cada conceito, registrar finalidade, identidade conceitual, relações, responsabilidades, estados quando aplicáveis e limites.
 
-- [ ] **Step 5: Escrever extensões planejadas e relações simples**
+- [x] **Step 5: Escrever extensões planejadas e relações simples**
 
 Separar portal do cliente, planos de ação, qualidade, auditoria dos pares, comercial, indicadores, integrações e agentes integrados. Explicar cardinalidades em linguagem simples sem usar modelo físico; deixar claro que uma relação futura não integra o MVP automaticamente.
 
-- [ ] **Step 6: Incluir estados, rastreabilidade, Obsidian e treinamento**
+- [x] **Step 6: Incluir estados, rastreabilidade, Obsidian e treinamento**
 
 Explicar ciclos de vida conceituais e relações rastreáveis. Declarar notas futuras. Incluir público, nível, pré-requisitos, objetivos, conceitos-chave, roteiro, exemplo, erros comuns, boas práticas, estudo de caso, perguntas, avaliação, resumo, fontes, versão e histórico.
 
-- [ ] **Step 7: Validar o documento**
+- [x] **Step 7: Validar o documento**
 
 Executar `git diff --check` e procurar `TODO`, `TBD`, `preencher` e `definir depois`. Conferir documento/evidência, instrução/evidência, papel/resposta ao risco, MVP/extensões e ausência de decisões físicas ou regras novas.
 
