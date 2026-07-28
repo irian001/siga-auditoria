@@ -71,7 +71,7 @@ Explicar ciclos de vida conceituais e relações rastreáveis. Declarar notas fu
 
 Executar `git diff --check` e procurar `TODO`, `TBD`, `preencher` e `definir depois`. Conferir documento/evidência, instrução/evidência, papel/resposta ao risco, MVP/extensões e ausência de decisões físicas ou regras novas.
 
-- [ ] **Step 8: Commit e revisão humana**
+- [x] **Step 8: Commit e revisão humana**
 
 Criar o commit `docs: cria modelo de domínio do SIGA` contendo somente o Modelo v0.9. Apresentar o arquivo e interromper até aprovação expressa.
 
@@ -86,11 +86,11 @@ Criar o commit `docs: cria modelo de domínio do SIGA` contendo somente o Modelo
 
 **Produces:** Modelo v1.0 aprovado, conectado à Matriz e publicado em `main` por pull request.
 
-- [ ] **Step 1: Registrar aprovação**
+- [x] **Step 1: Registrar aprovação**
 
 Atualizar o Modelo para `status: aprovado`, `version: 1.0`, data de aprovação e histórico preservando 0.9 como substituída.
 
-- [ ] **Step 2: Atualizar a Matriz Mestra**
+- [x] **Step 2: Atualizar a Matriz Mestra**
 
 Adicionar [[Modelo de Domínio do SIGA]] na navegação de documentos estruturantes, sem alterar regras constitucionais.
 
