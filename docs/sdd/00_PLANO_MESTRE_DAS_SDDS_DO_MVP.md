@@ -6,8 +6,8 @@ aliases:
   - SDDs do MVP
 type: plano-mestre-sdd
 domain: governanca-desenvolvimento
-status: minuta
-version: 0.1
+status: aprovado
+version: 1.0
 created: 2026-07-29
 updated: 2026-07-29
 owner: responsavel-projeto
@@ -594,3 +594,4 @@ A sequência imediata será:
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-07-29 | Criação da minuta inicial do Plano Mestre das SDDs do MVP | Em revisão |
+| 1.0 | 2026-07-29 | Primeira versão aprovada do Plano Mestre das SDDs do MVP | Aprovada |
