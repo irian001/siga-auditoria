@@ -6,10 +6,10 @@ aliases:
   - Esquema de Dados do SIGA
 type: documento-estruturante
 domain: dados
-status: em-revisao
-version: 0.9
+status: aprovado
+version: 1.0
 created: 2026-07-28
-updated: 2026-07-28
+updated: 2026-07-29
 owner: responsavel-projeto
 audience:
   - auditor
@@ -1048,3 +1048,4 @@ Em conflito, prevalece a Constituição e sua hierarquia documental. Pendências
 | 0.9 | 2026-07-28 | Correção 1/5: planos de ação classificados como extensão futura; arquivos recebidos, grupos de contas, alvos transversais e atores explicitados | Em revisão |
 | 0.9 | 2026-07-28 | Correção final: instruções aplicadas, concessões temporárias de arquivo, vínculo achado–conclusão, contas por vigência e titularidade contextual de referenciais explicitados; mapa, implantação e material atualizados | Em revisão |
 | 0.9 | 2026-07-28 | Correção de integridade: compatibilidade entre catálogos modelada por três caminhos lógicos, com referência alternativa/escopo de catálogo e validação física futura; sem compartilhamento entre organizações | Em revisão |
+| 1.0 | 2026-07-29 | Primeira versão aprovada do Modelo de Dados do SIGA | Aprovada |
