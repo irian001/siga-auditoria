@@ -126,7 +126,7 @@ Atualmente:
 - não existem módulos funcionais do MVP;
 - `.lovable/plan.md` registra orientações anteriores à consolidação do repositório e não deverá ser tratado como fonte oficial.
 
-## 4. Decisões propostas para aprovação
+## 4. Decisões aprovadas
 
 ### 4.1 Stack do MVP
 
@@ -632,13 +632,12 @@ Essas pendências não deverão ser incorporadas às SDDs do Grupo 00.
 
 ## 15. Próxima ação
 
-Após a aprovação deste plano:
+Com o plano aprovado e o procedimento de sincronização registrado em `AGENTS.md`, a sequência seguinte será:
 
-1. promover o documento para versão `1.0` e status `aprovado`;
-2. registrar em `AGENTS.md` o procedimento controlado para commits do Lovable;
-3. elaborar `SDD-FND-001_FUNDACAO_DA_APLICACAO.md`;
-4. revisar e aprovar a SDD;
-5. enviar a SDD ao Lovable exclusivamente em modo planejamento.
+1. elaborar `SDD-FND-001_FUNDACAO_DA_APLICACAO.md`;
+2. revisar e aprovar a SDD;
+3. publicar a SDD no GitHub;
+4. enviar a SDD ao Lovable exclusivamente em modo planejamento.
 
 ## 16. Navegação
 
