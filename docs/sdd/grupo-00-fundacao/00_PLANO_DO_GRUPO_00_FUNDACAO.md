@@ -6,8 +6,8 @@ aliases:
   - Plano da Fundação do SIGA
 type: plano-de-grupo-sdd
 domain: fundacao-aplicacao
-status: em-revisao
-version: 0.1
+status: aprovado
+version: 1.0
 created: 2026-07-29
 updated: 2026-07-29
 owner: responsavel-projeto
@@ -653,4 +653,5 @@ Após a aprovação deste plano:
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.1 | 2026-07-29 | Criação do plano operacional do Grupo 00 | Em revisão |
+| 0.1 | 2026-07-29 | Criação do plano operacional do Grupo 00 | Substituída |
+| 1.0 | 2026-07-29 | Primeira versão aprovada do Plano do Grupo 00 | Aprovada |

@@ -191,6 +191,20 @@ Somente após a aprovação do plano, o Lovable poderá:
 
 Não deverá ser enviado ao Lovable um comando amplo como “crie o SIGA completo”.
 
+### Exceção operacional da sincronização direta
+
+Quando a conexão direta do Lovable registrar alterações na branch conectada, normalmente a `main`, deverá ser aplicado o seguinte procedimento:
+
+1. registrar o commit atual da `main`;
+2. criar uma branch de checkpoint antes da implementação;
+3. autorizar somente o escopo da SDD aprovada;
+4. identificar imediatamente os commits produzidos pelo Lovable;
+5. revisar o diff e executar as verificações proporcionais;
+6. aceitar a alteração ou revertê-la por um novo commit;
+7. nunca utilizar force push, rebase, amend ou squash sobre histórico já sincronizado.
+
+Essa exceção aplica-se exclusivamente à sincronização direta do Lovable. Ela não autoriza outros agentes ou ferramentas a alterar a `main` sem o fluxo normal de branch, revisão e aprovação.
+
 ## 8. Controle de escopo
 
 Antes de alterar qualquer arquivo, o executor deverá verificar:
