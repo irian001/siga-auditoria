@@ -1,6 +1,11 @@
-# SIGA-Auditoria
+# SIGA — Sistema Integrado para Gerenciamento de Auditoria
 
-preciso criar um ambiente para dar prossegimento a um projeto que já existe no github
+Aplicação de apoio ao planejamento, execução, documentação e revisão de trabalhos de auditoria.
+
+A documentação oficial do projeto está em `docs/` (constituição, documentos estruturantes e SDDs). As diretrizes operacionais estão em `AGENTS.md`.
+
+Situação atual: MVP em construção — Grupo 00 (Fundação), SDD-FND-001.
+
 
 This project was built with [Lovable](https://lovable.dev).
 
