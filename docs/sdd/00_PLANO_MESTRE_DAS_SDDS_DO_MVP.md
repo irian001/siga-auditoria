@@ -569,7 +569,7 @@ A sequência imediata será:
 
 | Grupo | Situação | Próxima ação |
 |---|---|---|
-| 00 — Fundação | Não iniciado | Elaborar SDD-FND-001 |
+| 00 — Fundação | Em planejamento | Enviar SDD-FND-001 aprovada ao Lovable em modo planejamento |
 | 01 — Organização e acesso | Não iniciado | Aguardar Grupo 00 |
 | 02 — Clientes e trabalhos | Não iniciado | Aguardar Grupo 01 |
 | 03 — Contabilidade e planejamento | Não iniciado | Aguardar Grupo 02 |

@@ -7,8 +7,8 @@ aliases:
 type: sdd
 domain: fundacao-aplicacao
 group: grupo-00-fundacao
-status: em-revisao
-version: 0.1
+status: aprovado
+version: 1.0
 created: 2026-07-29
 updated: 2026-07-29
 owner: responsavel-projeto
@@ -1007,4 +1007,5 @@ Ao estudar esta SDD, o participante deverá compreender:
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.1 | 2026-07-29 | Criação da minuta inicial da SDD-FND-001 | Em revisão |
+| 0.1 | 2026-07-29 | Criação da minuta inicial da SDD-FND-001 | Substituída |
+| 1.0 | 2026-07-29 | Primeira versão aprovada da SDD-FND-001 | Aprovada |

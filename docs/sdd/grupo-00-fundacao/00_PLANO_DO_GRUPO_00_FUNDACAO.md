@@ -632,12 +632,12 @@ Essas pendências não deverão ser incorporadas às SDDs do Grupo 00.
 
 ## 15. Próxima ação
 
-Com o plano aprovado e o procedimento de sincronização registrado em `AGENTS.md`, a sequência seguinte será:
+Com a SDD-FND-001 aprovada, a próxima ação será:
 
-1. elaborar `SDD-FND-001_FUNDACAO_DA_APLICACAO.md`;
-2. revisar e aprovar a SDD;
-3. publicar a SDD no GitHub;
-4. enviar a SDD ao Lovable exclusivamente em modo planejamento.
+1. publicar a versão aprovada na `main`;
+2. confirmar sua leitura pelo Lovable;
+3. enviar a SDD ao Lovable exclusivamente em modo planejamento;
+4. revisar o plano apresentado antes de autorizar qualquer implementação.
 
 ## 16. Navegação
 
