@@ -30,7 +30,7 @@ export function MainNav({ onNavigate, className }: MainNavProps) {
                       to={item.to}
                       activeOptions={{ exact: item.to === "/" }}
                       onClick={onNavigate}
-                      className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-foreground/80 transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[status=active]:bg-secondary data-[status=active]:font-semibold data-[status=active]:text-secondary-foreground"
+                      className="flex items-center gap-3 rounded-md border-l-2 border-transparent px-3 py-2 text-sm font-medium text-sidebar-foreground/75 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar data-[status=active]:border-primary data-[status=active]:bg-sidebar-accent data-[status=active]:font-semibold data-[status=active]:text-sidebar-accent-foreground"
                       activeProps={{ "aria-current": "page" }}
                     >
                       <Icon aria-hidden="true" className="size-4 shrink-0" />
