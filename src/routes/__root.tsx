@@ -2,8 +2,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
+  redirect,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -12,6 +14,14 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { getServerAuthState } from "@/lib/auth/auth.server";
+
+const publicAuthPaths = new Set([
+  "/login",
+  "/recuperar-senha",
+  "/redefinir-senha",
+  "/auth/callback",
+]);
 
 function NotFoundComponent() {
   return (
@@ -74,6 +84,27 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: async ({ location }) => {
+    const auth = await getServerAuthState();
+    const isPublicAuthPath = publicAuthPaths.has(location.pathname);
+
+    if (isPublicAuthPath) {
+      if (auth.authenticated && location.pathname !== "/redefinir-senha") {
+        throw redirect({ to: "/acesso-pendente" });
+      }
+      return { auth };
+    }
+
+    if (!auth.authenticated) {
+      throw redirect({ to: "/login" });
+    }
+
+    if (location.pathname !== "/acesso-pendente") {
+      throw redirect({ to: "/acesso-pendente" });
+    }
+
+    return { auth };
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -95,9 +126,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Início — SIGA" },
-      { name: "twitter:description", content: "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png",
+      },
     ],
     links: [
       {
@@ -128,13 +171,19 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const usesAuthLayout = publicAuthPaths.has(pathname) || pathname === "/acesso-pendente";
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppLayout>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      {usesAuthLayout ? (
         <Outlet />
-      </AppLayout>
+      ) : (
+        <AppLayout>
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+        </AppLayout>
+      )}
     </QueryClientProvider>
   );
 }

@@ -43,3 +43,7 @@ export const appEnvironment: AppEnvironment = {
   supabaseUrl: parsedEnvironment.VITE_SIGA_SUPABASE_URL,
   supabasePublishableKey: parsedEnvironment.VITE_SIGA_SUPABASE_PUBLISHABLE_KEY,
 };
+
+export const isSupabaseConfigured = Boolean(
+  appEnvironment.supabaseUrl && appEnvironment.supabasePublishableKey,
+);
