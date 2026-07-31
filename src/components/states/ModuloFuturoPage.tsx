@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowLeft } from "lucide-react";
 
 import { PageHeader } from "@/components/layout/PageHeader";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/ui/status-badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/states/EmptyState";
 import { NAV_GROUP_LABELS, type NavItem } from "@/config/navigation";
@@ -23,7 +23,7 @@ export function ModuloFuturoPage({ item }: ModuloFuturoPageProps) {
       <PageHeader
         title={item.title}
         description={item.description}
-        badge={<Badge variant="secondary">Planejado</Badge>}
+        badge={<StatusBadge status="planejado" />}
         breadcrumbLabel={item.title}
       />
 

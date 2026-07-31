@@ -9,55 +9,20 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ClientesRouteImport } from './routes/clientes'
-import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
-import { Route as DocumentosEvidenciasRouteImport } from './routes/documentos-evidencias'
-import { Route as PapeisTrabalhoRouteImport } from './routes/papeis-trabalho'
-import { Route as PlanejamentoRouteImport } from './routes/planejamento'
-import { Route as RelatoriosRouteImport } from './routes/relatorios'
-import { Route as RevisaoRouteImport } from './routes/revisao'
-import { Route as RiscosProcedimentosRouteImport } from './routes/riscos-procedimentos'
 import { Route as TrabalhosRouteImport } from './routes/trabalhos'
+import { Route as RiscosProcedimentosRouteImport } from './routes/riscos-procedimentos'
+import { Route as RevisaoRouteImport } from './routes/revisao'
+import { Route as RelatoriosRouteImport } from './routes/relatorios'
+import { Route as PlanejamentoRouteImport } from './routes/planejamento'
+import { Route as PapeisTrabalhoRouteImport } from './routes/papeis-trabalho'
+import { Route as DocumentosEvidenciasRouteImport } from './routes/documentos-evidencias'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as ClientesRouteImport } from './routes/clientes'
+import { Route as IndexRouteImport } from './routes/index'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ClientesRoute = ClientesRouteImport.update({
-  id: '/clientes',
-  path: '/clientes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
-  id: '/configuracoes',
-  path: '/configuracoes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DocumentosEvidenciasRoute = DocumentosEvidenciasRouteImport.update({
-  id: '/documentos-evidencias',
-  path: '/documentos-evidencias',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PapeisTrabalhoRoute = PapeisTrabalhoRouteImport.update({
-  id: '/papeis-trabalho',
-  path: '/papeis-trabalho',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlanejamentoRoute = PlanejamentoRouteImport.update({
-  id: '/planejamento',
-  path: '/planejamento',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RelatoriosRoute = RelatoriosRouteImport.update({
-  id: '/relatorios',
-  path: '/relatorios',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RevisaoRoute = RevisaoRouteImport.update({
-  id: '/revisao',
-  path: '/revisao',
+const TrabalhosRoute = TrabalhosRouteImport.update({
+  id: '/trabalhos',
+  path: '/trabalhos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RiscosProcedimentosRoute = RiscosProcedimentosRouteImport.update({
@@ -65,9 +30,44 @@ const RiscosProcedimentosRoute = RiscosProcedimentosRouteImport.update({
   path: '/riscos-procedimentos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrabalhosRoute = TrabalhosRouteImport.update({
-  id: '/trabalhos',
-  path: '/trabalhos',
+const RevisaoRoute = RevisaoRouteImport.update({
+  id: '/revisao',
+  path: '/revisao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelatoriosRoute = RelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanejamentoRoute = PlanejamentoRouteImport.update({
+  id: '/planejamento',
+  path: '/planejamento',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PapeisTrabalhoRoute = PapeisTrabalhoRouteImport.update({
+  id: '/papeis-trabalho',
+  path: '/papeis-trabalho',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentosEvidenciasRoute = DocumentosEvidenciasRouteImport.update({
+  id: '/documentos-evidencias',
+  path: '/documentos-evidencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ClientesRoute = ClientesRouteImport.update({
+  id: '/clientes',
+  path: '/clientes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -162,60 +162,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/clientes': {
-      id: '/clientes'
-      path: '/clientes'
-      fullPath: '/clientes'
-      preLoaderRoute: typeof ClientesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/configuracoes': {
-      id: '/configuracoes'
-      path: '/configuracoes'
-      fullPath: '/configuracoes'
-      preLoaderRoute: typeof ConfiguracoesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/documentos-evidencias': {
-      id: '/documentos-evidencias'
-      path: '/documentos-evidencias'
-      fullPath: '/documentos-evidencias'
-      preLoaderRoute: typeof DocumentosEvidenciasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/papeis-trabalho': {
-      id: '/papeis-trabalho'
-      path: '/papeis-trabalho'
-      fullPath: '/papeis-trabalho'
-      preLoaderRoute: typeof PapeisTrabalhoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/planejamento': {
-      id: '/planejamento'
-      path: '/planejamento'
-      fullPath: '/planejamento'
-      preLoaderRoute: typeof PlanejamentoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/relatorios': {
-      id: '/relatorios'
-      path: '/relatorios'
-      fullPath: '/relatorios'
-      preLoaderRoute: typeof RelatoriosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/revisao': {
-      id: '/revisao'
-      path: '/revisao'
-      fullPath: '/revisao'
-      preLoaderRoute: typeof RevisaoRouteImport
+    '/trabalhos': {
+      id: '/trabalhos'
+      path: '/trabalhos'
+      fullPath: '/trabalhos'
+      preLoaderRoute: typeof TrabalhosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/riscos-procedimentos': {
@@ -225,11 +176,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RiscosProcedimentosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trabalhos': {
-      id: '/trabalhos'
-      path: '/trabalhos'
-      fullPath: '/trabalhos'
-      preLoaderRoute: typeof TrabalhosRouteImport
+    '/revisao': {
+      id: '/revisao'
+      path: '/revisao'
+      fullPath: '/revisao'
+      preLoaderRoute: typeof RevisaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relatorios': {
+      id: '/relatorios'
+      path: '/relatorios'
+      fullPath: '/relatorios'
+      preLoaderRoute: typeof RelatoriosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planejamento': {
+      id: '/planejamento'
+      path: '/planejamento'
+      fullPath: '/planejamento'
+      preLoaderRoute: typeof PlanejamentoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/papeis-trabalho': {
+      id: '/papeis-trabalho'
+      path: '/papeis-trabalho'
+      fullPath: '/papeis-trabalho'
+      preLoaderRoute: typeof PapeisTrabalhoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documentos-evidencias': {
+      id: '/documentos-evidencias'
+      path: '/documentos-evidencias'
+      fullPath: '/documentos-evidencias'
+      preLoaderRoute: typeof DocumentosEvidenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/clientes': {
+      id: '/clientes'
+      path: '/clientes'
+      fullPath: '/clientes'
+      preLoaderRoute: typeof ClientesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
