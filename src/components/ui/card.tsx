@@ -2,15 +2,11 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-/**
- * Cartão — SDD-DSG-001, seções 5.1 e 5.4.
- * Superfície levemente elevada, delimitada por borda e não por sombra.
- */
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("rounded-lg border border-border bg-card text-card-foreground", className)}
+      className={cn("rounded-xl border bg-card text-card-foreground shadow", className)}
       {...props}
     />
   ),
@@ -28,7 +24,7 @@ const CardTitle = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivE
   ({ className, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("text-base font-semibold leading-tight tracking-tight", className)}
+      className={cn("font-semibold leading-none tracking-tight", className)}
       {...props}
     />
   ),
@@ -51,7 +47,7 @@ CardContent.displayName = "CardContent";
 
 const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("flex items-center gap-2 p-6 pt-0", className)} {...props} />
+    <div ref={ref} className={cn("flex items-center p-6 pt-0", className)} {...props} />
   ),
 );
 CardFooter.displayName = "CardFooter";
