@@ -369,62 +369,82 @@ Esta SDD não poderá:
 
 ### CA-DSG-001 — Tema
 
-**Dado** que o usuário abre o SIGA,  
-**quando** a aplicação é carregada,  
+**Dado** que o usuário abre o SIGA,
+
+**quando** a aplicação é carregada,
+
 **então** o tema padrão deverá ser noturno, sóbrio e coerente com a paleta institucional aprovada.
 
 ### CA-DSG-002 — Hierarquia
 
-**Dado** que uma página estrutural é exibida,  
-**quando** o usuário percorre título, texto de apoio, cartões e ações,  
+**Dado** que uma página estrutural é exibida,
+
+**quando** o usuário percorre título, texto de apoio, cartões e ações,
+
 **então** a hierarquia visual deverá ser compreensível sem depender de decoração.
 
 ### CA-DSG-003 — Navegação ativa
 
-**Dado** que o usuário acessa uma rota estrutural,  
-**quando** a navegação é exibida,  
+**Dado** que o usuário acessa uma rota estrutural,
+
+**quando** a navegação é exibida,
+
 **então** a rota ativa deverá possuir indicação visual e semântica clara.
 
 ### CA-DSG-004 — Componentes
 
-**Dado** que um componente prioritário é utilizado,  
-**quando** seu estado muda,  
+**Dado** que um componente prioritário é utilizado,
+
+**quando** seu estado muda,
+
 **então** os tokens e estados visuais deverão permanecer coerentes com os demais componentes.
 
 ### CA-DSG-005 — Foco
 
-**Dado** que o usuário navega por teclado,  
-**quando** um item interativo recebe foco,  
+**Dado** que o usuário navega por teclado,
+
+**quando** um item interativo recebe foco,
+
 **então** o foco deverá estar visível.
 
 ### CA-DSG-006 — Estados
 
-**Dado** que um estado de sucesso, aviso, erro ou vazio é apresentado,  
-**quando** o usuário o lê,  
+**Dado** que um estado de sucesso, aviso, erro ou vazio é apresentado,
+
+**quando** o usuário o lê,
+
 **então** deverá compreender o significado sem depender exclusivamente da cor.
 
 ### CA-DSG-007 — Responsividade
 
-**Dado** que a interface é aberta em largura reduzida,  
-**quando** o usuário navega e visualiza os componentes básicos,  
+**Dado** que a interface é aberta em largura reduzida,
+
+**quando** o usuário navega e visualiza os componentes básicos,
+
 **então** não deverá ocorrer rolagem horizontal geral, sobreposição relevante ou perda de acesso às ações.
 
 ### CA-DSG-008 — Reutilização
 
-**Dado** que dois elementos possuem finalidade visual equivalente,  
-**quando** forem implementados,  
+**Dado** que dois elementos possuem finalidade visual equivalente,
+
+**quando** forem implementados,
+
 **então** deverão reutilizar o mesmo componente ou tokens compatíveis.
 
 ### CA-DSG-009 — Escopo
 
-**Dado** que a implementação foi concluída,  
-**quando** o diff for revisado,  
+**Dado** que a implementação foi concluída,
+
+**quando** o diff for revisado,
+
 **então** não deverá haver alteração em banco, Supabase, autenticação, regras de negócio, documentos aprovados, dependências ou publicação.
 
 ### CA-DSG-010 — Build
 
-**Dado** que as alterações foram concluídas,  
-**quando** o build disponível for executado,  
+**Dado** que as alterações foram concluídas,
+
+**quando** o build disponível for executado,
+
 **então** ele deverá concluir sem erro impeditivo.
 
 ## 15. Verificações esperadas
