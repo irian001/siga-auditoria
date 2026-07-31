@@ -23,7 +23,7 @@ export function ModuloFuturoPage({ item }: ModuloFuturoPageProps) {
       <PageHeader
         title={item.title}
         description={item.description}
-        badge={<Badge variant="secondary">Planejado</Badge>}
+        badge={<StatusBadge status="planejado" />}
         breadcrumbLabel={item.title}
       />
 
