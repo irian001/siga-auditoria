@@ -102,6 +102,12 @@
   --destructive-foreground: oklch(0.97 0.006 250);
   --success: oklch(0.62 0.11 158);
   --success-foreground: oklch(0.16 0.012 260);
+  /* Aviso — âmbar sóbrio, distinto de erro */
+  --warning: oklch(0.72 0.12 78);
+  --warning-foreground: oklch(0.16 0.012 260);
+  /* Neutro — situação planejada ou indisponível, sem sugerir aprovação */
+  --neutral: oklch(0.34 0.014 258);
+  --neutral-foreground: oklch(0.86 0.01 250);
 
   --border: oklch(0.31 0.014 258);
   --input: oklch(0.33 0.014 258);
