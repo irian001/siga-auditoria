@@ -78,29 +78,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "SIGA — Sistema Integrado para Gerenciamento de Auditoria" },
+      { title: "Início — SIGA" },
       {
         name: "description",
         content:
-          "SIGA — plataforma para planejar, executar, documentar e revisar trabalhos de auditoria.",
+          "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP.",
       },
       { name: "author", content: "Projeto SIGA" },
-      { property: "og:title", content: "SIGA — Sistema Integrado para Gerenciamento de Auditoria" },
+      { property: "og:title", content: "Início — SIGA" },
       {
         property: "og:description",
         content:
-          "SIGA — plataforma para planejar, executar, documentar e revisar trabalhos de auditoria.",
+          "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP.",
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "pt_BR" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Início — SIGA" },
+      { name: "twitter:description", content: "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/82b2220b-8e52-4c5c-9f30-3717f50e0524/id-preview-6bf56de7--51b279d6-605d-4129-85af-f02635876bd8.lovable.app-1785519217730.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,

@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Visão estrutural do SIGA — Sistema Integrado para Gerenciamento de Auditoria e dos módulos previstos para o MVP.",
+          "Página inicial do SIGA: visão estrutural do sistema de gerenciamento de auditoria e dos módulos previstos para o MVP.",
       },
     ],
   }),
