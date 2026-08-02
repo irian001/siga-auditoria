@@ -13,12 +13,17 @@ import { Route as TrabalhosRouteImport } from './routes/trabalhos'
 import { Route as RiscosProcedimentosRouteImport } from './routes/riscos-procedimentos'
 import { Route as RevisaoRouteImport } from './routes/revisao'
 import { Route as RelatoriosRouteImport } from './routes/relatorios'
+import { Route as RedefinirSenhaRouteImport } from './routes/redefinir-senha'
+import { Route as RecuperarSenhaRouteImport } from './routes/recuperar-senha'
 import { Route as PlanejamentoRouteImport } from './routes/planejamento'
 import { Route as PapeisTrabalhoRouteImport } from './routes/papeis-trabalho'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as DocumentosEvidenciasRouteImport } from './routes/documentos-evidencias'
 import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
 import { Route as ClientesRouteImport } from './routes/clientes'
+import { Route as AcessoPendenteRouteImport } from './routes/acesso-pendente'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthCallbackRouteImport } from './routes/auth/callback'
 
 const TrabalhosRoute = TrabalhosRouteImport.update({
   id: '/trabalhos',
@@ -40,6 +45,16 @@ const RelatoriosRoute = RelatoriosRouteImport.update({
   path: '/relatorios',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RedefinirSenhaRoute = RedefinirSenhaRouteImport.update({
+  id: '/redefinir-senha',
+  path: '/redefinir-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecuperarSenhaRoute = RecuperarSenhaRouteImport.update({
+  id: '/recuperar-senha',
+  path: '/recuperar-senha',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlanejamentoRoute = PlanejamentoRouteImport.update({
   id: '/planejamento',
   path: '/planejamento',
@@ -48,6 +63,11 @@ const PlanejamentoRoute = PlanejamentoRouteImport.update({
 const PapeisTrabalhoRoute = PapeisTrabalhoRouteImport.update({
   id: '/papeis-trabalho',
   path: '/papeis-trabalho',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocumentosEvidenciasRoute = DocumentosEvidenciasRouteImport.update({
@@ -65,99 +85,144 @@ const ClientesRoute = ClientesRouteImport.update({
   path: '/clientes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AcessoPendenteRoute = AcessoPendenteRouteImport.update({
+  id: '/acesso-pendente',
+  path: '/acesso-pendente',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acesso-pendente': typeof AcessoPendenteRoute
   '/clientes': typeof ClientesRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos-evidencias': typeof DocumentosEvidenciasRoute
+  '/login': typeof LoginRoute
   '/papeis-trabalho': typeof PapeisTrabalhoRoute
   '/planejamento': typeof PlanejamentoRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/relatorios': typeof RelatoriosRoute
   '/revisao': typeof RevisaoRoute
   '/riscos-procedimentos': typeof RiscosProcedimentosRoute
   '/trabalhos': typeof TrabalhosRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acesso-pendente': typeof AcessoPendenteRoute
   '/clientes': typeof ClientesRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos-evidencias': typeof DocumentosEvidenciasRoute
+  '/login': typeof LoginRoute
   '/papeis-trabalho': typeof PapeisTrabalhoRoute
   '/planejamento': typeof PlanejamentoRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/relatorios': typeof RelatoriosRoute
   '/revisao': typeof RevisaoRoute
   '/riscos-procedimentos': typeof RiscosProcedimentosRoute
   '/trabalhos': typeof TrabalhosRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acesso-pendente': typeof AcessoPendenteRoute
   '/clientes': typeof ClientesRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/documentos-evidencias': typeof DocumentosEvidenciasRoute
+  '/login': typeof LoginRoute
   '/papeis-trabalho': typeof PapeisTrabalhoRoute
   '/planejamento': typeof PlanejamentoRoute
+  '/recuperar-senha': typeof RecuperarSenhaRoute
+  '/redefinir-senha': typeof RedefinirSenhaRoute
   '/relatorios': typeof RelatoriosRoute
   '/revisao': typeof RevisaoRoute
   '/riscos-procedimentos': typeof RiscosProcedimentosRoute
   '/trabalhos': typeof TrabalhosRoute
+  '/auth/callback': typeof AuthCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/acesso-pendente'
     | '/clientes'
     | '/configuracoes'
     | '/documentos-evidencias'
+    | '/login'
     | '/papeis-trabalho'
     | '/planejamento'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/relatorios'
     | '/revisao'
     | '/riscos-procedimentos'
     | '/trabalhos'
+    | '/auth/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/acesso-pendente'
     | '/clientes'
     | '/configuracoes'
     | '/documentos-evidencias'
+    | '/login'
     | '/papeis-trabalho'
     | '/planejamento'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/relatorios'
     | '/revisao'
     | '/riscos-procedimentos'
     | '/trabalhos'
+    | '/auth/callback'
   id:
     | '__root__'
     | '/'
+    | '/acesso-pendente'
     | '/clientes'
     | '/configuracoes'
     | '/documentos-evidencias'
+    | '/login'
     | '/papeis-trabalho'
     | '/planejamento'
+    | '/recuperar-senha'
+    | '/redefinir-senha'
     | '/relatorios'
     | '/revisao'
     | '/riscos-procedimentos'
     | '/trabalhos'
+    | '/auth/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AcessoPendenteRoute: typeof AcessoPendenteRoute
   ClientesRoute: typeof ClientesRoute
   ConfiguracoesRoute: typeof ConfiguracoesRoute
   DocumentosEvidenciasRoute: typeof DocumentosEvidenciasRoute
+  LoginRoute: typeof LoginRoute
   PapeisTrabalhoRoute: typeof PapeisTrabalhoRoute
   PlanejamentoRoute: typeof PlanejamentoRoute
+  RecuperarSenhaRoute: typeof RecuperarSenhaRoute
+  RedefinirSenhaRoute: typeof RedefinirSenhaRoute
   RelatoriosRoute: typeof RelatoriosRoute
   RevisaoRoute: typeof RevisaoRoute
   RiscosProcedimentosRoute: typeof RiscosProcedimentosRoute
   TrabalhosRoute: typeof TrabalhosRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -190,6 +255,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RelatoriosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/redefinir-senha': {
+      id: '/redefinir-senha'
+      path: '/redefinir-senha'
+      fullPath: '/redefinir-senha'
+      preLoaderRoute: typeof RedefinirSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recuperar-senha': {
+      id: '/recuperar-senha'
+      path: '/recuperar-senha'
+      fullPath: '/recuperar-senha'
+      preLoaderRoute: typeof RecuperarSenhaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/planejamento': {
       id: '/planejamento'
       path: '/planejamento'
@@ -202,6 +281,13 @@ declare module '@tanstack/react-router' {
       path: '/papeis-trabalho'
       fullPath: '/papeis-trabalho'
       preLoaderRoute: typeof PapeisTrabalhoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/documentos-evidencias': {
@@ -225,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ClientesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/acesso-pendente': {
+      id: '/acesso-pendente'
+      path: '/acesso-pendente'
+      fullPath: '/acesso-pendente'
+      preLoaderRoute: typeof AcessoPendenteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,21 +325,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AcessoPendenteRoute: AcessoPendenteRoute,
   ClientesRoute: ClientesRoute,
   ConfiguracoesRoute: ConfiguracoesRoute,
   DocumentosEvidenciasRoute: DocumentosEvidenciasRoute,
+  LoginRoute: LoginRoute,
   PapeisTrabalhoRoute: PapeisTrabalhoRoute,
   PlanejamentoRoute: PlanejamentoRoute,
+  RecuperarSenhaRoute: RecuperarSenhaRoute,
+  RedefinirSenhaRoute: RedefinirSenhaRoute,
   RelatoriosRoute: RelatoriosRoute,
   RevisaoRoute: RevisaoRoute,
   RiscosProcedimentosRoute: RiscosProcedimentosRoute,
   TrabalhosRoute: TrabalhosRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
