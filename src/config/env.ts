@@ -15,7 +15,7 @@ const environmentSchema = z.object({
     .trim()
     .optional()
     .transform((value) => value || undefined),
-  VITE_SIGA_SUPABASE_ANON_KEY: z
+  VITE_SIGA_SUPABASE_PUBLISHABLE_KEY: z
     .string()
     .trim()
     .optional()
@@ -27,11 +27,19 @@ export type AppEnvironment = {
   appName: string;
   apiUrl?: string;
   supabaseUrl?: string;
-  supabaseAnonKey?: string;
+  supabasePublishableKey?: string;
 };
 
 /**
  * Único ponto autorizado para leitura de variáveis públicas do Vite.
- * Esta SDD não realiza conexão com API nem Supabase.
+ * Somente variáveis públicas podem ser lidas neste módulo.
  */
-export const appEnvironment: AppEnvironment = environmentSchema.parse(import.meta.env);
+const parsedEnvironment = environmentSchema.parse(import.meta.env);
+
+export const appEnvironment: AppEnvironment = {
+  environment: parsedEnvironment.VITE_SIGA_ENV,
+  appName: parsedEnvironment.VITE_SIGA_APP_NAME,
+  apiUrl: parsedEnvironment.VITE_SIGA_API_URL,
+  supabaseUrl: parsedEnvironment.VITE_SIGA_SUPABASE_URL,
+  supabasePublishableKey: parsedEnvironment.VITE_SIGA_SUPABASE_PUBLISHABLE_KEY,
+};
