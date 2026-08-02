@@ -8,7 +8,7 @@ export function getSupabaseServerClient() {
     throw new Error("Supabase authentication is not configured.");
   }
 
-  return createServerClient(appEnvironment.supabaseUrl!, appEnvironment.supabaseAnonKey!, {
+  return createServerClient(appEnvironment.supabaseUrl!, appEnvironment.supabasePublishableKey!, {
     cookies: {
       getAll() {
         return Object.entries(getCookies()).map(([name, value]) => ({ name, value }));

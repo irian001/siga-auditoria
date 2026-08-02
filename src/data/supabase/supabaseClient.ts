@@ -12,7 +12,7 @@ export function getSupabaseBrowserClient(): SupabaseClient {
 
   browserClient ??= createBrowserClient(
     appEnvironment.supabaseUrl!,
-    appEnvironment.supabaseAnonKey!,
+    appEnvironment.supabasePublishableKey!,
   );
   return browserClient;
 }
