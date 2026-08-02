@@ -30,16 +30,8 @@ export type AppEnvironment = {
   supabaseAnonKey?: string;
 };
 
-const parsed = environmentSchema.parse(import.meta.env);
-
 /**
  * Único ponto autorizado para leitura de variáveis públicas do Vite.
  * Esta SDD não realiza conexão com API nem Supabase.
  */
-export const appEnvironment: AppEnvironment = {
-  environment: parsed.VITE_SIGA_ENV,
-  appName: parsed.VITE_SIGA_APP_NAME,
-  apiUrl: parsed.VITE_SIGA_API_URL,
-  supabaseUrl: parsed.VITE_SIGA_SUPABASE_URL,
-  supabaseAnonKey: parsed.VITE_SIGA_SUPABASE_ANON_KEY,
-};
+export const appEnvironment: AppEnvironment = environmentSchema.parse(import.meta.env);
