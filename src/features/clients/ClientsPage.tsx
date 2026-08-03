@@ -276,8 +276,26 @@ export function ClientsPage() {
             createMutation.mutate(input);
           }}
         />
-
       ) : null}
+
+      {canManage ? (
+        <ClientStatusDialog
+          open={statusDialogOpen}
+          onOpenChange={handleStatusDialogOpenChange}
+          client={statusClient}
+          submitting={statusMutation.isPending}
+          submitError={statusMutation.isError ? statusMutation.error.message : null}
+          onConfirm={() => {
+            if (!statusClient || statusMutation.isPending) return;
+            statusMutation.mutate({
+              id: statusClient.id,
+              status: statusClient.status === "active" ? "inactive" : "active",
+            });
+          }}
+        />
+      ) : null}
+
+
 
 
       <DataTableShell
