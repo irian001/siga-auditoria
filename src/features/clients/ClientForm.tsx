@@ -74,7 +74,7 @@ function toFormState(client?: Client | null): FormState {
 
 
 /**
- * Formulário de criação de cliente — Camada 2 da SDD-CLI-001.
+ * Formulário de criação e edição de cliente — Camadas 2 e 3 da SDD-CLI-001.
  * Reutiliza integralmente os schemas e validações do domínio.
  */
 export function ClientForm({
@@ -83,16 +83,17 @@ export function ClientForm({
   submitting,
   submitError,
   onSubmit,
+  client = null,
 }: ClientFormProps) {
-  const [values, setValues] = useState<FormState>(INITIAL_STATE);
+  const isEditing = Boolean(client);
+  const [values, setValues] = useState<FormState>(() => toFormState(client));
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
 
   useEffect(() => {
-    if (!open) {
-      setValues(INITIAL_STATE);
-      setErrors({});
-    }
-  }, [open]);
+    setValues(toFormState(client));
+    setErrors({});
+  }, [open, client]);
+
 
   const requiresBrazilianIdentifier =
     values.taxIdentifierType === "cnpj" || values.taxIdentifierType === "cpf";
