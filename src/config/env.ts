@@ -30,6 +30,14 @@ export type AppEnvironment = {
   supabasePublishableKey?: string;
 };
 
+// Estes valores identificam o projeto oficial e são públicos por definição.
+// A chave publicável pode ser enviada ao navegador; chaves secretas e service_role
+// continuam proibidas no frontend.
+const officialSupabasePublicConfig = {
+  url: "https://umuassmgminmliuypoyp.supabase.co",
+  publishableKey: "sb_publishable_mFVLbZTEK3sGSnPiZecvuA_nBKdlYUd",
+} as const;
+
 /**
  * Único ponto autorizado para leitura de variáveis públicas do Vite.
  * Somente variáveis públicas podem ser lidas neste módulo.
@@ -40,8 +48,10 @@ export const appEnvironment: AppEnvironment = {
   environment: parsedEnvironment.VITE_SIGA_ENV,
   appName: parsedEnvironment.VITE_SIGA_APP_NAME,
   apiUrl: parsedEnvironment.VITE_SIGA_API_URL,
-  supabaseUrl: parsedEnvironment.VITE_SIGA_SUPABASE_URL,
-  supabasePublishableKey: parsedEnvironment.VITE_SIGA_SUPABASE_PUBLISHABLE_KEY,
+  supabaseUrl: parsedEnvironment.VITE_SIGA_SUPABASE_URL ?? officialSupabasePublicConfig.url,
+  supabasePublishableKey:
+    parsedEnvironment.VITE_SIGA_SUPABASE_PUBLISHABLE_KEY ??
+    officialSupabasePublicConfig.publishableKey,
 };
 
 export const isSupabaseConfigured = Boolean(
