@@ -144,6 +144,20 @@ export const supabaseAuthRepository: AuthRepository = {
     }
   },
 
+  async verifyRecoveryToken(tokenHash) {
+    try {
+      const { error } = await getSupabaseBrowserClient().auth.verifyOtp({
+        token_hash: tokenHash,
+        type: "recovery",
+      });
+      return error
+        ? safeError("AUTH_RECOVERY_ERROR", "O link é inválido ou expirou.")
+        : { ok: true, data: undefined };
+    } catch {
+      return safeError("AUTH_RECOVERY_ERROR", "O link é inválido ou expirou.");
+    }
+  },
+
   onAuthStateChange(listener) {
     const { data } = getSupabaseBrowserClient().auth.onAuthStateChange((_event, session) => {
       listener(session?.user ? identityFromUser(session.user) : null);

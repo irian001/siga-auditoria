@@ -9,6 +9,8 @@ import { AuthPage } from "@/features/auth/AuthPage";
 
 const searchSchema = z.object({
   code: z.string().optional(),
+  token_hash: z.string().optional(),
+  type: z.enum(["recovery"]).optional(),
   next: z.string().default("/redefinir-senha"),
 });
 
@@ -18,22 +20,25 @@ export const Route = createFileRoute("/auth/callback")({
 });
 
 function AuthCallbackRoute() {
-  const { code, next } = Route.useSearch();
+  const { code, token_hash: tokenHash, type, next } = Route.useSearch();
   const navigate = useNavigate();
   const [error, setError] = useState<string>();
 
   useEffect(() => {
     async function validateLink() {
-      const result = code
-        ? await supabaseAuthRepository.exchangeRecoveryCode(code)
-        : await supabaseAuthRepository.getCurrentSession();
+      const result =
+        tokenHash && type === "recovery"
+          ? await supabaseAuthRepository.verifyRecoveryToken(tokenHash)
+          : code
+            ? await supabaseAuthRepository.exchangeRecoveryCode(code)
+            : await supabaseAuthRepository.getCurrentSession();
 
       if (!result.ok) {
         setError(result.error.message);
         return;
       }
 
-      if (!code && !result.data) {
+      if (!tokenHash && !code && !result.data) {
         setError("O link é inválido ou expirou.");
         return;
       }
@@ -43,7 +48,7 @@ function AuthCallbackRoute() {
     }
 
     void validateLink();
-  }, [code, navigate, next]);
+  }, [code, navigate, next, tokenHash, type]);
 
   return (
     <AuthPage title="Validando acesso" description="Aguarde enquanto o link é verificado.">
