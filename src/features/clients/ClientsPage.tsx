@@ -24,7 +24,14 @@ import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
-import type { Client, ClientFilters, CreateClientInput, UpdateClientInput } from "@/domain/client";
+import type {
+  Client,
+  ClientFilters,
+  ClientStatus,
+  CreateClientInput,
+  UpdateClientInput,
+} from "@/domain/client";
+
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
 import { ClientForm } from "@/features/clients/ClientForm";
