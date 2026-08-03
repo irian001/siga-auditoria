@@ -4,6 +4,7 @@ import type { OrganizationMembership, UserAccessState } from "@/domain/organizat
 import type { Organization } from "@/domain/organization";
 import type { UserProfile } from "@/domain/user";
 import type { UserContextRepository } from "@/data/userContextRepository";
+import { createSupabaseAuthorizationRepository } from "@/data/supabase/supabaseAuthorizationRepository";
 
 type ProfileRow = {
   id: string;
@@ -131,12 +132,26 @@ export function createSupabaseUserContextRepository(
         status: profileRow.status,
       };
 
+      const authorization = await createSupabaseAuthorizationRepository(
+        supabase,
+      ).resolveAuthorization(membership.id, membership.organization_id);
+
+      if (authorization.status !== "active") {
+        return {
+          status: authorization.status === "pending" ? "pending" : "blocked",
+          reason:
+            authorization.status === "pending" ? "authorization-pending" : "authorization-blocked",
+          context: null,
+        };
+      }
+
       return {
         status: "active",
         context: {
           profile,
           membership: mapMembership(membership),
           organization: mapOrganization(organizationResult.data as OrganizationRow),
+          authorization,
         },
       };
     },

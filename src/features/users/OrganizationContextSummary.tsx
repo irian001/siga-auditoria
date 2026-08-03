@@ -1,5 +1,5 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { Building2, UserRound } from "lucide-react";
+import { Building2, ShieldCheck, UserRound } from "lucide-react";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -10,7 +10,7 @@ export function OrganizationContextSummary() {
   const { auth } = rootRoute.useRouteContext();
   if (auth.access?.status !== "active") return null;
 
-  const { profile, organization } = auth.access.context;
+  const { profile, organization, authorization } = auth.access.context;
 
   return (
     <Card className="mt-8">
@@ -23,7 +23,7 @@ export function OrganizationContextSummary() {
           <StatusBadge status="concluido" label="Acesso ativo" />
         </div>
       </CardHeader>
-      <CardContent className="grid gap-4 sm:grid-cols-2">
+      <CardContent className="grid gap-4 sm:grid-cols-3">
         <div className="flex items-start gap-3">
           <UserRound className="mt-0.5 size-5 text-primary" aria-hidden="true" />
           <div>
@@ -36,6 +36,15 @@ export function OrganizationContextSummary() {
           <div>
             <p className="text-sm text-muted-foreground">Organização</p>
             <p className="font-medium text-foreground">{organization.displayName}</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <ShieldCheck className="mt-0.5 size-5 text-primary" aria-hidden="true" />
+          <div>
+            <p className="text-sm text-muted-foreground">Papel organizacional</p>
+            <p className="font-medium text-foreground">
+              {authorization.roleCodes.join(", ") || "Não atribuído"}
+            </p>
           </div>
         </div>
       </CardContent>

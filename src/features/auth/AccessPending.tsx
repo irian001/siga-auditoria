@@ -12,16 +12,16 @@ const rootRoute = getRouteApi("__root__");
 
 const accessMessages = {
   pending: {
-    title: "Vínculo organizacional pendente",
+    title: "Liberação organizacional pendente",
     description:
-      "Procure o administrador da sua organização para solicitar a liberação. Nenhum dado do SIGA pode ser acessado enquanto o vínculo não estiver ativo.",
+      "Procure o administrador da sua organização para concluir seu vínculo e atribuir o papel necessário. Nenhum dado do SIGA pode ser acessado enquanto a liberação não estiver ativa.",
     variant: "info" as const,
     icon: Building2,
   },
   blocked: {
     title: "Acesso organizacional bloqueado",
     description:
-      "Seu perfil ou vínculo não está ativo. Procure o administrador da organização para revisar seu acesso.",
+      "Seu perfil, vínculo ou papel não autoriza este acesso. Procure o administrador da organização para revisar sua liberação.",
     variant: "warning" as const,
     icon: ShieldAlert,
   },
