@@ -101,6 +101,9 @@ export function ClientsPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [statusClient, setStatusClient] = useState<Client | null>(null);
+
 
   const createMutation = useMutation({
     mutationFn: async (input: CreateClientInput) => {
