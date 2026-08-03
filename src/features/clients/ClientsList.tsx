@@ -1,3 +1,6 @@
+import { Pencil } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,13 +19,15 @@ import {
 
 type ClientsListProps = {
   clients: Client[];
+  canManage?: boolean;
+  onEdit?: (client: Client) => void;
 };
 
 /**
- * Estrutura visual da listagem de clientes — Camada 1 da SDD-CLI-001.
- * Não executa ações; apenas apresenta os campos previstos.
+ * Estrutura visual da listagem de clientes — Camadas 1 e 3 da SDD-CLI-001.
  */
-export function ClientsList({ clients }: ClientsListProps) {
+export function ClientsList({ clients, canManage = false, onEdit }: ClientsListProps) {
+
   return (
     <Table>
       <caption className="sr-only">
