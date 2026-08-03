@@ -24,13 +24,23 @@ import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
-import type { Client, ClientFilters, CreateClientInput, UpdateClientInput } from "@/domain/client";
+import type {
+  Client,
+  ClientFilters,
+  ClientStatus,
+  CreateClientInput,
+  UpdateClientInput,
+} from "@/domain/client";
+
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
+import { ClientStatusDialog } from "@/features/clients/ClientStatusDialog";
 import {
   CLASSIFICATION_FILTER_OPTIONS,
+  CLIENT_ACTIVATED_NOTICE,
+  CLIENT_INACTIVATED_NOTICE,
   CLIENT_UPDATED_NOTICE,
   SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
@@ -38,6 +48,7 @@ import {
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
+
 
 
 
@@ -97,6 +108,9 @@ export function ClientsPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [statusClient, setStatusClient] = useState<Client | null>(null);
+
 
   const createMutation = useMutation({
     mutationFn: async (input: CreateClientInput) => {
@@ -126,6 +140,22 @@ export function ClientsPage() {
     },
   });
 
+  const statusMutation = useMutation({
+    mutationFn: async (variables: { id: string; status: ClientStatus }) => {
+      const result = await clientRepository.changeStatus(context, variables.id, variables.status);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (client) => {
+      setStatusDialogOpen(false);
+      setStatusClient(null);
+      setSuccessMessage(
+        client.status === "inactive" ? CLIENT_INACTIVATED_NOTICE : CLIENT_ACTIVATED_NOTICE,
+      );
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
   function openForm() {
     setSuccessMessage(null);
     createMutation.reset();
@@ -142,10 +172,24 @@ export function ClientsPage() {
     setFormOpen(true);
   }
 
+  function openStatusDialog(client: Client) {
+    setSuccessMessage(null);
+    statusMutation.reset();
+    setStatusClient(client);
+    setStatusDialogOpen(true);
+  }
+
+  function handleStatusDialogOpenChange(next: boolean) {
+    if (statusMutation.isPending) return;
+    setStatusDialogOpen(next);
+    if (!next) setStatusClient(null);
+  }
+
   function handleFormOpenChange(next: boolean) {
     setFormOpen(next);
     if (!next) setEditingClient(null);
   }
+
 
   function clearFilters() {
     setSearch("");
@@ -232,8 +276,26 @@ export function ClientsPage() {
             createMutation.mutate(input);
           }}
         />
-
       ) : null}
+
+      {canManage ? (
+        <ClientStatusDialog
+          open={statusDialogOpen}
+          onOpenChange={handleStatusDialogOpenChange}
+          client={statusClient}
+          submitting={statusMutation.isPending}
+          submitError={statusMutation.isError ? statusMutation.error.message : null}
+          onConfirm={() => {
+            if (!statusClient || statusMutation.isPending) return;
+            statusMutation.mutate({
+              id: statusClient.id,
+              status: statusClient.status === "active" ? "inactive" : "active",
+            });
+          }}
+        />
+      ) : null}
+
+
 
 
       <DataTableShell
@@ -321,7 +383,13 @@ export function ClientsPage() {
           />
         }
       >
-        <ClientsList clients={items} canManage={canManage} onEdit={openEditForm} />
+        <ClientsList
+          clients={items}
+          canManage={canManage}
+          onEdit={openEditForm}
+          onChangeStatus={openStatusDialog}
+        />
+
       </DataTableShell>
 
       {!canManage ? (
