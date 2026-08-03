@@ -60,3 +60,19 @@ export const SIMULATED_PERSISTENCE_NOTICE =
 
 /** Confirmação de edição simulada — Camada 3 da SDD-CLI-001. */
 export const CLIENT_UPDATED_NOTICE = "Cliente atualizado no ambiente de validação.";
+
+/** Textos de inativação e reativação — Camada 4 da SDD-CLI-001. */
+export const CLIENT_INACTIVATE_TITLE = "Inativar cliente";
+export const CLIENT_INACTIVATE_DESCRIPTION =
+  "ficará indisponível para novas etapas de trabalho, permanecendo consultável. O histórico será preservado e nenhum registro será excluído.";
+export const CLIENT_INACTIVATE_CONFIRM_LABEL = "Inativar cliente";
+
+export const CLIENT_ACTIVATE_TITLE = "Reativar cliente";
+export const CLIENT_ACTIVATE_DESCRIPTION =
+  "voltará a ficar disponível para novas etapas de trabalho. O histórico permanece preservado.";
+export const CLIENT_ACTIVATE_CONFIRM_LABEL = "Reativar cliente";
+
+export const CLIENT_INACTIVATED_NOTICE =
+  "Cliente inativado no ambiente de validação. O histórico foi preservado.";
+export const CLIENT_ACTIVATED_NOTICE = "Cliente reativado no ambiente de validação.";
+
