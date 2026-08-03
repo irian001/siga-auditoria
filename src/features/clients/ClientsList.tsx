@@ -63,9 +63,22 @@ export function ClientsList({ clients, canManage = false, onEdit }: ClientsListP
                 label={CLIENT_STATUS_LABELS[client.status]}
               />
             </TableCell>
-            <TableCell className="text-right text-xs text-muted-foreground">
-              Disponível na próxima etapa
+            <TableCell className="text-right">
+              {canManage && onEdit ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onEdit(client)}
+                  aria-label={`Editar cliente ${client.displayName}`}
+                >
+                  <Pencil aria-hidden="true" />
+                  Editar
+                </Button>
+              ) : (
+                <span className="text-xs text-muted-foreground">Somente consulta</span>
+              )}
             </TableCell>
+
           </TableRow>
         ))}
       </TableBody>
