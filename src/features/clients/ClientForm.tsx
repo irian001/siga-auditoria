@@ -263,8 +263,15 @@ export function ClientForm({
             </Button>
             <Button type="submit" disabled={submitting}>
               {submitting ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-              {submitting ? "Registrando…" : "Registrar cliente"}
+              {submitting
+                ? isEditing
+                  ? "Salvando…"
+                  : "Registrando…"
+                : isEditing
+                  ? "Salvar alterações"
+                  : "Registrar cliente"}
             </Button>
+
           </DialogFooter>
         </form>
       </DialogContent>
