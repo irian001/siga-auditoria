@@ -91,11 +91,35 @@ export function ClientsPage() {
     },
   });
 
+  const queryClient = useQueryClient();
+  const [formOpen, setFormOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const createMutation = useMutation({
+    mutationFn: async (input: CreateClientInput) => {
+      const result = await clientRepository.create(context, input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (client) => {
+      setFormOpen(false);
+      setSuccessMessage(`Cliente "${client.displayName}" registrado no ambiente de validação.`);
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
+  function openForm() {
+    setSuccessMessage(null);
+    createMutation.reset();
+    setFormOpen(true);
+  }
+
   function clearFilters() {
     setSearch("");
     setStatus("active");
     setClassification("all");
   }
+
 
   const header = (
     <PageHeader
