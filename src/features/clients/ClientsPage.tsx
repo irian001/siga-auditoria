@@ -29,8 +29,11 @@ import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
+import { ClientStatusDialog } from "@/features/clients/ClientStatusDialog";
 import {
   CLASSIFICATION_FILTER_OPTIONS,
+  CLIENT_ACTIVATED_NOTICE,
+  CLIENT_INACTIVATED_NOTICE,
   CLIENT_UPDATED_NOTICE,
   SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
@@ -38,6 +41,7 @@ import {
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
+
 
 
 
