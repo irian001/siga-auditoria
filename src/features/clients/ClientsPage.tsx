@@ -212,11 +212,27 @@ export function ClientsPage() {
       {canManage ? (
         <ClientForm
           open={formOpen}
-          onOpenChange={setFormOpen}
-          submitting={createMutation.isPending}
-          submitError={createMutation.isError ? createMutation.error.message : null}
-          onSubmit={(input) => createMutation.mutate(input)}
+          onOpenChange={handleFormOpenChange}
+          client={editingClient}
+          submitting={editingClient ? updateMutation.isPending : createMutation.isPending}
+          submitError={
+            editingClient
+              ? updateMutation.isError
+                ? updateMutation.error.message
+                : null
+              : createMutation.isError
+                ? createMutation.error.message
+                : null
+          }
+          onSubmit={(input) => {
+            if (editingClient) {
+              updateMutation.mutate({ id: editingClient.id, input: input as UpdateClientInput });
+              return;
+            }
+            createMutation.mutate(input);
+          }}
         />
+
       ) : null}
 
 
