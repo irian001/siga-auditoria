@@ -254,7 +254,7 @@ export function ClientsPage() {
             <EmptyState
               icon={Building2}
               title="Nenhum cliente cadastrado"
-              description="Esta organização ainda não possui clientes registrados. O cadastro será liberado na próxima etapa desta especificação."
+              description="Esta organização ainda não possui clientes registrados. Utilize “Novo cliente” para registrar no ambiente de validação."
             />
           )
         }
