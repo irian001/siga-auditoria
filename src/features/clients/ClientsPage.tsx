@@ -365,7 +365,13 @@ export function ClientsPage() {
           />
         }
       >
-        <ClientsList clients={items} canManage={canManage} onEdit={openEditForm} />
+        <ClientsList
+          clients={items}
+          canManage={canManage}
+          onEdit={openEditForm}
+          onChangeStatus={openStatusDialog}
+        />
+
       </DataTableShell>
 
       {!canManage ? (
