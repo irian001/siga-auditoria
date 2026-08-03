@@ -6,8 +6,8 @@ aliases:
   - Implantação de Usuários e Vínculos Organizacionais
 type: implementation-plan
 domain: organizacao-e-acesso
-status: minuta
-version: 0.1
+status: aprovado
+version: 1.0
 created: 2026-08-03
 updated: 2026-08-03
 owner: responsavel-projeto
@@ -471,4 +471,5 @@ Após aprovação e merge do PR documental:
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
-| 0.1 | 2026-08-03 | Criação da minuta do plano de implantação | Em revisão |
+| 0.1 | 2026-08-03 | Criação da minuta do plano de implantação | Substituída |
+| 1.0 | 2026-08-03 | Plano aprovado para implantação | Aprovada |
