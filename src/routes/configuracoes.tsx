@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 import { StatusBadge, STATUS_MAP, type StatusKey } from "@/components/ui/status-badge";
 import { getNavItem } from "@/config/navigation";
 import { OrganizationSummary } from "@/features/organization/OrganizationSummary";
+import { OrganizationContextSummary } from "@/features/users/OrganizationContextSummary";
 
 export const Route = createFileRoute("/configuracoes")({
   head: () => ({
@@ -126,6 +127,7 @@ function ModuleRoute() {
   return (
     <>
       <ModuloFuturoPage item={getNavItem("configuracoes")!} />
+      <OrganizationContextSummary />
       <OrganizationSummary />
       <Separator className="mt-12" />
       <ReferenciaVisual />

@@ -90,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
     if (isPublicAuthPath) {
       if (auth.authenticated && location.pathname !== "/redefinir-senha") {
-        throw redirect({ to: "/acesso-pendente" });
+        throw redirect({ to: auth.access?.status === "active" ? "/" : "/acesso-pendente" });
       }
       return { auth };
     }
@@ -99,8 +99,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       throw redirect({ to: "/login" });
     }
 
-    if (location.pathname !== "/acesso-pendente") {
+    if (auth.access?.status !== "active" && location.pathname !== "/acesso-pendente") {
       throw redirect({ to: "/acesso-pendente" });
+    }
+
+    if (auth.access?.status === "active" && location.pathname === "/acesso-pendente") {
+      throw redirect({ to: "/" });
     }
 
     return { auth };
