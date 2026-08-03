@@ -158,15 +158,33 @@ export function ClientsPage() {
 
       {canManage ? (
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <Button disabled aria-describedby="novo-cliente-ajuda">
+          <Button onClick={openForm} aria-describedby="novo-cliente-ajuda">
             <Plus aria-hidden="true" />
             Novo cliente
           </Button>
           <p id="novo-cliente-ajuda" className="text-xs text-muted-foreground">
-            Disponível na próxima etapa
+            {SIMULATED_PERSISTENCE_NOTICE}
           </p>
         </div>
       ) : null}
+
+      {successMessage ? (
+        <Alert variant="success" className="mb-6">
+          <CheckCircle2 aria-hidden="true" />
+          <AlertDescription>{successMessage}</AlertDescription>
+        </Alert>
+      ) : null}
+
+      {canManage ? (
+        <ClientForm
+          open={formOpen}
+          onOpenChange={setFormOpen}
+          submitting={createMutation.isPending}
+          submitError={createMutation.isError ? createMutation.error.message : null}
+          onSubmit={(input) => createMutation.mutate(input)}
+        />
+      ) : null}
+
 
       <DataTableShell
         title="Clientes da organização"
