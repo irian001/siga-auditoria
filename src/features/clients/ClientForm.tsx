@@ -24,6 +24,7 @@ import {
   clientClassifications,
   createClientSchema,
   taxIdentifierTypes,
+  type Client,
   type ClientClassification,
   type CreateClientInput,
   type TaxIdentifierType,
@@ -40,6 +41,8 @@ type ClientFormProps = {
   submitting: boolean;
   submitError?: string | null;
   onSubmit: (input: CreateClientInput) => void;
+  /** Quando informado, o formulário opera em modo de edição (Camada 3). */
+  client?: Client | null;
 };
 
 type FormState = {
@@ -57,6 +60,18 @@ const INITIAL_STATE: FormState = {
   taxIdentifier: "",
   classification: "legal_entity",
 };
+
+function toFormState(client?: Client | null): FormState {
+  if (!client) return INITIAL_STATE;
+  return {
+    displayName: client.displayName,
+    legalName: client.legalName,
+    taxIdentifierType: client.taxIdentifierType,
+    taxIdentifier: client.taxIdentifier ?? "",
+    classification: client.classification,
+  };
+}
+
 
 /**
  * Formulário de criação de cliente — Camada 2 da SDD-CLI-001.
