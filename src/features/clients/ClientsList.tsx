@@ -1,3 +1,6 @@
+import { Pencil } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -16,13 +19,15 @@ import {
 
 type ClientsListProps = {
   clients: Client[];
+  canManage?: boolean;
+  onEdit?: (client: Client) => void;
 };
 
 /**
- * Estrutura visual da listagem de clientes — Camada 1 da SDD-CLI-001.
- * Não executa ações; apenas apresenta os campos previstos.
+ * Estrutura visual da listagem de clientes — Camadas 1 e 3 da SDD-CLI-001.
  */
-export function ClientsList({ clients }: ClientsListProps) {
+export function ClientsList({ clients, canManage = false, onEdit }: ClientsListProps) {
+
   return (
     <Table>
       <caption className="sr-only">
@@ -58,9 +63,22 @@ export function ClientsList({ clients }: ClientsListProps) {
                 label={CLIENT_STATUS_LABELS[client.status]}
               />
             </TableCell>
-            <TableCell className="text-right text-xs text-muted-foreground">
-              Disponível na próxima etapa
+            <TableCell className="text-right">
+              {canManage && onEdit ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onEdit(client)}
+                  aria-label={`Editar cliente ${client.displayName}`}
+                >
+                  <Pencil aria-hidden="true" />
+                  Editar
+                </Button>
+              ) : (
+                <span className="text-xs text-muted-foreground">Somente consulta</span>
+              )}
             </TableCell>
+
           </TableRow>
         ))}
       </TableBody>

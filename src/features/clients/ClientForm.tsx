@@ -24,6 +24,7 @@ import {
   clientClassifications,
   createClientSchema,
   taxIdentifierTypes,
+  type Client,
   type ClientClassification,
   type CreateClientInput,
   type TaxIdentifierType,
@@ -40,6 +41,8 @@ type ClientFormProps = {
   submitting: boolean;
   submitError?: string | null;
   onSubmit: (input: CreateClientInput) => void;
+  /** Quando informado, o formulário opera em modo de edição (Camada 3). */
+  client?: Client | null;
 };
 
 type FormState = {
@@ -58,8 +61,20 @@ const INITIAL_STATE: FormState = {
   classification: "legal_entity",
 };
 
+function toFormState(client?: Client | null): FormState {
+  if (!client) return INITIAL_STATE;
+  return {
+    displayName: client.displayName,
+    legalName: client.legalName,
+    taxIdentifierType: client.taxIdentifierType,
+    taxIdentifier: client.taxIdentifier ?? "",
+    classification: client.classification,
+  };
+}
+
+
 /**
- * Formulário de criação de cliente — Camada 2 da SDD-CLI-001.
+ * Formulário de criação e edição de cliente — Camadas 2 e 3 da SDD-CLI-001.
  * Reutiliza integralmente os schemas e validações do domínio.
  */
 export function ClientForm({
@@ -68,16 +83,17 @@ export function ClientForm({
   submitting,
   submitError,
   onSubmit,
+  client = null,
 }: ClientFormProps) {
-  const [values, setValues] = useState<FormState>(INITIAL_STATE);
+  const isEditing = Boolean(client);
+  const [values, setValues] = useState<FormState>(() => toFormState(client));
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
 
   useEffect(() => {
-    if (!open) {
-      setValues(INITIAL_STATE);
-      setErrors({});
-    }
-  }, [open]);
+    setValues(toFormState(client));
+    setErrors({});
+  }, [open, client]);
+
 
   const requiresBrazilianIdentifier =
     values.taxIdentifierType === "cnpj" || values.taxIdentifierType === "cpf";
@@ -136,11 +152,14 @@ export function ClientForm({
     <Dialog open={open} onOpenChange={(next) => (submitting ? undefined : onOpenChange(next))}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Novo cliente</DialogTitle>
+          <DialogTitle>{isEditing ? "Editar cliente" : "Novo cliente"}</DialogTitle>
           <DialogDescription>
-            Informe os dados de identificação do cliente desta organização.
+            {isEditing
+              ? "Revise os dados de identificação do cliente desta organização."
+              : "Informe os dados de identificação do cliente desta organização."}
           </DialogDescription>
         </DialogHeader>
+
 
         <p className="text-xs text-muted-foreground">{SIMULATED_PERSISTENCE_NOTICE}</p>
 
@@ -247,8 +266,15 @@ export function ClientForm({
             </Button>
             <Button type="submit" disabled={submitting}>
               {submitting ? <Loader2 aria-hidden="true" className="animate-spin" /> : null}
-              {submitting ? "Registrando…" : "Registrar cliente"}
+              {submitting
+                ? isEditing
+                  ? "Salvando…"
+                  : "Registrando…"
+                : isEditing
+                  ? "Salvar alterações"
+                  : "Registrar cliente"}
             </Button>
+
           </DialogFooter>
         </form>
       </DialogContent>

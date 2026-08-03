@@ -24,19 +24,21 @@ import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
-import type { ClientFilters, CreateClientInput } from "@/domain/client";
+import type { Client, ClientFilters, CreateClientInput, UpdateClientInput } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import {
   CLASSIFICATION_FILTER_OPTIONS,
+  CLIENT_UPDATED_NOTICE,
   SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
   formatRecordCount,
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
+
 
 
 const rootRoute = getRouteApi("__root__");
@@ -93,6 +95,7 @@ export function ClientsPage() {
 
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const createMutation = useMutation({
@@ -103,7 +106,22 @@ export function ClientsPage() {
     },
     onSuccess: async (client) => {
       setFormOpen(false);
+      setEditingClient(null);
       setSuccessMessage(`Cliente "${client.displayName}" registrado no ambiente de validação.`);
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (variables: { id: string; input: UpdateClientInput }) => {
+      const result = await clientRepository.update(context, variables.id, variables.input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async () => {
+      setFormOpen(false);
+      setEditingClient(null);
+      setSuccessMessage(CLIENT_UPDATED_NOTICE);
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
   });
@@ -111,7 +129,22 @@ export function ClientsPage() {
   function openForm() {
     setSuccessMessage(null);
     createMutation.reset();
+    updateMutation.reset();
+    setEditingClient(null);
     setFormOpen(true);
+  }
+
+  function openEditForm(client: Client) {
+    setSuccessMessage(null);
+    createMutation.reset();
+    updateMutation.reset();
+    setEditingClient(client);
+    setFormOpen(true);
+  }
+
+  function handleFormOpenChange(next: boolean) {
+    setFormOpen(next);
+    if (!next) setEditingClient(null);
   }
 
   function clearFilters() {
@@ -119,6 +152,7 @@ export function ClientsPage() {
     setStatus("active");
     setClassification("all");
   }
+
 
 
   const header = (
@@ -178,11 +212,27 @@ export function ClientsPage() {
       {canManage ? (
         <ClientForm
           open={formOpen}
-          onOpenChange={setFormOpen}
-          submitting={createMutation.isPending}
-          submitError={createMutation.isError ? createMutation.error.message : null}
-          onSubmit={(input) => createMutation.mutate(input)}
+          onOpenChange={handleFormOpenChange}
+          client={editingClient}
+          submitting={editingClient ? updateMutation.isPending : createMutation.isPending}
+          submitError={
+            editingClient
+              ? updateMutation.isError
+                ? updateMutation.error.message
+                : null
+              : createMutation.isError
+                ? createMutation.error.message
+                : null
+          }
+          onSubmit={(input) => {
+            if (editingClient) {
+              updateMutation.mutate({ id: editingClient.id, input: input as UpdateClientInput });
+              return;
+            }
+            createMutation.mutate(input);
+          }}
         />
+
       ) : null}
 
 
@@ -271,7 +321,7 @@ export function ClientsPage() {
           />
         }
       >
-        <ClientsList clients={items} />
+        <ClientsList clients={items} canManage={canManage} onEdit={openEditForm} />
       </DataTableShell>
 
       {!canManage ? (
