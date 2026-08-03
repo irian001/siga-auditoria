@@ -5,6 +5,8 @@ export const permissionCodes = [
   "users.manage",
   "roles.view",
   "roles.manage",
+  "clients.view",
+  "clients.manage",
 ] as const;
 
 export type PermissionCode = (typeof permissionCodes)[number];
