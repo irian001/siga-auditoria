@@ -152,11 +152,14 @@ export function ClientForm({
     <Dialog open={open} onOpenChange={(next) => (submitting ? undefined : onOpenChange(next))}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Novo cliente</DialogTitle>
+          <DialogTitle>{isEditing ? "Editar cliente" : "Novo cliente"}</DialogTitle>
           <DialogDescription>
-            Informe os dados de identificação do cliente desta organização.
+            {isEditing
+              ? "Revise os dados de identificação do cliente desta organização."
+              : "Informe os dados de identificação do cliente desta organização."}
           </DialogDescription>
         </DialogHeader>
+
 
         <p className="text-xs text-muted-foreground">{SIMULATED_PERSISTENCE_NOTICE}</p>
 
