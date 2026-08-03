@@ -100,12 +100,21 @@ export const supabaseAuthRepository: AuthRepository = {
     }
     try {
       const redirectTo = `${window.location.origin}/auth/callback?next=/redefinir-senha`;
-      await getSupabaseBrowserClient().auth.resetPasswordForEmail(parsed.data.email, {
+      const { error } = await getSupabaseBrowserClient().auth.resetPasswordForEmail(parsed.data.email, {
         redirectTo,
       });
+      if (error) {
+        return safeError(
+          "AUTH_RECOVERY_ERROR",
+          "Não foi possível enviar as orientações agora. Aguarde alguns minutos e tente novamente.",
+        );
+      }
       return { ok: true, data: undefined };
     } catch {
-      return { ok: true, data: undefined };
+      return safeError(
+        "AUTH_RECOVERY_ERROR",
+        "A recuperação de senha não está disponível neste momento.",
+      );
     }
   },
 

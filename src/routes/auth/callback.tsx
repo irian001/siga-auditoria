@@ -23,19 +23,26 @@ function AuthCallbackRoute() {
   const [error, setError] = useState<string>();
 
   useEffect(() => {
-    if (!code) {
-      setError("O link é inválido ou expirou.");
-      return;
-    }
+    async function validateLink() {
+      const result = code
+        ? await supabaseAuthRepository.exchangeRecoveryCode(code)
+        : await supabaseAuthRepository.getCurrentSession();
 
-    void supabaseAuthRepository.exchangeRecoveryCode(code).then(async (result) => {
       if (!result.ok) {
         setError(result.error.message);
         return;
       }
+
+      if (!code && !result.data) {
+        setError("O link é inválido ou expirou.");
+        return;
+      }
+
       const destination = next === "/redefinir-senha" ? "/redefinir-senha" : "/acesso-pendente";
       await navigate({ to: destination, replace: true });
-    });
+    }
+
+    void validateLink();
   }, [code, navigate, next]);
 
   return (
