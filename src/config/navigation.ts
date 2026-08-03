@@ -63,7 +63,7 @@ export const NAV_ITEMS: NavItem[] = [
     to: "/clientes",
     icon: Building2,
     group: "trabalho",
-    status: "planejado",
+    status: "disponivel",
   },
   {
     id: "trabalhos",
