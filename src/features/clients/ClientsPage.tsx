@@ -1,15 +1,18 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { Building2, Plus, RotateCcw, ShieldAlert } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Building2, CheckCircle2, Plus, RotateCcw, ShieldAlert } from "lucide-react";
 import { useMemo, useState } from "react";
+
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTableShell } from "@/components/patterns/DataTableShell";
 import { EmptyState } from "@/components/states/EmptyState";
 import { ErrorState } from "@/components/states/ErrorState";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+
 import {
   Select,
   SelectContent,
@@ -21,17 +24,20 @@ import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
-import type { ClientFilters } from "@/domain/client";
+import type { ClientFilters, CreateClientInput } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
+import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import {
   CLASSIFICATION_FILTER_OPTIONS,
+  SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
   formatRecordCount,
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
+
 
 const rootRoute = getRouteApi("__root__");
 
@@ -85,11 +91,35 @@ export function ClientsPage() {
     },
   });
 
+  const queryClient = useQueryClient();
+  const [formOpen, setFormOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const createMutation = useMutation({
+    mutationFn: async (input: CreateClientInput) => {
+      const result = await clientRepository.create(context, input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (client) => {
+      setFormOpen(false);
+      setSuccessMessage(`Cliente "${client.displayName}" registrado no ambiente de validação.`);
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
+  function openForm() {
+    setSuccessMessage(null);
+    createMutation.reset();
+    setFormOpen(true);
+  }
+
   function clearFilters() {
     setSearch("");
     setStatus("active");
     setClassification("all");
   }
+
 
   const header = (
     <PageHeader
@@ -128,15 +158,33 @@ export function ClientsPage() {
 
       {canManage ? (
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <Button disabled aria-describedby="novo-cliente-ajuda">
+          <Button onClick={openForm} aria-describedby="novo-cliente-ajuda">
             <Plus aria-hidden="true" />
             Novo cliente
           </Button>
           <p id="novo-cliente-ajuda" className="text-xs text-muted-foreground">
-            Disponível na próxima etapa
+            {SIMULATED_PERSISTENCE_NOTICE}
           </p>
         </div>
       ) : null}
+
+      {successMessage ? (
+        <Alert variant="success" className="mb-6">
+          <CheckCircle2 aria-hidden="true" />
+          <AlertDescription>{successMessage}</AlertDescription>
+        </Alert>
+      ) : null}
+
+      {canManage ? (
+        <ClientForm
+          open={formOpen}
+          onOpenChange={setFormOpen}
+          submitting={createMutation.isPending}
+          submitError={createMutation.isError ? createMutation.error.message : null}
+          onSubmit={(input) => createMutation.mutate(input)}
+        />
+      ) : null}
+
 
       <DataTableShell
         title="Clientes da organização"
@@ -206,7 +254,7 @@ export function ClientsPage() {
             <EmptyState
               icon={Building2}
               title="Nenhum cliente cadastrado"
-              description="Esta organização ainda não possui clientes registrados. O cadastro será liberado na próxima etapa desta especificação."
+              description="Esta organização ainda não possui clientes registrados. Utilize “Novo cliente” para registrar no ambiente de validação."
             />
           )
         }
