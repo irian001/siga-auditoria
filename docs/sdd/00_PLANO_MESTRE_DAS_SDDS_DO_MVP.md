@@ -7,9 +7,9 @@ aliases:
 type: plano-mestre-sdd
 domain: governanca-desenvolvimento
 status: aprovado
-version: 1.0
+version: 1.3
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-08-03
 owner: responsavel-projeto
 audience:
   - responsavel-projeto
@@ -565,13 +565,13 @@ A sequência imediata será:
 6. revisar o plano apresentado;
 7. autorizar a primeira implementação.
 
-## 25. Painel inicial
+## 25. Painel de andamento
 
 | Grupo | Situação | Próxima ação |
 |---|---|---|
-| 00 — Fundação | Em planejamento | Enviar SDD-FND-001 aprovada ao Lovable em modo planejamento |
-| 01 — Organização e acesso | Não iniciado | Aguardar Grupo 00 |
-| 02 — Clientes e trabalhos | Não iniciado | Aguardar Grupo 01 |
+| 00 — Fundação | Concluído | Manter a fundação estável durante os grupos seguintes |
+| 01 — Organização e acesso | Concluído | Preservar autenticação, vínculo organizacional e ACL já validados |
+| 02 — Clientes e trabalhos | Em andamento | Publicar a documentação e executar a inspeção técnica anterior à migration da SDD-CLI-001 |
 | 03 — Contabilidade e planejamento | Não iniciado | Aguardar Grupo 02 |
 | 04 — Riscos e procedimentos | Não iniciado | Aguardar Grupo 03 |
 | 05 — Documentos e evidências | Não iniciado | Aguardar Grupo 04 |
@@ -595,3 +595,6 @@ A sequência imediata será:
 |---|---|---|---|
 | 0.1 | 2026-07-29 | Criação da minuta inicial do Plano Mestre das SDDs do MVP | Em revisão |
 | 1.0 | 2026-07-29 | Primeira versão aprovada do Plano Mestre das SDDs do MVP | Aprovada |
+| 1.1 | 2026-08-03 | Atualização do painel após a conclusão dos Grupos 00 e 01 e início da especificação do Grupo 02 | Aprovada |
+| 1.2 | 2026-08-03 | Registro da aprovação da SDD-CLI-001 e avanço para o planejamento de sua implantação | Aprovada |
+| 1.3 | 2026-08-03 | Registro da aprovação do plano CLI-001 e avanço para publicação e inspeção técnica | Aprovada |
