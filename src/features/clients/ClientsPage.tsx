@@ -93,6 +93,7 @@ export function ClientsPage() {
 
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
+  const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const createMutation = useMutation({
@@ -103,7 +104,22 @@ export function ClientsPage() {
     },
     onSuccess: async (client) => {
       setFormOpen(false);
+      setEditingClient(null);
       setSuccessMessage(`Cliente "${client.displayName}" registrado no ambiente de validação.`);
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async (variables: { id: string; input: UpdateClientInput }) => {
+      const result = await clientRepository.update(context, variables.id, variables.input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async () => {
+      setFormOpen(false);
+      setEditingClient(null);
+      setSuccessMessage(CLIENT_UPDATED_NOTICE);
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
   });
@@ -111,7 +127,22 @@ export function ClientsPage() {
   function openForm() {
     setSuccessMessage(null);
     createMutation.reset();
+    updateMutation.reset();
+    setEditingClient(null);
     setFormOpen(true);
+  }
+
+  function openEditForm(client: Client) {
+    setSuccessMessage(null);
+    createMutation.reset();
+    updateMutation.reset();
+    setEditingClient(client);
+    setFormOpen(true);
+  }
+
+  function handleFormOpenChange(next: boolean) {
+    setFormOpen(next);
+    if (!next) setEditingClient(null);
   }
 
   function clearFilters() {
@@ -119,6 +150,7 @@ export function ClientsPage() {
     setStatus("active");
     setClassification("all");
   }
+
 
 
   const header = (
