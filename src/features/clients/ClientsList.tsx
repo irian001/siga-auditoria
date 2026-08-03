@@ -1,4 +1,4 @@
-import { Pencil } from "lucide-react";
+import { Pencil, Power, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,19 @@ type ClientsListProps = {
   clients: Client[];
   canManage?: boolean;
   onEdit?: (client: Client) => void;
+  onChangeStatus?: (client: Client) => void;
 };
 
 /**
- * Estrutura visual da listagem de clientes — Camadas 1 e 3 da SDD-CLI-001.
+ * Estrutura visual da listagem de clientes — Camadas 1, 3 e 4 da SDD-CLI-001.
  */
-export function ClientsList({ clients, canManage = false, onEdit }: ClientsListProps) {
+export function ClientsList({
+  clients,
+  canManage = false,
+  onEdit,
+  onChangeStatus,
+}: ClientsListProps) {
+
 
   return (
     <Table>
