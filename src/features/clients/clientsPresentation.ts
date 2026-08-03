@@ -57,3 +57,6 @@ export function formatRecordCount(total: number): string {
 /** Aviso de ambiente de validação exibido na Camada 2 da SDD-CLI-001. */
 export const SIMULATED_PERSISTENCE_NOTICE =
   "Cadastro em ambiente de validação. Os dados não serão gravados no banco oficial.";
+
+/** Confirmação de edição simulada — Camada 3 da SDD-CLI-001. */
+export const CLIENT_UPDATED_NOTICE = "Cliente atualizado no ambiente de validação.";
