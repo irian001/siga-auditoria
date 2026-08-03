@@ -130,6 +130,22 @@ export function ClientsPage() {
     },
   });
 
+  const statusMutation = useMutation({
+    mutationFn: async (variables: { id: string; status: ClientStatus }) => {
+      const result = await clientRepository.changeStatus(context, variables.id, variables.status);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (client) => {
+      setStatusDialogOpen(false);
+      setStatusClient(null);
+      setSuccessMessage(
+        client.status === "inactive" ? CLIENT_INACTIVATED_NOTICE : CLIENT_ACTIVATED_NOTICE,
+      );
+      await queryClient.invalidateQueries({ queryKey: ["clients"] });
+    },
+  });
+
   function openForm() {
     setSuccessMessage(null);
     createMutation.reset();
@@ -146,10 +162,24 @@ export function ClientsPage() {
     setFormOpen(true);
   }
 
+  function openStatusDialog(client: Client) {
+    setSuccessMessage(null);
+    statusMutation.reset();
+    setStatusClient(client);
+    setStatusDialogOpen(true);
+  }
+
+  function handleStatusDialogOpenChange(next: boolean) {
+    if (statusMutation.isPending) return;
+    setStatusDialogOpen(next);
+    if (!next) setStatusClient(null);
+  }
+
   function handleFormOpenChange(next: boolean) {
     setFormOpen(next);
     if (!next) setEditingClient(null);
   }
+
 
   function clearFilters() {
     setSearch("");
