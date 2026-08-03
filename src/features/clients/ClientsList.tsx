@@ -55,7 +55,11 @@ export function ClientsList({
       </TableHeader>
       <TableBody>
         {clients.map((client) => (
-          <TableRow key={client.id} data-estado={client.status}>
+          <TableRow
+            key={client.id}
+            data-estado={client.status}
+            className={client.status === "inactive" ? "opacity-70" : undefined}
+          >
             <TableCell className="font-medium text-foreground">{client.displayName}</TableCell>
             <TableCell className="text-muted-foreground">{client.legalName}</TableCell>
             <TableCell className="whitespace-nowrap text-muted-foreground">
@@ -71,23 +75,46 @@ export function ClientsList({
               />
             </TableCell>
             <TableCell className="text-right">
-              {canManage && onEdit ? (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onEdit(client)}
-                  aria-label={`Editar cliente ${client.displayName}`}
-                >
-                  <Pencil aria-hidden="true" />
-                  Editar
-                </Button>
+              {canManage ? (
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  {onEdit ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onEdit(client)}
+                      aria-label={`Editar cliente ${client.displayName}`}
+                    >
+                      <Pencil aria-hidden="true" />
+                      Editar
+                    </Button>
+                  ) : null}
+                  {onChangeStatus ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onChangeStatus(client)}
+                      aria-label={
+                        client.status === "active"
+                          ? `Inativar cliente ${client.displayName}`
+                          : `Reativar cliente ${client.displayName}`
+                      }
+                    >
+                      {client.status === "active" ? (
+                        <Power aria-hidden="true" />
+                      ) : (
+                        <RotateCcw aria-hidden="true" />
+                      )}
+                      {client.status === "active" ? "Inativar" : "Reativar"}
+                    </Button>
+                  ) : null}
+                </div>
               ) : (
                 <span className="text-xs text-muted-foreground">Somente consulta</span>
               )}
             </TableCell>
-
           </TableRow>
         ))}
+
       </TableBody>
     </Table>
   );
