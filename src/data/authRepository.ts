@@ -18,5 +18,6 @@ export type AuthRepository = {
   requestPasswordReset(input: PasswordResetInput): Promise<AuthResult<void>>;
   updatePassword(input: UpdatePasswordInput): Promise<AuthResult<void>>;
   exchangeRecoveryCode(code: string): Promise<AuthResult<void>>;
+  verifyRecoveryToken(tokenHash: string): Promise<AuthResult<void>>;
   onAuthStateChange(listener: AuthStateListener): AuthSubscription;
 };
