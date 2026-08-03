@@ -1,5 +1,6 @@
 import type { Organization } from "@/domain/organization";
 import type { UserProfile } from "@/domain/user";
+import type { AuthorizationContext } from "@/domain/authorization";
 
 export const membershipStatuses = ["pending", "active", "inactive", "revoked"] as const;
 export type MembershipStatus = (typeof membershipStatuses)[number];
@@ -17,6 +18,7 @@ export type OrganizationContext = {
   profile: UserProfile;
   membership: OrganizationMembership;
   organization: Organization;
+  authorization: AuthorizationContext;
 };
 
 export type UserAccessReason =
@@ -25,6 +27,8 @@ export type UserAccessReason =
   | "membership-pending"
   | "membership-inactive"
   | "membership-ambiguous"
+  | "authorization-pending"
+  | "authorization-blocked"
   | "organization-unavailable"
   | "context-error";
 
