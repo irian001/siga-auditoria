@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ModuloFuturoPage } from "@/components/states/ModuloFuturoPage";
+import { ClientsPage } from "@/features/clients/ClientsPage";
 import { getNavItem } from "@/config/navigation";
 
 export const Route = createFileRoute("/clientes")({
@@ -12,9 +12,9 @@ export const Route = createFileRoute("/clientes")({
       { property: "og:description", content: getNavItem("clientes")!.description },
     ],
   }),
-  component: ModuleRoute,
+  component: ClientesRoute,
 });
 
-function ModuleRoute() {
-  return <ModuloFuturoPage item={getNavItem("clientes")!} />;
+function ClientesRoute() {
+  return <ClientsPage />;
 }
