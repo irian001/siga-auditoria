@@ -24,19 +24,21 @@ import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
-import type { ClientFilters, CreateClientInput } from "@/domain/client";
+import type { Client, ClientFilters, CreateClientInput, UpdateClientInput } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import {
   CLASSIFICATION_FILTER_OPTIONS,
+  CLIENT_UPDATED_NOTICE,
   SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
   formatRecordCount,
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
+
 
 
 const rootRoute = getRouteApi("__root__");
