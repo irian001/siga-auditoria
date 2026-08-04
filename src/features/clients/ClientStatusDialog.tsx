@@ -16,7 +16,6 @@ import {
   CLIENT_INACTIVATE_CONFIRM_LABEL,
   CLIENT_INACTIVATE_DESCRIPTION,
   CLIENT_INACTIVATE_TITLE,
-  SIMULATED_PERSISTENCE_NOTICE,
 } from "@/features/clients/clientsPresentation";
 
 type ClientStatusDialogProps = {
@@ -58,8 +57,6 @@ export function ClientStatusDialog({
             ) : null}
           </AlertDialogDescription>
         </AlertDialogHeader>
-
-        <p className="text-xs text-muted-foreground">{SIMULATED_PERSISTENCE_NOTICE}</p>
 
         {submitError ? (
           <p role="alert" className="text-sm text-destructive">

@@ -31,7 +31,6 @@ import {
 } from "@/domain/client";
 import {
   CLIENT_CLASSIFICATION_LABELS,
-  SIMULATED_PERSISTENCE_NOTICE,
   TAX_IDENTIFIER_TYPE_LABELS,
 } from "@/features/clients/clientsPresentation";
 
@@ -160,8 +159,6 @@ export function ClientForm({
           </DialogDescription>
         </DialogHeader>
 
-
-        <p className="text-xs text-muted-foreground">{SIMULATED_PERSISTENCE_NOTICE}</p>
 
         <form className="space-y-4" onSubmit={handleSubmit} noValidate>
           <FormField label="Nome de exibição" required error={errors.displayName}>

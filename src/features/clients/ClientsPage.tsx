@@ -22,8 +22,8 @@ import {
 } from "@/components/ui/select";
 import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
-import { MockClientRepository } from "@/data/mockClientRepository";
 import type { ClientRepository } from "@/data/clientRepository";
+import { createSupabaseClientRepository } from "@/data/supabase/supabaseClientRepository";
 import type {
   Client,
   ClientFilters,
@@ -42,7 +42,6 @@ import {
   CLIENT_ACTIVATED_NOTICE,
   CLIENT_INACTIVATED_NOTICE,
   CLIENT_UPDATED_NOTICE,
-  SIMULATED_PERSISTENCE_NOTICE,
   STATUS_FILTER_OPTIONS,
   formatRecordCount,
   type ClassificationFilterValue,
@@ -54,11 +53,13 @@ import {
 
 const rootRoute = getRouteApi("__root__");
 
-/**
- * Único ponto de instanciação do repositório nesta camada visual.
- * A instância permanece vazia: nenhum cliente fictício é criado.
- */
-const clientRepository: ClientRepository = new MockClientRepository();
+/** Único ponto de instanciação do repositório nesta camada visual. */
+let clientRepository: ClientRepository | undefined;
+
+function getClientRepository(): ClientRepository {
+  clientRepository ??= createSupabaseClientRepository();
+  return clientRepository;
+}
 
 export function ClientsPage() {
   const navItem = getNavItem("clientes")!;
@@ -98,7 +99,7 @@ export function ClientsPage() {
     enabled: canView,
     queryKey: ["clients", context.organizationId, filters],
     queryFn: async () => {
-      const result = await clientRepository.list(context, filters, { page: 1, pageSize: 20 });
+      const result = await getClientRepository().list(context, filters, { page: 1, pageSize: 20 });
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
@@ -114,21 +115,21 @@ export function ClientsPage() {
 
   const createMutation = useMutation({
     mutationFn: async (input: CreateClientInput) => {
-      const result = await clientRepository.create(context, input);
+      const result = await getClientRepository().create(context, input);
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
     onSuccess: async (client) => {
       setFormOpen(false);
       setEditingClient(null);
-      setSuccessMessage(`Cliente "${client.displayName}" registrado no ambiente de validação.`);
+      setSuccessMessage(`Cliente "${client.displayName}" cadastrado com sucesso.`);
       await queryClient.invalidateQueries({ queryKey: ["clients"] });
     },
   });
 
   const updateMutation = useMutation({
     mutationFn: async (variables: { id: string; input: UpdateClientInput }) => {
-      const result = await clientRepository.update(context, variables.id, variables.input);
+      const result = await getClientRepository().update(context, variables.id, variables.input);
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
@@ -142,7 +143,7 @@ export function ClientsPage() {
 
   const statusMutation = useMutation({
     mutationFn: async (variables: { id: string; status: ClientStatus }) => {
-      const result = await clientRepository.changeStatus(context, variables.id, variables.status);
+      const result = await getClientRepository().changeStatus(context, variables.id, variables.status);
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
@@ -236,13 +237,10 @@ export function ClientsPage() {
 
       {canManage ? (
         <div className="mb-6 flex flex-wrap items-center gap-3">
-          <Button onClick={openForm} aria-describedby="novo-cliente-ajuda">
+          <Button onClick={openForm}>
             <Plus aria-hidden="true" />
             Novo cliente
           </Button>
-          <p id="novo-cliente-ajuda" className="text-xs text-muted-foreground">
-            {SIMULATED_PERSISTENCE_NOTICE}
-          </p>
         </div>
       ) : null}
 
