@@ -404,9 +404,18 @@ export function ClientsPage() {
           canManage={canManage}
           onEdit={openEditForm}
           onChangeStatus={openStatusDialog}
+          onOpenAcceptance={openAcceptancePanel}
         />
 
       </DataTableShell>
+
+      <AcceptancePanel
+        open={acceptanceOpen}
+        onOpenChange={handleAcceptanceOpenChange}
+        client={acceptanceClient}
+        context={context}
+      />
+
 
       {!canManage ? (
         <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
