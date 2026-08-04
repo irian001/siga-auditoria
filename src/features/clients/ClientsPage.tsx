@@ -34,9 +34,11 @@ import type {
 
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
+import { AcceptancePanel } from "@/features/acceptance/AcceptancePanel";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import { ClientStatusDialog } from "@/features/clients/ClientStatusDialog";
+
 import {
   CLASSIFICATION_FILTER_OPTIONS,
   CLIENT_ACTIVATED_NOTICE,
