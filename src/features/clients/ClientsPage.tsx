@@ -34,9 +34,11 @@ import type {
 
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
+import { AcceptancePanel } from "@/features/acceptance/AcceptancePanel";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import { ClientStatusDialog } from "@/features/clients/ClientStatusDialog";
+
 import {
   CLASSIFICATION_FILTER_OPTIONS,
   CLIENT_ACTIVATED_NOTICE,
@@ -111,6 +113,9 @@ export function ClientsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [statusClient, setStatusClient] = useState<Client | null>(null);
+  const [acceptanceOpen, setAcceptanceOpen] = useState(false);
+  const [acceptanceClient, setAcceptanceClient] = useState<Client | null>(null);
+
 
 
   const createMutation = useMutation({
@@ -190,6 +195,19 @@ export function ClientsPage() {
     setFormOpen(next);
     if (!next) setEditingClient(null);
   }
+
+  function openAcceptancePanel(client: Client) {
+    setSuccessMessage(null);
+    setAcceptanceClient(client);
+    setAcceptanceOpen(true);
+  }
+
+  function handleAcceptanceOpenChange(next: boolean) {
+    setAcceptanceOpen(next);
+    if (!next) setAcceptanceClient(null);
+  }
+
+
 
 
   function clearFilters() {
@@ -386,9 +404,18 @@ export function ClientsPage() {
           canManage={canManage}
           onEdit={openEditForm}
           onChangeStatus={openStatusDialog}
+          onOpenAcceptance={openAcceptancePanel}
         />
 
       </DataTableShell>
+
+      <AcceptancePanel
+        open={acceptanceOpen}
+        onOpenChange={handleAcceptanceOpenChange}
+        client={acceptanceClient}
+        context={context}
+      />
+
 
       {!canManage ? (
         <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
