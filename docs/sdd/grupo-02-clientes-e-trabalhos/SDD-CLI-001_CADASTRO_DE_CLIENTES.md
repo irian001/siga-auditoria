@@ -9,9 +9,10 @@ type: sdd
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
 status: aprovado
-version: 1.0
+implementation_status: concluido
+version: 1.1
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-04
 owner: responsavel-projeto
 responsible:
   planning: work
@@ -468,14 +469,24 @@ Com a aprovação desta SDD, ficam estabelecidas para o MVP:
 4. a classificação inicial será `legal_entity`, `individual` ou `other`;
 5. a listagem apresentará CPF ou CNPJ parcialmente mascarado; a visualização completa dependerá de autorização e necessidade funcional.
 
-## 20. Condição para elaborar o plano de implantação
+## 20. Resultado da implementação
 
-O plano somente será criado após:
+A `SDD-CLI-001` foi concluída e validada em 2026-08-04.
 
-- revisão humana desta minuta;
-- resolução das pendências da seção 19;
-- aprovação expressa da SDD;
-- inspeção atualizada do repositório e do ambiente oficial.
+Foram confirmados:
+
+- cadastro, consulta, pesquisa e filtros de clientes;
+- edição, inativação e reativação;
+- normalização e validação de CPF e CNPJ;
+- permissões `clients.view` e `clients.manage`;
+- RLS e isolamento por organização;
+- integração real com o Supabase oficial `umuassmgminmliuypoyp`;
+- ausência de utilização do Lovable Cloud como banco alternativo;
+- testes funcionais realizados e aprovados pelo responsável pelo projeto;
+- integração do código na `main` pelo PR #26, merge `e306f028`;
+- reconciliação do identificador da migration pelo PR #27, merge `fe9f98e6`.
+
+Não há pendência funcional conhecida nesta SDD. A sequência autorizada pelo Plano Mestre passa para a elaboração da `SDD-ACE-001`.
 
 ## 21. Navegação
 
@@ -492,3 +503,4 @@ O plano somente será criado após:
 |---|---|---|---|
 | 0.1 | 2026-08-03 | Criação da primeira minuta do cadastro de clientes para abertura do Grupo 02 | Substituída |
 | 1.0 | 2026-08-03 | Aprovação humana da SDD e confirmação das decisões cadastrais iniciais do MVP | Aprovada |
+| 1.1 | 2026-08-04 | Registro da conclusão da implementação, validação funcional e reconciliação da migration de clientes | Concluída |

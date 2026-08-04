@@ -7,15 +7,16 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 1.2
+version: 1.3
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-04
 owner: responsavel-projeto
 related:
   - "[[Constituição do SIGA]]"
   - "[[Plano Mestre das SDDs do MVP do SIGA]]"
   - "[[SDD-ACL-001]]"
   - "[[SDD-CLI-001]]"
+  - "[[SDD-ACE-001]]"
 obsidian:
   note_type: project-status
   graph_role: operational-hub
@@ -28,7 +29,7 @@ tags: [siga, status, continuidade, mvp, sdd]
 
 ## 1. Estado atual
 
-O Grupo 01 — Organização e acesso está concluído e validado no ambiente publicado.
+Os Grupos 00 — Fundação e 01 — Organização e acesso estão concluídos. O Grupo 02 — Clientes e trabalhos está em andamento, com a `SDD-CLI-001` concluída e validada no ambiente publicado.
 
 Situação confirmada pelo responsável pelo projeto:
 
@@ -57,34 +58,43 @@ Concluídas e validadas:
 
 O critério de avanço foi atendido: o usuário autorizado acessa somente a organização e as funções permitidas, com contexto organizacional e ACL verificáveis.
 
+### Grupo 02 — Clientes e trabalhos
+
+Concluída e validada:
+
+- `SDD-CLI-001` — Cadastro de clientes.
+
+Foram confirmados cadastro, consulta, pesquisa, filtros, edição, inativação, reativação, validação de CPF e CNPJ, permissões, RLS, isolamento organizacional e integração com o Supabase oficial.
+
 ## 3. Etapa em andamento
 
 ### Grupo 02 — Clientes e trabalhos
 
-Primeira especificação aprovada:
+Próxima especificação a elaborar:
 
-- `SDD-CLI-001` — Cadastro de clientes, versão 1.0.
+- `SDD-ACE-001` — Aceitação e continuidade simplificada.
 
-Não foi iniciada implementação do Grupo 02.
+As SDDs de trabalho, equipe e painel permanecem não iniciadas e dependem da sequência definida no Plano Mestre.
 
 ## 4. Ambiente e referência técnica
 
 - projeto Supabase oficial: `siga-auditoria`;
 - referência do projeto: `umuassmgminmliuypoyp`;
 - aplicação publicada: `https://siga-audiconsult.lovable.app`;
-- branch de documentação atual: `docs/grupo-02-cli-001-minuta`;
-- último merge relevante confirmado antes desta atualização: `27bec8c`;
+- branch oficial de referência: `main`;
+- merge da integração real de clientes: `e306f028`;
+- merge da reconciliação da migration de clientes: `fe9f98e6`;
 - repositório e GitHub permanecem como fontes oficiais de código e documentação.
 
 ## 5. Pendências e bloqueios
 
-- publicar a documentação aprovada da `SDD-CLI-001` e executar a inspeção técnica anterior à migration;
-- não há bloqueio funcional conhecido para iniciar a especificação do Grupo 02;
-- resíduos locais `src/routeTree.gen.ts` e `supabase/.temp/` não pertencem a esta atualização documental e não deverão ser incluídos em commit.
+- não há pendência funcional conhecida na `SDD-CLI-001`;
+- não há bloqueio conhecido para elaborar a `SDD-ACE-001`;
+- funcionalidades de aceitação e continuidade não deverão ser antecipadas antes da aprovação de sua SDD e de seu plano de implantação.
 
 ## 6. Próximo passo exato
 
-Publicar a `SDD-CLI-001` e seu plano de implantação na `main`; depois atualizar e inspecionar a base técnica, apresentando o resultado antes de criar a migration.
+Elaborar a minuta da `SDD-ACE-001 — Aceitação e continuidade simplificada`, revisar suas regras funcionais e obter aprovação humana antes de preparar o respectivo plano de implantação.
 
 ## 7. Histórico de alterações
 
@@ -93,3 +103,4 @@ Publicar a `SDD-CLI-001` e seu plano de implantação na `main`; depois atualiza
 | 1.0 | 2026-08-03 | Criação do registro operacional após a conclusão dos Grupos 00 e 01 e abertura do Grupo 02 | Ativo |
 | 1.1 | 2026-08-03 | Registro da aprovação da SDD-CLI-001 e definição do plano de implantação como próximo passo | Ativo |
 | 1.2 | 2026-08-03 | Registro da aprovação do plano CLI-001 e abertura da etapa de publicação e inspeção técnica | Ativo |
+| 1.3 | 2026-08-04 | Encerramento da SDD-CLI-001 após integração real, testes funcionais e reconciliação da migration; definição da SDD-ACE-001 como próximo passo | Ativo |

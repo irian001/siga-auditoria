@@ -8,9 +8,10 @@ type: plano-implantacao
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
 status: aprovado
-version: 1.0
+implementation_status: concluido
+version: 1.1
 created: 2026-08-03
-updated: 2026-08-03
+updated: 2026-08-04
 owner: responsavel-projeto
 responsible:
   coordination: work
@@ -568,16 +569,23 @@ A implantação estará concluída quando:
 - aplicação publicada estiver validada;
 - Situação do Projeto estiver atualizada.
 
-## 30. Próximo passo após aprovação
+## 30. Resultado da implantação
 
-Após a aprovação deste plano:
+O plano foi executado e concluído em 2026-08-04.
 
-1. publicar a documentação na `main` por PR pequeno;
-2. atualizar a cópia local com a `main`;
-3. iniciar a Etapa 2 — inspeção técnica atualizada;
-4. apresentar o resultado antes de criar a migration.
+Resultado confirmado:
 
-Não se deverá enviar imediatamente um comando amplo ao Lovable. A interface será acionada somente depois da base técnica e do contrato estável.
+1. documentação, domínio, contrato e migration versionados;
+2. tabela `public.clients` aplicada no Supabase oficial;
+3. permissões, RLS e isolamento organizacional configurados;
+4. interface fabricada em camadas e validada pelo responsável;
+5. adaptador Supabase integrado sem reconstrução da interface;
+6. testes funcionais executados sem pendências relatadas;
+7. integração técnica incorporada à `main` pelo PR #26;
+8. identificador da migration reconciliado pelo PR #27;
+9. nenhuma utilização do Lovable Cloud como banco alternativo.
+
+O próximo passo do Plano Mestre é elaborar e aprovar a `SDD-ACE-001`, sem antecipar sua implementação.
 
 ## 31. Navegação
 
@@ -594,3 +602,4 @@ Não se deverá enviar imediatamente um comando amplo ao Lovable. A interface se
 |---|---|---|---|
 | 0.1 | 2026-08-03 | Criação da minuta do plano de implantação da SDD-CLI-001 | Substituída |
 | 1.0 | 2026-08-03 | Aprovação humana do plano de implantação da SDD-CLI-001 | Aprovada |
+| 1.1 | 2026-08-04 | Registro da conclusão da implantação e liberação da sequência para a SDD-ACE-001 | Concluída |
