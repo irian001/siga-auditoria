@@ -196,6 +196,19 @@ export function ClientsPage() {
     if (!next) setEditingClient(null);
   }
 
+  function openAcceptancePanel(client: Client) {
+    setSuccessMessage(null);
+    setAcceptanceClient(client);
+    setAcceptanceOpen(true);
+  }
+
+  function handleAcceptanceOpenChange(next: boolean) {
+    setAcceptanceOpen(next);
+    if (!next) setAcceptanceClient(null);
+  }
+
+
+
 
   function clearFilters() {
     setSearch("");
