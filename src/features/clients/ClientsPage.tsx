@@ -113,6 +113,9 @@ export function ClientsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [statusClient, setStatusClient] = useState<Client | null>(null);
+  const [acceptanceOpen, setAcceptanceOpen] = useState(false);
+  const [acceptanceClient, setAcceptanceClient] = useState<Client | null>(null);
+
 
 
   const createMutation = useMutation({
