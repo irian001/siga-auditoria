@@ -1,4 +1,4 @@
-import { Pencil, Power, RotateCcw } from "lucide-react";
+import { ClipboardCheck, Pencil, Power, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ type ClientsListProps = {
   canManage?: boolean;
   onEdit?: (client: Client) => void;
   onChangeStatus?: (client: Client) => void;
+  onOpenAcceptance?: (client: Client) => void;
 };
 
 /**
@@ -32,7 +33,9 @@ export function ClientsList({
   canManage = false,
   onEdit,
   onChangeStatus,
+  onOpenAcceptance,
 }: ClientsListProps) {
+
 
 
   return (
