@@ -78,7 +78,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full gap-0 sm:max-w-xl">
+      <SheetContent side="right" className="flex w-full flex-col overflow-y-auto sm:max-w-xl">
         <SheetHeader>
           <SheetTitle>{ACCEPTANCE_PANEL_TITLE}</SheetTitle>
           <SheetDescription>
@@ -86,7 +86,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
           </SheetDescription>
         </SheetHeader>
 
-        <div className="flex-1 overflow-y-auto px-4 pb-6">
+        <div className="mt-2 flex-1">
           <Alert variant="warning" className="mb-6">
             <FileCheck2 aria-hidden="true" />
             <AlertDescription>{ACCEPTANCE_SIMULATION_NOTICE}</AlertDescription>
