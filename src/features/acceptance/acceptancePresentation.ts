@@ -81,11 +81,9 @@ function baseAssessment(
 ): AcceptanceAssessment {
   const timestamp = `${overrides.assessmentDate}T12:00:00.000Z`;
   return {
-    id: overrides.id,
     organizationId: input.organizationId,
     clientId: input.clientId,
     assessmentType: "acceptance",
-    assessmentDate: overrides.assessmentDate,
     status: "draft",
     preparedBy: input.preparedBy,
     answers: [],
