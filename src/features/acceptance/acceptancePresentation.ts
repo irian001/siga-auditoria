@@ -1,5 +1,6 @@
 import type { StatusKey } from "@/components/ui/status-badge";
 import type {
+  AcceptanceAnswerValue,
   AcceptanceAssessment,
   AcceptanceAssessmentStatus,
   AcceptanceAssessmentType,
@@ -35,6 +36,28 @@ export const ACCEPTANCE_CONCLUSION_LABELS: Record<AcceptanceConclusion, string> 
   approved: "Aprovada",
   rejected: "Rejeitada",
 };
+
+export const ACCEPTANCE_ANSWER_LABELS: Record<AcceptanceAnswerValue, string> = {
+  yes: "Sim",
+  no: "Não",
+  not_applicable: "Não se aplica",
+  unknown: "Não identificado",
+};
+
+export const ACCEPTANCE_DRAFT_SAVED_NOTICE = "Rascunho da avaliação salvo com sucesso.";
+
+export function describeAssessmentRule(
+  type: AcceptanceAssessmentType,
+  isReanalysis: boolean,
+): string {
+  if (type === "continuance") {
+    return "A continuidade será relacionada à avaliação aprovada mais recente deste cliente.";
+  }
+  if (isReanalysis) {
+    return "A nova análise será relacionada à rejeição anterior e exige justificativa.";
+  }
+  return "Registre a avaliação inicial e salve o questionário como rascunho.";
+}
 
 export function formatAcceptanceDate(value?: string): string {
   if (!value) return "—";
@@ -93,8 +116,8 @@ function createSimulatedAssessment(
 /** Cenários determinísticos usados exclusivamente pelo repositório em memória. */
 export function buildSimulatedAssessments(input: SimulatedAssessmentInput): AcceptanceAssessment[] {
   const scenario = selectScenario(input.clientId);
-  const firstId = `${input.clientId}-sim-1`;
-  const secondId = `${input.clientId}-sim-2`;
+  const firstId = crypto.randomUUID();
+  const secondId = crypto.randomUUID();
 
   if (scenario === 0) return [];
 

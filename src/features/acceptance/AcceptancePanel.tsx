@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { FileCheck2, RotateCcw } from "lucide-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { CheckCircle2, FileCheck2, Plus, RotateCcw } from "lucide-react";
+import { useState } from "react";
 
 import { EmptyState } from "@/components/states/EmptyState";
 import { ErrorState } from "@/components/states/ErrorState";
@@ -17,10 +18,15 @@ import type { AcceptanceRepository } from "@/data/acceptanceRepository";
 import { MockAcceptanceRepository } from "@/data/mockAcceptanceRepository";
 import type { Client } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
+import {
+  AcceptanceForm,
+  type AcceptanceDraftSubmission,
+} from "@/features/acceptance/AcceptanceForm";
 import { AcceptanceHistory } from "@/features/acceptance/AcceptanceHistory";
 import {
   ACCEPTANCE_PANEL_TITLE,
   ACCEPTANCE_SIMULATION_NOTICE,
+  ACCEPTANCE_DRAFT_SAVED_NOTICE,
   buildSimulatedAssessments,
   formatAcceptanceCount,
 } from "@/features/acceptance/acceptancePresentation";
@@ -55,6 +61,11 @@ type AcceptancePanelProps = {
 
 /** Painel somente leitura da Camada Visual 1 da SDD-ACE-001. */
 export function AcceptancePanel({ open, onOpenChange, client, context }: AcceptancePanelProps) {
+  const queryClient = useQueryClient();
+  const [formOpen, setFormOpen] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
   const query = useQuery({
     enabled: open && Boolean(client) && Boolean(context.organizationId) && Boolean(context.userId),
     queryKey: ["acceptance-simulado", context.organizationId, client?.id],
@@ -66,9 +77,59 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   });
 
   const assessments = query.data ?? [];
+  const draft = assessments.find((assessment) => assessment.status === "draft") ?? null;
+  const hasOpenReview = assessments.some((assessment) => assessment.status === "pending_review");
+  const canCreate = Boolean(client && client.status === "active" && !draft && !hasOpenReview);
+
+  const saveDraftMutation = useMutation({
+    mutationFn: async (submission: AcceptanceDraftSubmission) => {
+      if (!client) throw new Error("Nenhum cliente selecionado.");
+      const repository = getAcceptanceRepository(client);
+      let assessmentId = submission.assessmentId;
+
+      if (submission.createInput) {
+        const created = await repository.create(context, submission.createInput);
+        if (!created.ok) throw new Error(created.error.message);
+        assessmentId = created.data.id;
+      }
+
+      if (!assessmentId) throw new Error("Não foi possível identificar o rascunho.");
+      if (submission.answers.length > 0) {
+        const saved = await repository.saveAnswers(context, assessmentId, submission.answers);
+        if (!saved.ok) throw new Error(saved.error.message);
+      }
+      return assessmentId;
+    },
+    onSuccess: async () => {
+      setFormOpen(false);
+      setFormError(null);
+      setSuccessMessage(ACCEPTANCE_DRAFT_SAVED_NOTICE);
+      await queryClient.invalidateQueries({
+        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+      });
+    },
+    onError: (error) => setFormError(error.message),
+  });
+
+  function openDraftForm() {
+    setFormError(null);
+    setSuccessMessage(null);
+    saveDraftMutation.reset();
+    setFormOpen(true);
+  }
+
+  function handlePanelOpenChange(next: boolean) {
+    if (!next && saveDraftMutation.isPending) return;
+    onOpenChange(next);
+    if (!next) {
+      setFormOpen(false);
+      setFormError(null);
+      setSuccessMessage(null);
+    }
+  }
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
+    <Sheet open={open} onOpenChange={handlePanelOpenChange}>
       <SheetContent side="right" className="flex w-full flex-col overflow-y-auto sm:max-w-xl">
         <SheetHeader>
           <SheetTitle>{ACCEPTANCE_PANEL_TITLE}</SheetTitle>
@@ -82,6 +143,33 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
             <FileCheck2 aria-hidden="true" />
             <AlertDescription>{ACCEPTANCE_SIMULATION_NOTICE}</AlertDescription>
           </Alert>
+
+          {successMessage ? (
+            <Alert variant="success" className="mb-6">
+              <CheckCircle2 aria-hidden="true" />
+              <AlertDescription>{successMessage}</AlertDescription>
+            </Alert>
+          ) : null}
+
+          {query.isSuccess ? (
+            <div className="mb-6 flex flex-wrap items-center gap-3">
+              {draft ? (
+                <Button onClick={openDraftForm}>Continuar rascunho</Button>
+              ) : (
+                <Button onClick={openDraftForm} disabled={!canCreate}>
+                  <Plus aria-hidden="true" />
+                  Nova avaliação
+                </Button>
+              )}
+              {!canCreate && !draft ? (
+                <p className="text-xs text-muted-foreground">
+                  {client?.status !== "active"
+                    ? "Cliente inativo: nova avaliação indisponível."
+                    : "Já existe uma avaliação aguardando decisão."}
+                </p>
+              ) : null}
+            </div>
+          ) : null}
 
           {query.isPending ? <LoadingState variant="cartao" lines={2} /> : null}
 
@@ -115,6 +203,22 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
             </>
           ) : null}
         </div>
+
+        {client ? (
+          <AcceptanceForm
+            open={formOpen}
+            onOpenChange={setFormOpen}
+            clientId={client.id}
+            assessments={assessments}
+            draft={draft}
+            submitting={saveDraftMutation.isPending}
+            submitError={formError}
+            onSubmit={(submission) => {
+              if (saveDraftMutation.isPending) return;
+              saveDraftMutation.mutate(submission);
+            }}
+          />
+        ) : null}
       </SheetContent>
     </Sheet>
   );
