@@ -23,6 +23,7 @@ import {
   AcceptanceForm,
   type AcceptanceDraftSubmission,
 } from "@/features/acceptance/AcceptanceForm";
+import { AcceptanceCancelDialog } from "@/features/acceptance/AcceptanceCancelDialog";
 import { AcceptanceHistory } from "@/features/acceptance/AcceptanceHistory";
 import { AcceptanceReview } from "@/features/acceptance/AcceptanceReview";
 import { AcceptanceDecisionDialog } from "@/features/acceptance/AcceptanceDecisionDialog";
@@ -74,6 +75,8 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   const [reviewAssessmentId, setReviewAssessmentId] = useState<string | null>(null);
   const [decisionOpen, setDecisionOpen] = useState(false);
   const [workflowError, setWorkflowError] = useState<string | null>(null);
+  const [cancelOpen, setCancelOpen] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
 
   const query = useQuery({
     enabled: open && Boolean(client) && Boolean(context.organizationId) && Boolean(context.userId),
@@ -169,6 +172,29 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
     onError: (error) => setWorkflowError(error.message),
   });
 
+  const cancelMutation = useMutation({
+    mutationFn: async (input: { assessmentId: string; reason: string }) => {
+      if (!client) throw new Error("Nenhum cliente selecionado.");
+      const result = await getAcceptanceRepository(client).cancel(
+        context,
+        input.assessmentId,
+        input.reason,
+      );
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async () => {
+      setCancelOpen(false);
+      setCancelError(null);
+      setReviewAssessmentId(null);
+      setSuccessMessage("Rascunho cancelado e preservado no histórico.");
+      await queryClient.invalidateQueries({
+        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+      });
+    },
+    onError: (error) => setCancelError(error.message),
+  });
+
   function openDraftForm() {
     setFormError(null);
     setSuccessMessage(null);
@@ -181,6 +207,12 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
     setWorkflowError(null);
     workflowMutation.reset();
     setReviewAssessmentId(assessment.id);
+  }
+
+  function openCancelDialog() {
+    setCancelError(null);
+    cancelMutation.reset();
+    setCancelOpen(true);
   }
 
   function closeReview() {
@@ -207,8 +239,10 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
       setFormOpen(false);
       setReviewAssessmentId(null);
       setDecisionOpen(false);
+      setCancelOpen(false);
       setFormError(null);
       setWorkflowError(null);
+      setCancelError(null);
       setSuccessMessage(null);
     }
   }
@@ -257,27 +291,45 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
           ) : null}
 
           {query.isSuccess && actionableAssessment && !reviewAssessment ? (
-            <div className="mb-6">
+            <div className="mb-6 flex flex-wrap gap-2">
               <Button variant="outline" onClick={() => openReview(actionableAssessment)}>
                 Revisar avaliação
               </Button>
+              {actionableAssessment.status === "draft" ? (
+                <Button variant="destructive" onClick={openCancelDialog}>
+                  Cancelar rascunho
+                </Button>
+              ) : null}
             </div>
           ) : null}
 
           {reviewAssessment ? (
-            <AcceptanceReview
-              assessment={reviewAssessment}
-              submitting={workflowMutation.isPending}
-              error={workflowError}
-              onSubmit={() => {
-                workflowMutation.mutate({
-                  action: "submit",
-                  assessmentId: reviewAssessment.id,
-                });
-              }}
-              onReturnToDraft={requestReturnToDraft}
-              onDecide={() => setDecisionOpen(true)}
-            />
+            <>
+              <AcceptanceReview
+                assessment={reviewAssessment}
+                submitting={workflowMutation.isPending || cancelMutation.isPending}
+                error={workflowError}
+                onSubmit={() => {
+                  workflowMutation.mutate({
+                    action: "submit",
+                    assessmentId: reviewAssessment.id,
+                  });
+                }}
+                onReturnToDraft={requestReturnToDraft}
+                onDecide={() => setDecisionOpen(true)}
+              />
+              {reviewAssessment.status === "draft" ? (
+                <div className="mb-6">
+                  <Button
+                    variant="destructive"
+                    onClick={openCancelDialog}
+                    disabled={workflowMutation.isPending || cancelMutation.isPending}
+                  >
+                    Cancelar rascunho
+                  </Button>
+                </div>
+              ) : null}
+            </>
           ) : null}
 
           {query.isPending ? <LoadingState variant="cartao" lines={2} /> : null}
@@ -343,6 +395,19 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
               conclusion,
               rationale,
             });
+          }}
+        />
+
+        <AcceptanceCancelDialog
+          open={cancelOpen}
+          onOpenChange={setCancelOpen}
+          assessment={actionableAssessment?.status === "draft" ? actionableAssessment : null}
+          submitting={cancelMutation.isPending}
+          error={cancelError}
+          onConfirm={(reason) => {
+            const target = reviewAssessment ?? actionableAssessment;
+            if (cancelMutation.isPending || !target || target.status !== "draft") return;
+            cancelMutation.mutate({ assessmentId: target.id, reason });
           }}
         />
 

@@ -192,6 +192,22 @@ export function AcceptanceForm({
             ) : null}
           </div>
 
+          {assessmentType === "continuance" ? (
+            <Alert>
+              <AlertDescription>
+                Esta continuidade está vinculada à avaliação aprovada mais recente do cliente.
+              </AlertDescription>
+            </Alert>
+          ) : null}
+
+          {isReanalysis ? (
+            <Alert variant="warning">
+              <AlertDescription>
+                Existe uma rejeição anterior. A justificativa da reanálise é obrigatória.
+              </AlertDescription>
+            </Alert>
+          ) : null}
+
           <div className="grid gap-4 sm:grid-cols-2">
             <FormField label="Data da avaliação" required error={metadataErrors.assessmentDate}>
               {(field) => (
