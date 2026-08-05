@@ -36,6 +36,11 @@ export const ENGAGEMENTS_READ_ONLY_NOTICE =
 export const ENGAGEMENTS_FUTURE_STEPS_NOTICE =
   "Equipe, período e planejamento ainda não fazem parte desta etapa.";
 
+export const ENGAGEMENT_CREATED_NOTICE = "Trabalho criado em elaboração com sucesso.";
+
+export const ENGAGEMENT_CREATION_SCOPE_NOTICE =
+  "A criação exige cliente ativo e avaliação ACE aprovada e aplicável. O trabalho nasce em elaboração.";
+
 export function formatEngagementRecordCount(total: number): string {
   if (total === 0) return "Nenhum trabalho";
   return total === 1 ? "1 trabalho" : `${total} trabalhos`;
