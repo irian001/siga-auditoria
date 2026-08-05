@@ -68,11 +68,11 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "trabalhos",
     title: "Trabalhos",
-    description: "Trabalhos de auditoria, períodos, equipes e situação.",
+    description: "Consulta de trabalhos de auditoria e sua situação.",
     to: "/trabalhos",
     icon: Briefcase,
     group: "trabalho",
-    status: "planejado",
+    status: "disponivel",
   },
   {
     id: "planejamento",

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { ModuloFuturoPage } from "@/components/states/ModuloFuturoPage";
 import { getNavItem } from "@/config/navigation";
+import { EngagementsPage } from "@/features/engagements/EngagementsPage";
 
 export const Route = createFileRoute("/trabalhos")({
   head: () => ({
@@ -16,5 +16,5 @@ export const Route = createFileRoute("/trabalhos")({
 });
 
 function ModuleRoute() {
-  return <ModuloFuturoPage item={getNavItem("trabalhos")!} />;
+  return <EngagementsPage />;
 }
