@@ -1,6 +1,17 @@
 import { getRouteApi } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { BriefcaseBusiness, CheckCircle2, Eye, Plus, RotateCcw, ShieldAlert } from "lucide-react";
+import {
+  Ban,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Eye,
+  LockKeyhole,
+  Pencil,
+  Plus,
+  Power,
+  RotateCcw,
+  ShieldAlert,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { PageHeader } from "@/components/layout/PageHeader";
@@ -46,17 +57,27 @@ import type {
   AuditEngagement,
   AuditEngagementFilters,
   AuditEngagementStatus,
+  AuditEngagementTransitionStatus,
+  ChangeAuditEngagementStatusInput,
   CreateAuditEngagementInput,
+  UpdateAuditEngagementInput,
 } from "@/domain/engagement";
 import { EngagementForm } from "@/features/engagements/EngagementForm";
+import { EngagementEditForm } from "@/features/engagements/EngagementEditForm";
+import { EngagementStatusDialog } from "@/features/engagements/EngagementStatusDialog";
 import {
+  ENGAGEMENT_ACTIVATED_NOTICE,
+  ENGAGEMENT_CANCELLED_NOTICE,
   ENGAGEMENT_CLASSIFICATION_LABELS,
+  ENGAGEMENT_CLOSED_NOTICE,
   ENGAGEMENT_CREATED_NOTICE,
   ENGAGEMENT_CREATION_SCOPE_NOTICE,
+  ENGAGEMENT_LIFECYCLE_NOTICE,
   ENGAGEMENTS_FUTURE_STEPS_NOTICE,
   ENGAGEMENT_STATUS_BADGES,
   ENGAGEMENT_STATUS_FILTER_OPTIONS,
   ENGAGEMENT_STATUS_LABELS,
+  ENGAGEMENT_UPDATED_NOTICE,
   formatEngagementDate,
   formatEngagementRecordCount,
 } from "@/features/engagements/engagementsPresentation";
@@ -91,6 +112,8 @@ export function EngagementsPage() {
   const authorization = access?.authorization ?? null;
   const canView = can(authorization, "engagements.view");
   const canManage = can(authorization, "engagements.manage");
+  const canClose = can(authorization, "engagements.close");
+  const canCancel = can(authorization, "engagements.cancel");
 
   const context = useMemo<RequestContext>(
     () => ({
@@ -107,6 +130,9 @@ export function EngagementsPage() {
   const [selectedEngagement, setSelectedEngagement] = useState<AuditEngagement | null>(null);
   const [formOpen, setFormOpen] = useState(false);
   const [selectedCreateClientId, setSelectedCreateClientId] = useState("");
+  const [editingEngagement, setEditingEngagement] = useState<AuditEngagement | null>(null);
+  const [statusEngagement, setStatusEngagement] = useState<AuditEngagement | null>(null);
+  const [statusTarget, setStatusTarget] = useState<AuditEngagementTransitionStatus | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const filters = useMemo<AuditEngagementFilters>(
@@ -177,6 +203,39 @@ export function EngagementsPage() {
     },
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, input }: { id: string; input: UpdateAuditEngagementInput }) => {
+      const result = await getEngagementRepository().update(context, id, input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async () => {
+      setEditingEngagement(null);
+      setSuccessMessage(ENGAGEMENT_UPDATED_NOTICE);
+      await queryClient.invalidateQueries({ queryKey: ["engagements"] });
+    },
+  });
+
+  const statusMutation = useMutation({
+    mutationFn: async ({ id, input }: { id: string; input: ChangeAuditEngagementStatusInput }) => {
+      const result = await getEngagementRepository().changeStatus(context, id, input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (engagement) => {
+      setStatusEngagement(null);
+      setStatusTarget(null);
+      setSuccessMessage(
+        engagement.status === "active"
+          ? ENGAGEMENT_ACTIVATED_NOTICE
+          : engagement.status === "cancelled"
+            ? ENGAGEMENT_CANCELLED_NOTICE
+            : ENGAGEMENT_CLOSED_NOTICE,
+      );
+      await queryClient.invalidateQueries({ queryKey: ["engagements"] });
+    },
+  });
+
   const clientsById = useMemo(
     () => new Map((clientsQuery.data ?? []).map((client) => [client.id, client])),
     [clientsQuery.data],
@@ -210,6 +269,36 @@ export function EngagementsPage() {
     if (!next) {
       setSelectedCreateClientId("");
       createMutation.reset();
+    }
+  }
+
+  function openEdit(engagement: AuditEngagement) {
+    setSuccessMessage(null);
+    updateMutation.reset();
+    setEditingEngagement(engagement);
+  }
+
+  function handleEditOpenChange(next: boolean) {
+    if (updateMutation.isPending) return;
+    if (!next) {
+      setEditingEngagement(null);
+      updateMutation.reset();
+    }
+  }
+
+  function openStatus(engagement: AuditEngagement, target: AuditEngagementTransitionStatus) {
+    setSuccessMessage(null);
+    statusMutation.reset();
+    setStatusEngagement(engagement);
+    setStatusTarget(target);
+  }
+
+  function handleStatusOpenChange(next: boolean) {
+    if (statusMutation.isPending) return;
+    if (!next) {
+      setStatusEngagement(null);
+      setStatusTarget(null);
+      statusMutation.reset();
     }
   }
 
@@ -273,6 +362,33 @@ export function EngagementsPage() {
           onSubmit={(input) => createMutation.mutate(input)}
         />
       ) : null}
+
+      {canManage ? (
+        <EngagementEditForm
+          open={editingEngagement !== null}
+          onOpenChange={handleEditOpenChange}
+          engagement={editingEngagement}
+          submitting={updateMutation.isPending}
+          submitError={updateMutation.isError ? updateMutation.error.message : null}
+          onSubmit={(input) => {
+            if (!editingEngagement) return;
+            updateMutation.mutate({ id: editingEngagement.id, input });
+          }}
+        />
+      ) : null}
+
+      <EngagementStatusDialog
+        open={statusEngagement !== null && statusTarget !== null}
+        onOpenChange={handleStatusOpenChange}
+        engagement={statusEngagement}
+        targetStatus={statusTarget}
+        submitting={statusMutation.isPending}
+        submitError={statusMutation.isError ? statusMutation.error.message : null}
+        onConfirm={(input) => {
+          if (!statusEngagement) return;
+          statusMutation.mutate({ id: statusEngagement.id, input });
+        }}
+      />
 
       <DataTableShell
         title="Trabalhos da organização"
@@ -362,7 +478,7 @@ export function EngagementsPage() {
       >
         <Table>
           <caption className="sr-only">
-            Trabalhos de auditoria da organização ativa, em modo somente leitura.
+            Trabalhos de auditoria da organização ativa, com consulta e ações autorizadas.
           </caption>
           <TableHeader>
             <TableRow>
@@ -372,7 +488,7 @@ export function EngagementsPage() {
               <TableHead scope="col">Estado</TableHead>
               <TableHead scope="col">Atualizado</TableHead>
               <TableHead scope="col" className="text-right">
-                Consulta
+                Ações
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -398,16 +514,64 @@ export function EngagementsPage() {
                 <TableCell className="whitespace-nowrap text-muted-foreground">
                   {formatEngagementDate(engagement.updatedAt)}
                 </TableCell>
-                <TableCell className="text-right">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSelectedEngagement(engagement)}
-                    aria-label={`Consultar trabalho ${engagement.code}`}
-                  >
-                    <Eye aria-hidden="true" />
-                    Ver resumo
-                  </Button>
+                <TableCell>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    {canManage &&
+                    (engagement.status === "draft" || engagement.status === "active") ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openEdit(engagement)}
+                        aria-label={`Editar trabalho ${engagement.code}`}
+                      >
+                        <Pencil aria-hidden="true" />
+                        Editar
+                      </Button>
+                    ) : null}
+                    {canManage && engagement.status === "draft" ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openStatus(engagement, "active")}
+                        aria-label={`Ativar trabalho ${engagement.code}`}
+                      >
+                        <Power aria-hidden="true" />
+                        Ativar
+                      </Button>
+                    ) : null}
+                    {canCancel &&
+                    (engagement.status === "draft" || engagement.status === "active") ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openStatus(engagement, "cancelled")}
+                        aria-label={`Cancelar trabalho ${engagement.code}`}
+                      >
+                        <Ban aria-hidden="true" />
+                        Cancelar
+                      </Button>
+                    ) : null}
+                    {canClose && engagement.status === "active" ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => openStatus(engagement, "closed")}
+                        aria-label={`Encerrar trabalho ${engagement.code}`}
+                      >
+                        <LockKeyhole aria-hidden="true" />
+                        Encerrar
+                      </Button>
+                    ) : null}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setSelectedEngagement(engagement)}
+                      aria-label={`Consultar trabalho ${engagement.code}`}
+                    >
+                      <Eye aria-hidden="true" />
+                      Ver resumo
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
@@ -417,8 +581,7 @@ export function EngagementsPage() {
 
       <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
         <ShieldAlert aria-hidden="true" className="size-4" />
-        Esta camada permite criar trabalhos em elaboração, mas ainda não permite editar, cancelar ou
-        encerrar.
+        {ENGAGEMENT_LIFECYCLE_NOTICE}
       </p>
 
       <Dialog
@@ -431,7 +594,7 @@ export function EngagementsPage() {
           <DialogHeader>
             <DialogTitle>{selectedEngagement?.title ?? "Resumo do trabalho"}</DialogTitle>
             <DialogDescription>
-              Consulta somente leitura do trabalho {selectedEngagement?.code ?? ""}.
+              Consulta do trabalho {selectedEngagement?.code ?? ""}.
             </DialogDescription>
           </DialogHeader>
 
@@ -470,7 +633,7 @@ export function EngagementsPage() {
           ) : null}
 
           <Badge variant="neutral" className="w-fit">
-            Somente consulta
+            Ações conforme permissão e estado
           </Badge>
         </DialogContent>
       </Dialog>

@@ -38,8 +38,19 @@ export const ENGAGEMENTS_FUTURE_STEPS_NOTICE =
 
 export const ENGAGEMENT_CREATED_NOTICE = "Trabalho criado em elaboração com sucesso.";
 
+export const ENGAGEMENT_UPDATED_NOTICE = "Trabalho atualizado com sucesso.";
+
+export const ENGAGEMENT_ACTIVATED_NOTICE = "Trabalho ativado com sucesso.";
+
+export const ENGAGEMENT_CANCELLED_NOTICE = "Trabalho cancelado com sucesso.";
+
+export const ENGAGEMENT_CLOSED_NOTICE = "Trabalho encerrado com sucesso.";
+
 export const ENGAGEMENT_CREATION_SCOPE_NOTICE =
   "A criação exige cliente ativo e avaliação ACE aprovada e aplicável. O trabalho nasce em elaboração.";
+
+export const ENGAGEMENT_LIFECYCLE_NOTICE =
+  "Edição e mudanças de estado respeitam o estado do trabalho, as permissões e a preservação do histórico.";
 
 export function formatEngagementRecordCount(total: number): string {
   if (total === 0) return "Nenhum trabalho";
