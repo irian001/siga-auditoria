@@ -7,6 +7,10 @@ export const permissionCodes = [
   "roles.manage",
   "clients.view",
   "clients.manage",
+  "engagements.view",
+  "engagements.manage",
+  "engagements.close",
+  "engagements.cancel",
 ] as const;
 
 export type PermissionCode = (typeof permissionCodes)[number];
