@@ -24,6 +24,13 @@ function Field({ label, value }: { label: string; value: string }) {
   );
 }
 
+function cancellationReason(assessment: AcceptanceAssessment): string {
+  return (
+    assessment.transitions.find((transition) => transition.toStatus === "cancelled")?.reason ??
+    "Motivo não informado."
+  );
+}
+
 /** Histórico simulado em modo exclusivamente consultivo. */
 export function AcceptanceHistory({ assessments }: AcceptanceHistoryProps) {
   return (
@@ -65,6 +72,15 @@ export function AcceptanceHistory({ assessments }: AcceptanceHistoryProps) {
             {assessment.decidedBy ? <Field label="Decisor" value={assessment.decidedBy} /> : null}
             {assessment.decidedAt ? (
               <Field label="Decidida em" value={formatAcceptanceDateTime(assessment.decidedAt)} />
+            ) : null}
+            {assessment.status === "cancelled" ? (
+              <>
+                <Field
+                  label="Cancelada em"
+                  value={formatAcceptanceDateTime(assessment.cancelledAt)}
+                />
+                <Field label="Motivo do cancelamento" value={cancellationReason(assessment)} />
+              </>
             ) : null}
           </dl>
 
