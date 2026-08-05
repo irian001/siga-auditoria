@@ -63,7 +63,7 @@ export function AcceptanceCancelDialog({
           <DialogTitle>Cancelar rascunho</DialogTitle>
           <DialogDescription>
             O registro será preservado no histórico com o estado cancelado. Esta ação não poderá ser
-            desfeita no ambiente simulado.
+            desfeita no banco oficial.
           </DialogDescription>
         </DialogHeader>
 

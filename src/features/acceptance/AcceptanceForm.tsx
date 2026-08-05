@@ -175,7 +175,7 @@ export function AcceptanceForm({
           <DialogTitle>{draft ? "Continuar rascunho" : "Nova avaliação"}</DialogTitle>
           <DialogDescription>
             {draft
-              ? "Revise as respostas e salve novamente o rascunho simulado."
+              ? "Revise as respostas e salve novamente o rascunho."
               : describeAssessmentRule(assessmentType, isReanalysis)}
           </DialogDescription>
         </DialogHeader>

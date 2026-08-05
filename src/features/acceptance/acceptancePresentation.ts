@@ -11,6 +11,9 @@ export const ACCEPTANCE_PANEL_TITLE = "Aceitação e continuidade";
 export const ACCEPTANCE_SIMULATION_NOTICE =
   "Avaliação em ambiente de validação. Os dados não serão gravados no banco oficial.";
 
+export const ACCEPTANCE_OFFICIAL_NOTICE =
+  "As avaliações serão gravadas no banco oficial do SIGA, preservando histórico e responsáveis.";
+
 export const ACCEPTANCE_TYPE_LABELS: Record<AcceptanceAssessmentType, string> = {
   acceptance: "Aceitação",
   continuance: "Continuidade",
@@ -79,6 +82,10 @@ export function formatAcceptanceDateTime(value?: string): string {
   return Number.isNaN(date.getTime())
     ? value
     : date.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+export function formatAcceptanceRegisteredCount(total: number): string {
+  return total === 1 ? "1 avaliação registrada" : total + " avaliações registradas";
 }
 
 export function formatAcceptanceCount(total: number): string {

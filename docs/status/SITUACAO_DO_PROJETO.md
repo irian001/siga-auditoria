@@ -29,7 +29,7 @@ tags: [siga, status, continuidade, mvp, sdd]
 
 ## 1. Estado atual
 
-Os Grupos 00 — Fundação e 01 — Organização e acesso estão concluídos. O Grupo 02 — Clientes e trabalhos está em andamento, com a `SDD-CLI-001` concluída e validada no ambiente publicado.
+Os Grupos 00 — Fundação e 01 — Organização e acesso estão concluídos. O Grupo 02 — Clientes e trabalhos está em andamento, com a `SDD-CLI-001` concluída e a `SDD-ACE-001` em validação de integração real.
 
 Situação confirmada pelo responsável pelo projeto:
 
@@ -70,9 +70,12 @@ Foram confirmados cadastro, consulta, pesquisa, filtros, edição, inativação,
 
 ### Grupo 02 — Clientes e trabalhos
 
-Próxima especificação a elaborar:
+Em validação:
 
-- `SDD-ACE-001` — Aceitação e continuidade simplificada.
+- `SDD-ACE-001` — Aceitação e continuidade simplificada;
+- persistência oficial e RLS aplicadas no Supabase;
+- adapter Supabase e interface real integrados localmente;
+- homologação autenticada ainda pendente.
 
 As SDDs de trabalho, equipe e painel permanecem não iniciadas e dependem da sequência definida no Plano Mestre.
 
@@ -84,17 +87,21 @@ As SDDs de trabalho, equipe e painel permanecem não iniciadas e dependem da seq
 - branch oficial de referência: `main`;
 - merge da integração real de clientes: `e306f028`;
 - merge da reconciliação da migration de clientes: `fe9f98e6`;
+- migration ACE-001 remota de tabelas: `20260805142219`;
+- migration ACE-001 remota de RPC: `20260805143933`;
+- migration ACE-001 remota de ACL: `20260805144054`;
 - repositório e GitHub permanecem como fontes oficiais de código e documentação.
 
 ## 5. Pendências e bloqueios
 
 - não há pendência funcional conhecida na `SDD-CLI-001`;
-- não há bloqueio conhecido para elaborar a `SDD-ACE-001`;
-- funcionalidades de aceitação e continuidade não deverão ser antecipadas antes da aprovação de sua SDD e de seu plano de implantação.
+- não há bloqueio técnico conhecido para a integração real da `SDD-ACE-001`;
+- falta homologação autenticada e abertura do PR técnico;
+- funcionalidades de trabalho, equipe e painel continuam bloqueadas pela sequência do Plano Mestre.
 
 ## 6. Próximo passo exato
 
-Elaborar a minuta da `SDD-ACE-001 — Aceitação e continuidade simplificada`, revisar suas regras funcionais e obter aprovação humana antes de preparar o respectivo plano de implantação.
+Executar a homologação autenticada da `SDD-ACE-001`, revisar o diff final, abrir o PR técnico e aguardar aprovação humana antes do merge na `main`.
 
 ## 7. Histórico de alterações
 
@@ -104,3 +111,4 @@ Elaborar a minuta da `SDD-ACE-001 — Aceitação e continuidade simplificada`, 
 | 1.1 | 2026-08-03 | Registro da aprovação da SDD-CLI-001 e definição do plano de implantação como próximo passo | Ativo |
 | 1.2 | 2026-08-03 | Registro da aprovação do plano CLI-001 e abertura da etapa de publicação e inspeção técnica | Ativo |
 | 1.3 | 2026-08-04 | Encerramento da SDD-CLI-001 após integração real, testes funcionais e reconciliação da migration; definição da SDD-ACE-001 como próximo passo | Ativo |
+| 1.4 | 2026-08-05 | Registro da aplicação remota da ACE-001, integração real local e abertura da etapa de homologação | Ativo |

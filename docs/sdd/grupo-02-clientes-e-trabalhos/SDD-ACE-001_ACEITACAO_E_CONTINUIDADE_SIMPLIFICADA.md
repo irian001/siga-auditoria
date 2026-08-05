@@ -8,10 +8,10 @@ type: sdd
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
 status: aprovado
-implementation_status: nao-iniciado
+implementation_status: em-validacao
 version: 1.0
 created: 2026-08-04
-updated: 2026-08-04
+updated: 2026-08-05
 owner: responsavel-projeto
 responsible:
   planning: work
