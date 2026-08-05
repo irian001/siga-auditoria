@@ -15,7 +15,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { AcceptanceRepository } from "@/data/acceptanceRepository";
-import { MockAcceptanceRepository } from "@/data/mockAcceptanceRepository";
+import { createSupabaseAcceptanceRepository } from "@/data/supabase/supabaseAcceptanceRepository";
 import type { AcceptanceAssessment, AcceptanceConclusion } from "@/domain/acceptance";
 import type { Client } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
@@ -32,31 +32,16 @@ import {
   ACCEPTANCE_PANEL_TITLE,
   ACCEPTANCE_RETURNED_SUCCESS_NOTICE,
   ACCEPTANCE_SUBMITTED_SUCCESS_NOTICE,
-  ACCEPTANCE_SIMULATION_NOTICE,
+  ACCEPTANCE_OFFICIAL_NOTICE,
   ACCEPTANCE_DRAFT_SAVED_NOTICE,
-  buildSimulatedAssessments,
-  formatAcceptanceCount,
+  formatAcceptanceRegisteredCount,
 } from "@/features/acceptance/acceptancePresentation";
 
-const repositories = new Map<string, AcceptanceRepository>();
+let acceptanceRepository: AcceptanceRepository | undefined;
 
-function getAcceptanceRepository(client: Client): AcceptanceRepository {
-  const key = `${client.organizationId}:${client.id}`;
-  const current = repositories.get(key);
-  if (current) return current;
-
-  const repository = new MockAcceptanceRepository({
-    seed: buildSimulatedAssessments({
-      clientId: client.id,
-      organizationId: client.organizationId,
-      preparedBy: "Auditor responsável (simulado)",
-      decidedBy: "Sócio revisor (simulado)",
-    }),
-    activeClientIds: client.status === "active" ? [client.id] : [],
-    delayMs: 250,
-  });
-  repositories.set(key, repository);
-  return repository;
+function getAcceptanceRepository(): AcceptanceRepository {
+  acceptanceRepository ??= createSupabaseAcceptanceRepository();
+  return acceptanceRepository;
 }
 
 type AcceptancePanelProps = {
@@ -66,7 +51,7 @@ type AcceptancePanelProps = {
   context: RequestContext;
 };
 
-/** Painel somente leitura da Camada Visual 1 da SDD-ACE-001. */
+/** Painel oficial de aceitaÃ§Ã£o e continuidade da SDD-ACE-001. */
 export function AcceptancePanel({ open, onOpenChange, client, context }: AcceptancePanelProps) {
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
@@ -80,9 +65,9 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
 
   const query = useQuery({
     enabled: open && Boolean(client) && Boolean(context.organizationId) && Boolean(context.userId),
-    queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+    queryKey: ["acceptance", context.organizationId, client?.id],
     queryFn: async () => {
-      const result = await getAcceptanceRepository(client!).listByClient(context, client!.id);
+      const result = await getAcceptanceRepository().listByClient(context, client!.id);
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
@@ -102,7 +87,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   const saveDraftMutation = useMutation({
     mutationFn: async (submission: AcceptanceDraftSubmission) => {
       if (!client) throw new Error("Nenhum cliente selecionado.");
-      const repository = getAcceptanceRepository(client);
+      const repository = getAcceptanceRepository();
       let assessmentId = submission.assessmentId;
 
       if (submission.createInput) {
@@ -123,7 +108,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
       setFormError(null);
       setSuccessMessage(ACCEPTANCE_DRAFT_SAVED_NOTICE);
       await queryClient.invalidateQueries({
-        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+        queryKey: ["acceptance", context.organizationId, client?.id],
       });
     },
     onError: (error) => setFormError(error.message),
@@ -137,7 +122,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
       rationale?: string;
     }) => {
       if (!client) throw new Error("Nenhum cliente selecionado.");
-      const repository = getAcceptanceRepository(client);
+      const repository = getAcceptanceRepository();
       let result: Awaited<ReturnType<typeof repository.submit>>;
       if (input.action === "submit") {
         result = await repository.submit(context, input.assessmentId);
@@ -166,7 +151,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
             : ACCEPTANCE_DECIDED_SUCCESS_NOTICE,
       );
       await queryClient.invalidateQueries({
-        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+        queryKey: ["acceptance", context.organizationId, client?.id],
       });
     },
     onError: (error) => setWorkflowError(error.message),
@@ -175,7 +160,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   const cancelMutation = useMutation({
     mutationFn: async (input: { assessmentId: string; reason: string }) => {
       if (!client) throw new Error("Nenhum cliente selecionado.");
-      const result = await getAcceptanceRepository(client).cancel(
+      const result = await getAcceptanceRepository().cancel(
         context,
         input.assessmentId,
         input.reason,
@@ -189,7 +174,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
       setReviewAssessmentId(null);
       setSuccessMessage("Rascunho cancelado e preservado no histórico.");
       await queryClient.invalidateQueries({
-        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+        queryKey: ["acceptance", context.organizationId, client?.id],
       });
     },
     onError: (error) => setCancelError(error.message),
@@ -260,7 +245,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
         <div className="mt-2 flex-1">
           <Alert variant="warning" className="mb-6">
             <FileCheck2 aria-hidden="true" />
-            <AlertDescription>{ACCEPTANCE_SIMULATION_NOTICE}</AlertDescription>
+            <AlertDescription>{ACCEPTANCE_OFFICIAL_NOTICE}</AlertDescription>
           </Alert>
 
           {successMessage ? (
@@ -337,7 +322,7 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
           {query.isError ? (
             <ErrorState
               title="Não foi possível carregar as avaliações"
-              description="Não foi possível concluir a consulta simulada. Tente novamente."
+              description="Não foi possível concluir a consulta oficial. Tente novamente."
               action={
                 <Button variant="outline" onClick={() => query.refetch()}>
                   <RotateCcw aria-hidden="true" />
@@ -351,14 +336,14 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
             <EmptyState
               icon={FileCheck2}
               title="Nenhuma avaliação registrada"
-              description="Este cliente ainda não possui avaliação de aceitação ou continuidade no ambiente de validação."
+              description="Este cliente ainda não possui avaliação de aceitação ou continuidade no banco oficial."
             />
           ) : null}
 
           {query.isSuccess && assessments.length > 0 ? (
             <>
               <p className="mb-3 text-xs text-muted-foreground">
-                {formatAcceptanceCount(assessments.length)} — da mais recente para a mais antiga.
+                {formatAcceptanceRegisteredCount(assessments.length)} — da mais recente para a mais antiga.
               </p>
               <AcceptanceHistory assessments={assessments} />
             </>

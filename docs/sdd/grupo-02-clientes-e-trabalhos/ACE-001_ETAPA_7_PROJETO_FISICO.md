@@ -3,8 +3,8 @@ id: SIGA-ACE-ETP7-001
 title: ACE-001 — Etapa 7 — Projeto físico do banco
 type: implementation-record
 domain: acceptance-continuance
-status: proposta-para-revisao
-version: 0.1
+status: aplicado-e-verificado
+version: 1.0
 created: 2026-08-05
 updated: 2026-08-05
 owner: responsavel-projeto
@@ -28,7 +28,7 @@ tags:
 
 ## 1. Objetivo
 
-Registrar a proposta local de projeto físico para a [[SDD-ACE-001 — Aceitação e Continuidade Simplificada]], sem aplicar alterações no Supabase remoto e sem integrar o repositório real à interface nesta etapa.
+Registrar o projeto físico da [[SDD-ACE-001 — Aceitação e Continuidade Simplificada]] e seu resultado de aplicação controlada no Supabase remoto.
 
 ## 2. Arquivo da migration
 
@@ -140,18 +140,18 @@ A migration acrescenta a restrição única composta `(organization_id, id)` em 
 - branch própria foi criada a partir da `main` atual;
 - migration foi gerada pelo Supabase CLI;
 - tabelas, FKs, checks, índices, RLS, grants, revokes e funções foram revisados estaticamente;
-- não houve conexão, aplicação ou alteração no projeto Supabase remoto;
+- a migration foi aplicada no projeto Supabase remoto e verificada após a aplicação;
 - não houve alteração no Lovable, na autenticação, nas dependências ou no código visual.
 
 ## 9. Limitações atuais
 
 O repositório ainda não possui `supabase/config.toml`, banco local ou ambiente Docker Supabase configurado. Portanto, nesta etapa não foi possível executar `db reset`, aplicar a migration localmente, executar consultas de teste ou rodar advisors contra um banco local.
 
-A migration permanece uma proposta revisável. A aplicação remota somente poderá ocorrer após revisão do SQL, confirmação das decisões físicas e autorização humana específica para o projeto `umuassmgminmliuypoyp`.
+As estruturas propostas foram aplicadas no projeto `umuassmgminmliuypoyp` após autorização humana específica. A versão registrada remotamente possui timestamp próprio, diferente do nome local da migration.
 
 ## 10. Próximo passo oficial
 
-Revisar o diff desta branch e aprovar ou corrigir a proposta. Depois, configurar uma forma segura de validação local ou usar um ambiente controlado de homologação. Somente após essa verificação deverão ser considerados o adaptador Supabase, a exposição controlada das operações e a aplicação remota.
+Concluir a integração do adapter Supabase, validar a interface autenticada e preparar o PR técnico. A homologação funcional ainda é necessária antes de considerar a SDD concluída.
 
 ## 11. Histórico de alterações
 

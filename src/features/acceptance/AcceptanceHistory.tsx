@@ -31,7 +31,7 @@ function cancellationReason(assessment: AcceptanceAssessment): string {
   );
 }
 
-/** Histórico simulado em modo exclusivamente consultivo. */
+/** Histórico oficial da aceitação e continuidade. */
 export function AcceptanceHistory({ assessments }: AcceptanceHistoryProps) {
   return (
     <ol className="space-y-4">
