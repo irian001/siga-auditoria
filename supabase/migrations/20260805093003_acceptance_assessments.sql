@@ -519,10 +519,11 @@ begin
 
     if not exists (
       select 1
-        from public.acceptance_assessment_answers a
+       from public.acceptance_assessment_answers a
        where a.assessment_id = p_assessment_id
          and a.organization_id = v_organization_id
          and a.question_code = v_question_code
+         and a.question_version = 1
     ) then
       raise exception 'Questão não pertence à avaliação.' using errcode = '22023';
     end if;
@@ -548,7 +549,8 @@ begin
            answered_at = v_now
      where assessment_id = p_assessment_id
        and organization_id = v_organization_id
-       and question_code = v_question_code;
+       and question_code = v_question_code
+       and question_version = 1;
   end loop;
 
   update public.acceptance_assessments

@@ -119,6 +119,8 @@ O uso de `SECURITY DEFINER` é restrito a essas operações de escrita porque a 
 
 A criação protegida insere as oito questões com snapshots canônicos, mas deixa `answer`, `answered_by` e `answered_at` nulos até a resposta. Assim, a tabela filha representa simultaneamente a questão aplicada e seu estado ainda não respondido.
 
+Na versão vigente do questionário do MVP, a gravação protegida atualiza explicitamente apenas `question_version = 1`. Uma futura versão do questionário deverá ser acompanhada por migration e ajuste explícito do contrato de gravação.
+
 Essa decisão preserva a exigência de snapshot sem transformar uma avaliação nova em avaliação respondida. Deve ser confirmada antes da aplicação remota.
 
 ### 7.2 Histórico de transições
