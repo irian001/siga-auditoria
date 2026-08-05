@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Building2, CheckCircle2, Plus, RotateCcw, ShieldAlert } from "lucide-react";
 import { useMemo, useState } from "react";
 
-
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTableShell } from "@/components/patterns/DataTableShell";
 import { EmptyState } from "@/components/states/EmptyState";
@@ -34,6 +33,7 @@ import type {
 
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
+import { AcceptancePanel } from "@/features/acceptance/AcceptancePanel";
 import { ClientForm } from "@/features/clients/ClientForm";
 import { ClientsList } from "@/features/clients/ClientsList";
 import { ClientStatusDialog } from "@/features/clients/ClientStatusDialog";
@@ -47,9 +47,6 @@ import {
   type ClassificationFilterValue,
   type StatusFilterValue,
 } from "@/features/clients/clientsPresentation";
-
-
-
 
 const rootRoute = getRouteApi("__root__");
 
@@ -111,7 +108,8 @@ export function ClientsPage() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [statusDialogOpen, setStatusDialogOpen] = useState(false);
   const [statusClient, setStatusClient] = useState<Client | null>(null);
-
+  const [acceptanceOpen, setAcceptanceOpen] = useState(false);
+  const [acceptanceClient, setAcceptanceClient] = useState<Client | null>(null);
 
   const createMutation = useMutation({
     mutationFn: async (input: CreateClientInput) => {
@@ -143,7 +141,11 @@ export function ClientsPage() {
 
   const statusMutation = useMutation({
     mutationFn: async (variables: { id: string; status: ClientStatus }) => {
-      const result = await getClientRepository().changeStatus(context, variables.id, variables.status);
+      const result = await getClientRepository().changeStatus(
+        context,
+        variables.id,
+        variables.status,
+      );
       if (!result.ok) throw new Error(result.error.message);
       return result.data;
     },
@@ -191,6 +193,16 @@ export function ClientsPage() {
     if (!next) setEditingClient(null);
   }
 
+  function openAcceptancePanel(client: Client) {
+    setSuccessMessage(null);
+    setAcceptanceClient(client);
+    setAcceptanceOpen(true);
+  }
+
+  function handleAcceptanceOpenChange(next: boolean) {
+    setAcceptanceOpen(next);
+    if (!next) setAcceptanceClient(null);
+  }
 
   function clearFilters() {
     setSearch("");
@@ -198,14 +210,8 @@ export function ClientsPage() {
     setClassification("all");
   }
 
-
-
   const header = (
-    <PageHeader
-      title="Clientes"
-      description={navItem.description}
-      breadcrumbLabel="Clientes"
-    />
+    <PageHeader title="Clientes" description={navItem.description} breadcrumbLabel="Clientes" />
   );
 
   if (!canView) {
@@ -293,9 +299,6 @@ export function ClientsPage() {
         />
       ) : null}
 
-
-
-
       <DataTableShell
         title="Clientes da organização"
         description={formatRecordCount(total)}
@@ -314,7 +317,10 @@ export function ClientsPage() {
             </div>
             <div className="w-full space-y-1.5 sm:w-40">
               <Label htmlFor="clientes-estado">Estado</Label>
-              <Select value={status} onValueChange={(value) => setStatus(value as StatusFilterValue)}>
+              <Select
+                value={status}
+                onValueChange={(value) => setStatus(value as StatusFilterValue)}
+              >
                 <SelectTrigger id="clientes-estado">
                   <SelectValue />
                 </SelectTrigger>
@@ -386,9 +392,16 @@ export function ClientsPage() {
           canManage={canManage}
           onEdit={openEditForm}
           onChangeStatus={openStatusDialog}
+          onOpenAcceptance={openAcceptancePanel}
         />
-
       </DataTableShell>
+
+      <AcceptancePanel
+        open={acceptanceOpen}
+        onOpenChange={handleAcceptanceOpenChange}
+        client={acceptanceClient}
+        context={context}
+      />
 
       {!canManage ? (
         <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
