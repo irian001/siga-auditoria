@@ -1,4 +1,4 @@
-import { Pencil, Power, RotateCcw } from "lucide-react";
+import { ClipboardCheck, Pencil, Power, RotateCcw } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,6 +22,7 @@ type ClientsListProps = {
   canManage?: boolean;
   onEdit?: (client: Client) => void;
   onChangeStatus?: (client: Client) => void;
+  onOpenAcceptance?: (client: Client) => void;
 };
 
 /**
@@ -32,9 +33,8 @@ export function ClientsList({
   canManage = false,
   onEdit,
   onChangeStatus,
+  onOpenAcceptance,
 }: ClientsListProps) {
-
-
   return (
     <Table>
       <caption className="sr-only">
@@ -75,46 +75,55 @@ export function ClientsList({
               />
             </TableCell>
             <TableCell className="text-right">
-              {canManage ? (
-                <div className="flex flex-wrap items-center justify-end gap-2">
-                  {onEdit ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onEdit(client)}
-                      aria-label={`Editar cliente ${client.displayName}`}
-                    >
-                      <Pencil aria-hidden="true" />
-                      Editar
-                    </Button>
-                  ) : null}
-                  {onChangeStatus ? (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onChangeStatus(client)}
-                      aria-label={
-                        client.status === "active"
-                          ? `Inativar cliente ${client.displayName}`
-                          : `Reativar cliente ${client.displayName}`
-                      }
-                    >
-                      {client.status === "active" ? (
-                        <Power aria-hidden="true" />
-                      ) : (
-                        <RotateCcw aria-hidden="true" />
-                      )}
-                      {client.status === "active" ? "Inativar" : "Reativar"}
-                    </Button>
-                  ) : null}
-                </div>
-              ) : (
-                <span className="text-xs text-muted-foreground">Somente consulta</span>
-              )}
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                {onOpenAcceptance ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onOpenAcceptance(client)}
+                    aria-label={`Consultar avaliações de ${client.displayName}`}
+                  >
+                    <ClipboardCheck aria-hidden="true" />
+                    Avaliações
+                  </Button>
+                ) : null}
+                {canManage && onEdit ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onEdit(client)}
+                    aria-label={`Editar cliente ${client.displayName}`}
+                  >
+                    <Pencil aria-hidden="true" />
+                    Editar
+                  </Button>
+                ) : null}
+                {canManage && onChangeStatus ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onChangeStatus(client)}
+                    aria-label={
+                      client.status === "active"
+                        ? `Inativar cliente ${client.displayName}`
+                        : `Reativar cliente ${client.displayName}`
+                    }
+                  >
+                    {client.status === "active" ? (
+                      <Power aria-hidden="true" />
+                    ) : (
+                      <RotateCcw aria-hidden="true" />
+                    )}
+                    {client.status === "active" ? "Inativar" : "Reativar"}
+                  </Button>
+                ) : null}
+                {!canManage ? (
+                  <span className="text-xs text-muted-foreground">Somente consulta</span>
+                ) : null}
+              </div>
             </TableCell>
           </TableRow>
         ))}
-
       </TableBody>
     </Table>
   );
