@@ -247,8 +247,8 @@ Permitir o cadastro de clientes e a criação controlada dos trabalhos de audito
 | Ordem | ID | SDD | Situação | Responsável principal | Dependências |
 |---:|---|---|---|---|---|
 | 1 | SDD-CLI-001 | Cadastro de clientes | Concluída | Lovable + Codex | Grupo 01 |
-| 2 | SDD-ACE-001 | Aceitação e continuidade simplificada | Próxima SDD | Work + Lovable + Codex | SDD-CLI-001 |
-| 3 | SDD-TRB-001 | Criação e gestão do trabalho | Não iniciada | Lovable + Codex | SDD-ACE-001 |
+| 2 | SDD-ACE-001 | Aceitação e continuidade simplificada | Concluída e homologada | Work + Lovable + Codex | SDD-CLI-001 |
+| 3 | SDD-TRB-001 | Criação e gestão do trabalho | Camada 1 técnica em execução | Lovable + Codex | SDD-ACE-001 |
 | 4 | SDD-EQP-001 | Equipe, funções e períodos | Não iniciada | Lovable + Codex | SDD-TRB-001 |
 | 5 | SDD-PNL-001 | Painel básico do trabalho | Não iniciada | Lovable | SDD-EQP-001 |
 
@@ -571,7 +571,7 @@ A sequência imediata será:
 |---|---|---|
 | 00 — Fundação | Concluído | Manter a fundação estável durante os grupos seguintes |
 | 01 — Organização e acesso | Concluído | Preservar autenticação, vínculo organizacional e ACL já validados |
-| 02 — Clientes e trabalhos | Em andamento | Elaborar e aprovar a minuta da SDD-ACE-001 |
+| 02 — Clientes e trabalhos | Em andamento | Executar e revisar a Camada 1 técnica da SDD-TRB-001 |
 | 03 — Contabilidade e planejamento | Não iniciado | Aguardar Grupo 02 |
 | 04 — Riscos e procedimentos | Não iniciado | Aguardar Grupo 03 |
 | 05 — Documentos e evidências | Não iniciado | Aguardar Grupo 04 |
@@ -599,3 +599,5 @@ A sequência imediata será:
 | 1.2 | 2026-08-03 | Registro da aprovação da SDD-CLI-001 e avanço para o planejamento de sua implantação | Aprovada |
 | 1.3 | 2026-08-03 | Registro da aprovação do plano CLI-001 e avanço para publicação e inspeção técnica | Aprovada |
 | 1.4 | 2026-08-04 | Registro da conclusão da SDD-CLI-001 e definição da SDD-ACE-001 como próxima especificação do Grupo 02 | Aprovada |
+| 1.5 | 2026-08-05 | Registro da conclusão homologada da SDD-ACE-001 e aprovação da SDD-TRB-001 como próxima etapa | Aprovada |
+| 1.6 | 2026-08-05 | Aprovação do Plano de Implantação da SDD-TRB-001 e definição da Camada 0 como próxima ação | Aprovada |
