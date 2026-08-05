@@ -46,6 +46,14 @@ export const ACCEPTANCE_ANSWER_LABELS: Record<AcceptanceAnswerValue, string> = {
 
 export const ACCEPTANCE_DRAFT_SAVED_NOTICE = "Rascunho da avaliação salvo com sucesso.";
 
+export const ACCEPTANCE_REVIEW_NOTICE =
+  "Revise as respostas antes de enviar. O envio não registra uma decisão.";
+export const ACCEPTANCE_SUBMITTED_NOTICE =
+  "Esta avaliação aguarda uma decisão humana. O sistema não aprova automaticamente.";
+export const ACCEPTANCE_SUBMITTED_SUCCESS_NOTICE = "Avaliação enviada para decisão.";
+export const ACCEPTANCE_RETURNED_SUCCESS_NOTICE = "Avaliação devolvida para rascunho.";
+export const ACCEPTANCE_DECIDED_SUCCESS_NOTICE = "Decisão registrada com sucesso.";
+
 export function describeAssessmentRule(
   type: AcceptanceAssessmentType,
   isReanalysis: boolean,

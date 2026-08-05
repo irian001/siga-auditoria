@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sheet";
 import type { AcceptanceRepository } from "@/data/acceptanceRepository";
 import { MockAcceptanceRepository } from "@/data/mockAcceptanceRepository";
+import type { AcceptanceAssessment, AcceptanceConclusion } from "@/domain/acceptance";
 import type { Client } from "@/domain/client";
 import type { RequestContext } from "@/domain/contracts";
 import {
@@ -23,8 +24,13 @@ import {
   type AcceptanceDraftSubmission,
 } from "@/features/acceptance/AcceptanceForm";
 import { AcceptanceHistory } from "@/features/acceptance/AcceptanceHistory";
+import { AcceptanceReview } from "@/features/acceptance/AcceptanceReview";
+import { AcceptanceDecisionDialog } from "@/features/acceptance/AcceptanceDecisionDialog";
 import {
+  ACCEPTANCE_DECIDED_SUCCESS_NOTICE,
   ACCEPTANCE_PANEL_TITLE,
+  ACCEPTANCE_RETURNED_SUCCESS_NOTICE,
+  ACCEPTANCE_SUBMITTED_SUCCESS_NOTICE,
   ACCEPTANCE_SIMULATION_NOTICE,
   ACCEPTANCE_DRAFT_SAVED_NOTICE,
   buildSimulatedAssessments,
@@ -65,6 +71,9 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   const [formOpen, setFormOpen] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [reviewAssessmentId, setReviewAssessmentId] = useState<string | null>(null);
+  const [decisionOpen, setDecisionOpen] = useState(false);
+  const [workflowError, setWorkflowError] = useState<string | null>(null);
 
   const query = useQuery({
     enabled: open && Boolean(client) && Boolean(context.organizationId) && Boolean(context.userId),
@@ -80,6 +89,12 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
   const draft = assessments.find((assessment) => assessment.status === "draft") ?? null;
   const hasOpenReview = assessments.some((assessment) => assessment.status === "pending_review");
   const canCreate = Boolean(client && client.status === "active" && !draft && !hasOpenReview);
+  const actionableAssessment =
+    assessments.find((assessment) => assessment.status === "draft") ??
+    assessments.find((assessment) => assessment.status === "pending_review") ??
+    null;
+  const reviewAssessment =
+    assessments.find((assessment) => assessment.id === reviewAssessmentId) ?? null;
 
   const saveDraftMutation = useMutation({
     mutationFn: async (submission: AcceptanceDraftSubmission) => {
@@ -111,6 +126,49 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
     onError: (error) => setFormError(error.message),
   });
 
+  const workflowMutation = useMutation({
+    mutationFn: async (input: {
+      action: "submit" | "return" | "decide";
+      assessmentId: string;
+      conclusion?: AcceptanceConclusion;
+      rationale?: string;
+    }) => {
+      if (!client) throw new Error("Nenhum cliente selecionado.");
+      const repository = getAcceptanceRepository(client);
+      let result: Awaited<ReturnType<typeof repository.submit>>;
+      if (input.action === "submit") {
+        result = await repository.submit(context, input.assessmentId);
+      } else if (input.action === "return") {
+        result = await repository.returnToDraft(context, input.assessmentId, input.rationale ?? "");
+      } else {
+        result = await repository.decide(
+          context,
+          input.assessmentId,
+          input.conclusion ?? "rejected",
+          input.rationale ?? "",
+        );
+      }
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async (_assessment, variables) => {
+      setWorkflowError(null);
+      setDecisionOpen(false);
+      setReviewAssessmentId(null);
+      setSuccessMessage(
+        variables.action === "submit"
+          ? ACCEPTANCE_SUBMITTED_SUCCESS_NOTICE
+          : variables.action === "return"
+            ? ACCEPTANCE_RETURNED_SUCCESS_NOTICE
+            : ACCEPTANCE_DECIDED_SUCCESS_NOTICE,
+      );
+      await queryClient.invalidateQueries({
+        queryKey: ["acceptance-simulado", context.organizationId, client?.id],
+      });
+    },
+    onError: (error) => setWorkflowError(error.message),
+  });
+
   function openDraftForm() {
     setFormError(null);
     setSuccessMessage(null);
@@ -118,12 +176,39 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
     setFormOpen(true);
   }
 
+  function openReview(assessment: AcceptanceAssessment) {
+    setSuccessMessage(null);
+    setWorkflowError(null);
+    workflowMutation.reset();
+    setReviewAssessmentId(assessment.id);
+  }
+
+  function closeReview() {
+    if (workflowMutation.isPending) return;
+    setReviewAssessmentId(null);
+    setWorkflowError(null);
+  }
+
+  function requestReturnToDraft() {
+    if (!reviewAssessment) return;
+    const reason = window.prompt("Informe o motivo da devolução para rascunho:");
+    if (!reason?.trim()) return;
+    workflowMutation.mutate({
+      action: "return",
+      assessmentId: reviewAssessment.id,
+      rationale: reason,
+    });
+  }
+
   function handlePanelOpenChange(next: boolean) {
     if (!next && saveDraftMutation.isPending) return;
     onOpenChange(next);
     if (!next) {
       setFormOpen(false);
+      setReviewAssessmentId(null);
+      setDecisionOpen(false);
       setFormError(null);
+      setWorkflowError(null);
       setSuccessMessage(null);
     }
   }
@@ -169,6 +254,30 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
                 </p>
               ) : null}
             </div>
+          ) : null}
+
+          {query.isSuccess && actionableAssessment && !reviewAssessment ? (
+            <div className="mb-6">
+              <Button variant="outline" onClick={() => openReview(actionableAssessment)}>
+                Revisar avaliação
+              </Button>
+            </div>
+          ) : null}
+
+          {reviewAssessment ? (
+            <AcceptanceReview
+              assessment={reviewAssessment}
+              submitting={workflowMutation.isPending}
+              error={workflowError}
+              onSubmit={() => {
+                workflowMutation.mutate({
+                  action: "submit",
+                  assessmentId: reviewAssessment.id,
+                });
+              }}
+              onReturnToDraft={requestReturnToDraft}
+              onDecide={() => setDecisionOpen(true)}
+            />
           ) : null}
 
           {query.isPending ? <LoadingState variant="cartao" lines={2} /> : null}
@@ -218,6 +327,29 @@ export function AcceptancePanel({ open, onOpenChange, client, context }: Accepta
               saveDraftMutation.mutate(submission);
             }}
           />
+        ) : null}
+
+        <AcceptanceDecisionDialog
+          open={decisionOpen}
+          onOpenChange={setDecisionOpen}
+          assessment={reviewAssessment}
+          submitting={workflowMutation.isPending}
+          error={workflowError}
+          onConfirm={(conclusion, rationale) => {
+            if (workflowMutation.isPending || !reviewAssessment) return;
+            workflowMutation.mutate({
+              action: "decide",
+              assessmentId: reviewAssessment.id,
+              conclusion,
+              rationale,
+            });
+          }}
+        />
+
+        {reviewAssessment ? (
+          <Button variant="ghost" onClick={closeReview} disabled={workflowMutation.isPending}>
+            Fechar revisão
+          </Button>
         ) : null}
       </SheetContent>
     </Sheet>
