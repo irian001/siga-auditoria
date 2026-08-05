@@ -1,12 +1,13 @@
 import { getRouteApi } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
-import { BriefcaseBusiness, Eye, RotateCcw, ShieldAlert } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { BriefcaseBusiness, CheckCircle2, Eye, Plus, RotateCcw, ShieldAlert } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import { DataTableShell } from "@/components/patterns/DataTableShell";
 import { EmptyState } from "@/components/states/EmptyState";
 import { ErrorState } from "@/components/states/ErrorState";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -37,6 +38,7 @@ import {
 import { appEnvironment } from "@/config/env";
 import { getNavItem } from "@/config/navigation";
 import { createSupabaseClientRepository } from "@/data/supabase/supabaseClientRepository";
+import { createSupabaseAcceptanceRepository } from "@/data/supabase/supabaseAcceptanceRepository";
 import { createSupabaseEngagementRepository } from "@/data/supabase/supabaseEngagementRepository";
 import type { RequestContext } from "@/domain/contracts";
 import { can } from "@/domain/authorization";
@@ -44,11 +46,14 @@ import type {
   AuditEngagement,
   AuditEngagementFilters,
   AuditEngagementStatus,
+  CreateAuditEngagementInput,
 } from "@/domain/engagement";
+import { EngagementForm } from "@/features/engagements/EngagementForm";
 import {
   ENGAGEMENT_CLASSIFICATION_LABELS,
+  ENGAGEMENT_CREATED_NOTICE,
+  ENGAGEMENT_CREATION_SCOPE_NOTICE,
   ENGAGEMENTS_FUTURE_STEPS_NOTICE,
-  ENGAGEMENTS_READ_ONLY_NOTICE,
   ENGAGEMENT_STATUS_BADGES,
   ENGAGEMENT_STATUS_FILTER_OPTIONS,
   ENGAGEMENT_STATUS_LABELS,
@@ -60,6 +65,7 @@ const rootRoute = getRouteApi("__root__");
 
 let engagementRepository: ReturnType<typeof createSupabaseEngagementRepository> | undefined;
 let clientRepository: ReturnType<typeof createSupabaseClientRepository> | undefined;
+let acceptanceRepository: ReturnType<typeof createSupabaseAcceptanceRepository> | undefined;
 
 function getEngagementRepository() {
   engagementRepository ??= createSupabaseEngagementRepository();
@@ -71,6 +77,11 @@ function getClientRepository() {
   return clientRepository;
 }
 
+function getAcceptanceRepository() {
+  acceptanceRepository ??= createSupabaseAcceptanceRepository();
+  return acceptanceRepository;
+}
+
 type StatusFilterValue = AuditEngagementStatus | "all";
 
 export function EngagementsPage() {
@@ -79,6 +90,7 @@ export function EngagementsPage() {
   const access = auth.access?.status === "active" ? auth.access.context : null;
   const authorization = access?.authorization ?? null;
   const canView = can(authorization, "engagements.view");
+  const canManage = can(authorization, "engagements.manage");
 
   const context = useMemo<RequestContext>(
     () => ({
@@ -93,6 +105,9 @@ export function EngagementsPage() {
   const [status, setStatus] = useState<StatusFilterValue>("all");
   const [clientId, setClientId] = useState("all");
   const [selectedEngagement, setSelectedEngagement] = useState<AuditEngagement | null>(null);
+  const [formOpen, setFormOpen] = useState(false);
+  const [selectedCreateClientId, setSelectedCreateClientId] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const filters = useMemo<AuditEngagementFilters>(
     () => ({
@@ -126,6 +141,42 @@ export function EngagementsPage() {
     },
   });
 
+  const activeClients = useMemo(
+    () => (clientsQuery.data ?? []).filter((client) => client.status === "active"),
+    [clientsQuery.data],
+  );
+
+  useEffect(() => {
+    if (formOpen && !selectedCreateClientId && activeClients[0]) {
+      setSelectedCreateClientId(activeClients[0].id);
+    }
+  }, [activeClients, formOpen, selectedCreateClientId]);
+
+  const acceptanceQuery = useQuery({
+    enabled: canManage && formOpen && Boolean(selectedCreateClientId),
+    queryKey: ["engagement-create-acceptance", context.organizationId, selectedCreateClientId],
+    queryFn: async () => {
+      const result = await getAcceptanceRepository().getApplicable(context, selectedCreateClientId);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+  });
+
+  const queryClient = useQueryClient();
+  const createMutation = useMutation({
+    mutationFn: async (input: CreateAuditEngagementInput) => {
+      const result = await getEngagementRepository().create(context, input);
+      if (!result.ok) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: async () => {
+      setFormOpen(false);
+      setSelectedCreateClientId("");
+      setSuccessMessage(ENGAGEMENT_CREATED_NOTICE);
+      await queryClient.invalidateQueries({ queryKey: ["engagements"] });
+    },
+  });
+
   const clientsById = useMemo(
     () => new Map((clientsQuery.data ?? []).map((client) => [client.id, client])),
     [clientsQuery.data],
@@ -145,6 +196,22 @@ export function EngagementsPage() {
   const header = (
     <PageHeader title="Trabalhos" description={navItem.description} breadcrumbLabel="Trabalhos" />
   );
+
+  function openCreateForm() {
+    setSuccessMessage(null);
+    createMutation.reset();
+    setSelectedCreateClientId(activeClients[0]?.id ?? "");
+    setFormOpen(true);
+  }
+
+  function handleFormOpenChange(next: boolean) {
+    if (createMutation.isPending) return;
+    setFormOpen(next);
+    if (!next) {
+      setSelectedCreateClientId("");
+      createMutation.reset();
+    }
+  }
 
   if (!canView) {
     return (
@@ -168,10 +235,44 @@ export function EngagementsPage() {
     <>
       {header}
 
+      {canManage ? (
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <Button onClick={openCreateForm}>
+            <Plus aria-hidden="true" />
+            Novo trabalho
+          </Button>
+        </div>
+      ) : null}
+
+      {successMessage ? (
+        <Alert variant="success" className="mb-6">
+          <CheckCircle2 aria-hidden="true" />
+          <AlertDescription>{successMessage}</AlertDescription>
+        </Alert>
+      ) : null}
+
       <div className="mb-6 space-y-2">
-        <p className="text-sm text-muted-foreground">{ENGAGEMENTS_READ_ONLY_NOTICE}</p>
+        <p className="text-sm text-muted-foreground">{ENGAGEMENT_CREATION_SCOPE_NOTICE}</p>
         <p className="text-xs text-muted-foreground">{ENGAGEMENTS_FUTURE_STEPS_NOTICE}</p>
       </div>
+
+      {canManage ? (
+        <EngagementForm
+          open={formOpen}
+          onOpenChange={handleFormOpenChange}
+          clients={activeClients}
+          selectedClientId={selectedCreateClientId}
+          acceptance={acceptanceQuery.data ?? null}
+          acceptanceLoading={acceptanceQuery.isPending}
+          acceptanceError={acceptanceQuery.isError ? acceptanceQuery.error.message : null}
+          clientsLoading={clientsQuery.isPending}
+          clientsError={clientsQuery.isError ? clientsQuery.error.message : null}
+          submitting={createMutation.isPending}
+          submitError={createMutation.isError ? createMutation.error.message : null}
+          onClientChange={setSelectedCreateClientId}
+          onSubmit={(input) => createMutation.mutate(input)}
+        />
+      ) : null}
 
       <DataTableShell
         title="Trabalhos da organização"
@@ -191,7 +292,10 @@ export function EngagementsPage() {
             </div>
             <div className="w-full space-y-1.5 sm:w-44">
               <Label htmlFor="trabalhos-estado">Estado</Label>
-              <Select value={status} onValueChange={(value) => setStatus(value as StatusFilterValue)}>
+              <Select
+                value={status}
+                onValueChange={(value) => setStatus(value as StatusFilterValue)}
+              >
                 <SelectTrigger id="trabalhos-estado">
                   <SelectValue />
                 </SelectTrigger>
@@ -239,7 +343,7 @@ export function EngagementsPage() {
             <EmptyState
               icon={BriefcaseBusiness}
               title="Nenhum trabalho disponível"
-              description="Esta organização ainda não possui trabalhos para consulta. A criação será disponibilizada em uma camada posterior."
+              description="Esta organização ainda não possui trabalhos. Utilize “Novo trabalho” para iniciar uma criação controlada."
             />
           )
         }
@@ -313,7 +417,8 @@ export function EngagementsPage() {
 
       <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
         <ShieldAlert aria-hidden="true" className="size-4" />
-        Esta camada não permite criar, editar, cancelar ou encerrar trabalhos.
+        Esta camada permite criar trabalhos em elaboração, mas ainda não permite editar, cancelar ou
+        encerrar.
       </p>
 
       <Dialog
@@ -336,19 +441,30 @@ export function EngagementsPage() {
               <Detail label="Estado" value={ENGAGEMENT_STATUS_LABELS[selectedEngagement.status]} />
               <Detail
                 label="Cliente"
-                value={clientsById.get(selectedEngagement.clientId)?.displayName ?? selectedEngagement.clientId}
+                value={
+                  clientsById.get(selectedEngagement.clientId)?.displayName ??
+                  selectedEngagement.clientId
+                }
               />
               <Detail
                 label="Classificação"
                 value={ENGAGEMENT_CLASSIFICATION_LABELS[selectedEngagement.classification]}
               />
-              <Detail label="Avaliação ACE utilizada" value={selectedEngagement.acceptanceAssessmentId} />
-              <Detail label="Criado em" value={formatEngagementDate(selectedEngagement.createdAt)} />
+              <Detail
+                label="Avaliação ACE utilizada"
+                value={selectedEngagement.acceptanceAssessmentId}
+              />
+              <Detail
+                label="Criado em"
+                value={formatEngagementDate(selectedEngagement.createdAt)}
+              />
               <div className="sm:col-span-2">
                 <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Escopo preliminar
                 </dt>
-                <dd className="mt-1 whitespace-pre-wrap text-foreground">{selectedEngagement.scope}</dd>
+                <dd className="mt-1 whitespace-pre-wrap text-foreground">
+                  {selectedEngagement.scope}
+                </dd>
               </div>
             </dl>
           ) : null}
@@ -365,7 +481,9 @@ export function EngagementsPage() {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</dt>
+      <dt className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+        {label}
+      </dt>
       <dd className="mt-1 break-words text-foreground">{value}</dd>
     </div>
   );
