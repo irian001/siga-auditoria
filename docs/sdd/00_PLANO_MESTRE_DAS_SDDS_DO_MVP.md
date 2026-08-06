@@ -7,9 +7,9 @@ aliases:
 type: plano-mestre-sdd
 domain: governanca-desenvolvimento
 status: aprovado
-version: 1.0
+version: 2.5
 created: 2026-07-29
-updated: 2026-07-29
+updated: 2026-08-06
 owner: responsavel-projeto
 audience:
   - responsavel-projeto
@@ -19,6 +19,7 @@ audience:
   - lovable
 related:
   - "[[Constituição do SIGA]]"
+  - "[[Matriz Mestra da Constituição do SIGA]]"
   - "[[Visão do Produto do SIGA]]"
   - "[[Glossário do SIGA]]"
   - "[[Modelo de Domínio do SIGA]]"
@@ -26,6 +27,8 @@ related:
   - "[[Governança do Desenvolvimento do SIGA]]"
   - "[[Roadmap, Evolução e Continuidade do SIGA]]"
   - "[[Qualidade, Testes e Validação do SIGA]]"
+  - "[[Documentação Mestre do SIGA]]"
+  - "[[Situação do Projeto]]"
 tags:
   - siga
   - mvp
@@ -55,6 +58,8 @@ Ele estabelece:
 
 Este plano não substitui as SDDs individuais. Cada SDD detalhará uma parte delimitada do sistema.
 
+Na hierarquia documental, este plano é a ponte operacional entre o roadmap e as SDDs individuais. Ele organiza a execução do MVP, mas não altera a Constituição, as regras de negócio, a metodologia, o domínio, os dados ou a arquitetura aprovados.
+
 ## 2. Fontes e hierarquia
 
 Este plano deriva de:
@@ -72,9 +77,9 @@ Em caso de conflito, prevalecem a Constituição, as decisões expressamente apr
 
 Conversas e prompts complementam a execução, mas não substituem os arquivos oficiais do GitHub.
 
-## 3. Situação inicial
+## 3. Situação de origem
 
-Na data desta minuta:
+Na data da primeira minuta, como registro histórico:
 
 - a Constituição está aprovada e publicada;
 - a Visão do Produto está aprovada e publicada;
@@ -84,6 +89,16 @@ Na data desta minuta:
 - o `AGENTS.md` está publicado na `main`;
 - nenhuma SDD do MVP foi iniciada;
 - nenhuma implementação deverá ser enviada ao Lovable antes da aprovação deste plano e da SDD correspondente.
+
+### 3.1 Estado reconciliado atual
+
+- Grupo 00 — Fundação: concluído;
+- Grupo 01 — Organização e acesso: concluído;
+- Grupo 02 — Clientes e trabalhos: em andamento;
+- `SDD-CLI-001`, `SDD-ACE-001`, `SDD-TRB-001` e `SDD-EQP-001`: concluídas e homologadas conforme a [[Situação do Projeto]];
+- `SDD-PNL-001`: especificação e plano restritivo aprovados; implementação ainda não iniciada;
+- Grupos 03 a 07: não iniciados;
+- a versão 1.1 da `SDD-DSG-001` ainda registra `status: em-revisao`, embora o Grupo 00 esteja operacionalmente concluído; a normalização deverá ocorrer em tarefa documental própria.
 
 ## 4. Conceitos de organização
 
@@ -195,11 +210,11 @@ SDD-FND-001_FUNDACAO_DA_APLICACAO.md
 
 Criar a base visual e técnica sobre a qual os demais módulos serão construídos.
 
-| Ordem | ID | SDD | Responsável principal | Dependências |
-|---:|---|---|---|---|
-| 1 | SDD-FND-001 | Fundação da aplicação | Lovable | AGENTS e Plano Mestre |
-| 2 | SDD-DSG-001 | Sistema visual e componentes básicos | Lovable | SDD-FND-001 |
-| 3 | SDD-ENV-001 | Ambientes, contratos e integrações iniciais | Codex | SDD-FND-001 |
+| Ordem | ID | SDD | Situação | Responsável principal | Dependências |
+|---:|---|---|---|---|---|
+| 1 | SDD-FND-001 | Fundação da aplicação | Concluída e homologada | Lovable | AGENTS e Plano Mestre |
+| 2 | SDD-DSG-001 | Sistema visual e componentes básicos | Concluída operacionalmente; normalização documental 1.1 pendente | Lovable | SDD-FND-001 |
+| 3 | SDD-ENV-001 | Ambientes, contratos e integrações iniciais | Concluída e homologada | Codex | SDD-FND-001 |
 
 ### Escopo esperado
 
@@ -227,12 +242,12 @@ A aplicação deverá possuir estrutura navegável, consistente e preparada para
 
 Estabelecer identidade organizacional, autenticação, usuários, vínculos, papéis e permissões.
 
-| Ordem | ID | SDD | Responsável principal | Dependências |
-|---:|---|---|---|---|
-| 1 | SDD-ORG-001 | Organização usuária | Lovable + Codex | Grupo 00 |
-| 2 | SDD-AUT-001 | Autenticação | Codex | SDD-ORG-001 |
-| 3 | SDD-USR-001 | Usuários e vínculos organizacionais | Lovable + Codex | SDD-AUT-001 |
-| 4 | SDD-ACL-001 | Papéis e permissões | Codex | SDD-USR-001 |
+| Ordem | ID | SDD | Situação | Responsável principal | Dependências |
+|---:|---|---|---|---|---|
+| 1 | SDD-ORG-001 | Organização usuária | Concluída e homologada | Lovable + Codex | Grupo 00 |
+| 2 | SDD-AUT-001 | Autenticação | Concluída e homologada | Codex | SDD-ORG-001 |
+| 3 | SDD-USR-001 | Usuários e vínculos organizacionais | Concluída e homologada | Lovable + Codex | SDD-AUT-001 |
+| 4 | SDD-ACL-001 | Papéis e permissões | Concluída e homologada | Codex | SDD-USR-001 |
 
 ### Critério de avanço
 
@@ -244,13 +259,13 @@ Usuários autorizados deverão acessar somente a organização e as funções pe
 
 Permitir o cadastro de clientes e a criação controlada dos trabalhos de auditoria.
 
-| Ordem | ID | SDD | Responsável principal | Dependências |
-|---:|---|---|---|---|
-| 1 | SDD-CLI-001 | Cadastro de clientes | Lovable + Codex | Grupo 01 |
-| 2 | SDD-ACE-001 | Aceitação e continuidade simplificada | Work + Lovable + Codex | SDD-CLI-001 |
-| 3 | SDD-TRB-001 | Criação e gestão do trabalho | Lovable + Codex | SDD-ACE-001 |
-| 4 | SDD-EQP-001 | Equipe, funções e períodos | Lovable + Codex | SDD-TRB-001 |
-| 5 | SDD-PNL-001 | Painel básico do trabalho | Lovable | SDD-EQP-001 |
+| Ordem | ID | SDD | Situação | Responsável principal | Dependências |
+|---:|---|---|---|---|---|
+| 1 | SDD-CLI-001 | Cadastro de clientes | Concluída | Lovable + Codex | Grupo 01 |
+| 2 | SDD-ACE-001 | Aceitação e continuidade simplificada | Concluída e homologada | Work + Lovable + Codex | SDD-CLI-001 |
+| 3 | SDD-TRB-001 | Criação e gestão do trabalho | Concluída e homologada | Lovable + Codex | SDD-ACE-001 |
+| 4 | SDD-EQP-001 | Equipe, funções e períodos | Concluída e homologada | Codex | SDD-TRB-001 |
+| 5 | SDD-PNL-001 | Painel básico do trabalho | Especificação e plano aprovados; implementação não iniciada | Work + Codex | SDD-EQP-001 |
 
 ### Critério de avanço
 
@@ -565,13 +580,13 @@ A sequência imediata será:
 6. revisar o plano apresentado;
 7. autorizar a primeira implementação.
 
-## 25. Painel inicial
+## 25. Painel de andamento
 
 | Grupo | Situação | Próxima ação |
 |---|---|---|
-| 00 — Fundação | Não iniciado | Elaborar SDD-FND-001 |
-| 01 — Organização e acesso | Não iniciado | Aguardar Grupo 00 |
-| 02 — Clientes e trabalhos | Não iniciado | Aguardar Grupo 01 |
+| 00 — Fundação | Concluído | Manter a fundação estável durante os grupos seguintes |
+| 01 — Organização e acesso | Concluído | Preservar autenticação, vínculo organizacional e ACL já validados |
+| 02 — Clientes e trabalhos | Em andamento | Executar a Etapa 1 da PNL-001 — rota e composição de leitura |
 | 03 — Contabilidade e planejamento | Não iniciado | Aguardar Grupo 02 |
 | 04 — Riscos e procedimentos | Não iniciado | Aguardar Grupo 03 |
 | 05 — Documentos e evidências | Não iniciado | Aguardar Grupo 04 |
@@ -595,3 +610,18 @@ A sequência imediata será:
 |---|---|---|---|
 | 0.1 | 2026-07-29 | Criação da minuta inicial do Plano Mestre das SDDs do MVP | Em revisão |
 | 1.0 | 2026-07-29 | Primeira versão aprovada do Plano Mestre das SDDs do MVP | Aprovada |
+| 1.1 | 2026-08-03 | Atualização do painel após a conclusão dos Grupos 00 e 01 e início da especificação do Grupo 02 | Aprovada |
+| 1.2 | 2026-08-03 | Registro da aprovação da SDD-CLI-001 e avanço para o planejamento de sua implantação | Aprovada |
+| 1.3 | 2026-08-03 | Registro da aprovação do plano CLI-001 e avanço para publicação e inspeção técnica | Aprovada |
+| 1.4 | 2026-08-04 | Registro da conclusão da SDD-CLI-001 e definição da SDD-ACE-001 como próxima especificação do Grupo 02 | Aprovada |
+| 1.5 | 2026-08-05 | Registro da conclusão homologada da SDD-ACE-001 e aprovação da SDD-TRB-001 como próxima etapa | Aprovada |
+| 1.6 | 2026-08-05 | Aprovação do Plano de Implantação da SDD-TRB-001 e definição da Camada 0 como próxima ação | Aprovada |
+| 1.7 | 2026-08-05 | Registro da conclusão homologada da SDD-TRB-001 e definição da SDD-EQP-001 como próxima etapa do Grupo 02 | Aprovada |
+| 1.8 | 2026-08-05 | Aprovação da minuta da SDD-EQP-001 e abertura do plano restritivo de implantação | Aprovada |
+| 1.9 | 2026-08-05 | Conclusão da Camada 1 da EQP-001 e registro do bloqueio de diretório por contrato e RLS | Aprovada |
+| 2.0 | 2026-08-06 | Conclusão do desenho de segurança e do contrato local simulado da Camada 2; persistência oficial permanece pendente | Aprovada |
+| 2.1 | 2026-08-06 | Registro da conclusão homologada da SDD-EQP-001 e abertura da especificação da SDD-PNL-001 | Aprovada |
+| 2.2 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próxima etapa | Aprovada |
+| 2.3 | 2026-08-06 | Elaboração do plano restritivo único da SDD-PNL-001 em quatro etapas fechadas | Aprovada |
+| 2.4 | 2026-08-06 | Aprovação do plano da PNL-001 e reconciliação do andamento das SDDs dos Grupos 00 a 02 | Aprovada |
+| 2.5 | 2026-08-06 | Formalização do Plano Mestre como ponte entre roadmap, SDDs individuais e execução | Aprovada |

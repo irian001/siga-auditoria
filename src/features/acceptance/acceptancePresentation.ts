@@ -1,0 +1,216 @@
+import type { StatusKey } from "@/components/ui/status-badge";
+import type {
+  AcceptanceAnswerValue,
+  AcceptanceAssessment,
+  AcceptanceAssessmentStatus,
+  AcceptanceAssessmentType,
+  AcceptanceConclusion,
+} from "@/domain/acceptance";
+
+export const ACCEPTANCE_PANEL_TITLE = "Aceitação e continuidade";
+export const ACCEPTANCE_SIMULATION_NOTICE =
+  "Avaliação em ambiente de validação. Os dados não serão gravados no banco oficial.";
+
+export const ACCEPTANCE_OFFICIAL_NOTICE =
+  "As avaliações serão gravadas no banco oficial do SIGA, preservando histórico e responsáveis.";
+
+export const ACCEPTANCE_TYPE_LABELS: Record<AcceptanceAssessmentType, string> = {
+  acceptance: "Aceitação",
+  continuance: "Continuidade",
+};
+
+export const ACCEPTANCE_STATUS_LABELS: Record<AcceptanceAssessmentStatus, string> = {
+  draft: "Em elaboração",
+  pending_review: "Aguardando decisão",
+  approved: "Aprovada",
+  rejected: "Rejeitada",
+  cancelled: "Cancelada",
+};
+
+export const ACCEPTANCE_STATUS_BADGE: Record<AcceptanceAssessmentStatus, StatusKey> = {
+  draft: "em-andamento",
+  pending_review: "atencao",
+  approved: "concluido",
+  rejected: "erro",
+  cancelled: "indisponivel",
+};
+
+export const ACCEPTANCE_CONCLUSION_LABELS: Record<AcceptanceConclusion, string> = {
+  approved: "Aprovada",
+  rejected: "Rejeitada",
+};
+
+export const ACCEPTANCE_ANSWER_LABELS: Record<AcceptanceAnswerValue, string> = {
+  yes: "Sim",
+  no: "Não",
+  not_applicable: "Não se aplica",
+  unknown: "Não identificado",
+};
+
+export const ACCEPTANCE_DRAFT_SAVED_NOTICE = "Rascunho da avaliação salvo com sucesso.";
+
+export const ACCEPTANCE_REVIEW_NOTICE =
+  "Revise as respostas antes de enviar. O envio não registra uma decisão.";
+export const ACCEPTANCE_SUBMITTED_NOTICE =
+  "Esta avaliação aguarda uma decisão humana. O sistema não aprova automaticamente.";
+export const ACCEPTANCE_SUBMITTED_SUCCESS_NOTICE = "Avaliação enviada para decisão.";
+export const ACCEPTANCE_RETURNED_SUCCESS_NOTICE = "Avaliação devolvida para rascunho.";
+export const ACCEPTANCE_DECIDED_SUCCESS_NOTICE = "Decisão registrada com sucesso.";
+
+export function describeAssessmentRule(
+  type: AcceptanceAssessmentType,
+  isReanalysis: boolean,
+): string {
+  if (type === "continuance") {
+    return "A continuidade será relacionada à avaliação aprovada mais recente deste cliente.";
+  }
+  if (isReanalysis) {
+    return "A nova análise será relacionada à rejeição anterior e exige justificativa.";
+  }
+  return "Registre a avaliação inicial e salve o questionário como rascunho.";
+}
+
+export function formatAcceptanceDate(value?: string): string {
+  if (!value) return "—";
+  const date = new Date(value.length === 10 ? `${value}T00:00:00` : value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("pt-BR");
+}
+
+export function formatAcceptanceDateTime(value?: string): string {
+  if (!value) return "—";
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? value
+    : date.toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
+}
+
+export function formatAcceptanceRegisteredCount(total: number): string {
+  return total === 1 ? "1 avaliação registrada" : total + " avaliações registradas";
+}
+
+export function formatAcceptanceCount(total: number): string {
+  return total === 1 ? "1 avaliação simulada" : `${total} avaliações simuladas`;
+}
+
+type SimulatedAssessmentInput = {
+  clientId: string;
+  organizationId: string;
+  preparedBy: string;
+  decidedBy: string;
+};
+
+function selectScenario(clientId: string): number {
+  let hash = 0;
+  for (let index = 0; index < clientId.length; index += 1) {
+    hash = (hash * 31 + clientId.charCodeAt(index)) % 100_000;
+  }
+  return hash % 5;
+}
+
+function createSimulatedAssessment(
+  input: SimulatedAssessmentInput,
+  values: Partial<AcceptanceAssessment> & { id: string; assessmentDate: string },
+): AcceptanceAssessment {
+  const timestamp = `${values.assessmentDate}T12:00:00.000Z`;
+  return {
+    id: values.id,
+    organizationId: input.organizationId,
+    clientId: input.clientId,
+    assessmentType: "acceptance",
+    assessmentDate: values.assessmentDate,
+    status: "draft",
+    preparedBy: input.preparedBy,
+    answers: [],
+    transitions: [],
+    createdAt: timestamp,
+    updatedAt: timestamp,
+    ...values,
+  };
+}
+
+/** Cenários determinísticos usados exclusivamente pelo repositório em memória. */
+export function buildSimulatedAssessments(input: SimulatedAssessmentInput): AcceptanceAssessment[] {
+  const scenario = selectScenario(input.clientId);
+  const firstId = crypto.randomUUID();
+  const secondId = crypto.randomUUID();
+
+  if (scenario === 0) return [];
+
+  if (scenario === 1) {
+    return [
+      createSimulatedAssessment(input, {
+        id: firstId,
+        assessmentDate: "2026-02-10",
+        status: "approved",
+        conclusion: "approved",
+        rationale: "Não foram identificados impedimentos preliminares.",
+        submittedAt: "2026-02-11T13:00:00.000Z",
+        submittedBy: input.preparedBy,
+        decidedAt: "2026-02-12T18:30:00.000Z",
+        decidedBy: input.decidedBy,
+      }),
+    ];
+  }
+
+  if (scenario === 2) {
+    return [
+      createSimulatedAssessment(input, {
+        id: firstId,
+        assessmentDate: "2025-03-05",
+        status: "approved",
+        conclusion: "approved",
+        submittedAt: "2025-03-06T13:00:00.000Z",
+        submittedBy: input.preparedBy,
+        decidedAt: "2025-03-07T16:00:00.000Z",
+        decidedBy: input.decidedBy,
+      }),
+      createSimulatedAssessment(input, {
+        id: secondId,
+        assessmentDate: "2026-06-18",
+        assessmentType: "continuance",
+        referencePeriod: "Exercício de 2026",
+        previousAssessmentId: firstId,
+      }),
+    ];
+  }
+
+  if (scenario === 3) {
+    return [
+      createSimulatedAssessment(input, {
+        id: firstId,
+        assessmentDate: "2026-01-22",
+        status: "rejected",
+        conclusion: "rejected",
+        rationale: "Limitação relevante de acesso a informações essenciais.",
+        submittedAt: "2026-01-23T12:00:00.000Z",
+        submittedBy: input.preparedBy,
+        decidedAt: "2026-01-24T19:00:00.000Z",
+        decidedBy: input.decidedBy,
+      }),
+    ];
+  }
+
+  return [
+    createSimulatedAssessment(input, {
+      id: firstId,
+      assessmentDate: "2025-11-04",
+      status: "rejected",
+      conclusion: "rejected",
+      rationale: "Pendências de integridade não esclarecidas na ocasião.",
+      submittedAt: "2025-11-05T12:00:00.000Z",
+      submittedBy: input.preparedBy,
+      decidedAt: "2025-11-06T17:45:00.000Z",
+      decidedBy: input.decidedBy,
+    }),
+    createSimulatedAssessment(input, {
+      id: secondId,
+      assessmentDate: "2026-07-15",
+      status: "pending_review",
+      referencePeriod: "Exercício de 2026",
+      previousAssessmentId: firstId,
+      reanalysisRationale: "Reanálise após esclarecimento das pendências anteriores.",
+      submittedAt: "2026-07-16T11:20:00.000Z",
+      submittedBy: input.preparedBy,
+    }),
+  ];
+}

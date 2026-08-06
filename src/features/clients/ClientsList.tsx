@@ -1,0 +1,130 @@
+import { ClipboardCheck, Pencil, Power, RotateCcw } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { StatusBadge } from "@/components/ui/status-badge";
+import { maskTaxIdentifier, type Client } from "@/domain/client";
+import {
+  CLIENT_CLASSIFICATION_LABELS,
+  CLIENT_STATUS_BADGE,
+  CLIENT_STATUS_LABELS,
+} from "@/features/clients/clientsPresentation";
+
+type ClientsListProps = {
+  clients: Client[];
+  canManage?: boolean;
+  onEdit?: (client: Client) => void;
+  onChangeStatus?: (client: Client) => void;
+  onOpenAcceptance?: (client: Client) => void;
+};
+
+/**
+ * Estrutura visual da listagem de clientes — Camadas 1, 3 e 4 da SDD-CLI-001.
+ */
+export function ClientsList({
+  clients,
+  canManage = false,
+  onEdit,
+  onChangeStatus,
+  onOpenAcceptance,
+}: ClientsListProps) {
+  return (
+    <Table>
+      <caption className="sr-only">
+        Clientes da organização ativa, com nome de exibição, razão social, identificador fiscal
+        mascarado, classificação e estado.
+      </caption>
+      <TableHeader>
+        <TableRow>
+          <TableHead scope="col">Nome de exibição</TableHead>
+          <TableHead scope="col">Razão social ou nome jurídico</TableHead>
+          <TableHead scope="col">Identificador fiscal</TableHead>
+          <TableHead scope="col">Classificação</TableHead>
+          <TableHead scope="col">Estado</TableHead>
+          <TableHead scope="col" className="text-right">
+            Ações
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {clients.map((client) => (
+          <TableRow
+            key={client.id}
+            data-estado={client.status}
+            className={client.status === "inactive" ? "opacity-70" : undefined}
+          >
+            <TableCell className="font-medium text-foreground">{client.displayName}</TableCell>
+            <TableCell className="text-muted-foreground">{client.legalName}</TableCell>
+            <TableCell className="whitespace-nowrap text-muted-foreground">
+              {maskTaxIdentifier(client.taxIdentifierType, client.taxIdentifier)}
+            </TableCell>
+            <TableCell className="text-muted-foreground">
+              {CLIENT_CLASSIFICATION_LABELS[client.classification]}
+            </TableCell>
+            <TableCell>
+              <StatusBadge
+                status={CLIENT_STATUS_BADGE[client.status]}
+                label={CLIENT_STATUS_LABELS[client.status]}
+              />
+            </TableCell>
+            <TableCell className="text-right">
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                {onOpenAcceptance ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onOpenAcceptance(client)}
+                    aria-label={`Consultar avaliações de ${client.displayName}`}
+                  >
+                    <ClipboardCheck aria-hidden="true" />
+                    Avaliações
+                  </Button>
+                ) : null}
+                {canManage && onEdit ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onEdit(client)}
+                    aria-label={`Editar cliente ${client.displayName}`}
+                  >
+                    <Pencil aria-hidden="true" />
+                    Editar
+                  </Button>
+                ) : null}
+                {canManage && onChangeStatus ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onChangeStatus(client)}
+                    aria-label={
+                      client.status === "active"
+                        ? `Inativar cliente ${client.displayName}`
+                        : `Reativar cliente ${client.displayName}`
+                    }
+                  >
+                    {client.status === "active" ? (
+                      <Power aria-hidden="true" />
+                    ) : (
+                      <RotateCcw aria-hidden="true" />
+                    )}
+                    {client.status === "active" ? "Inativar" : "Reativar"}
+                  </Button>
+                ) : null}
+                {!canManage ? (
+                  <span className="text-xs text-muted-foreground">Somente consulta</span>
+                ) : null}
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}

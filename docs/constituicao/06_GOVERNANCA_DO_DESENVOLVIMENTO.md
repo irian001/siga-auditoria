@@ -7,9 +7,9 @@ aliases:
 type: documento-constitucional
 domain: governanca-desenvolvimento
 status: aprovado
-version: 1.0
+version: 1.1
 created: 2026-07-26
-updated: 2026-07-27
+updated: 2026-08-06
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -25,6 +25,7 @@ related:
   - "[[Qualidade, Testes e Validação do SIGA]]"
   - "[[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]]"
   - "[[Situação do Projeto]]"
+  - "[[Plano Mestre das SDDs do MVP do SIGA]]"
 tags: [siga, constituicao, governanca, desenvolvimento, sdd, git]
 ---
 
@@ -49,7 +50,9 @@ O desenvolvimento é incremental, documentado, verificável, reversível e orien
 
 ## Hierarquia documental
 
-Constituição; documentos constitucionais; regras; domínio; decisões arquiteturais; SDD; plano; tarefa; prompt; código. Documento inferior não pode contrariar superior.
+Constituição; decisões humanas expressamente aprovadas; documentos constitucionais; regras e metodologia; visão, domínio, dados e arquitetura; roadmap; [[Plano Mestre das SDDs do MVP do SIGA]]; SDD individual; plano de implementação; tarefa; prompt; código e testes. Documento inferior não pode contrariar superior.
+
+O Plano Mestre é a ponte operacional entre a estratégia documentada e as SDDs individuais: organiza grupos, ordem, dependências, limites do MVP e critérios de avanço, sem substituir a especificação de cada módulo.
 
 ## SDD, plano e tarefa
 
@@ -85,3 +88,4 @@ Estudo de caso: a importação de balancetes é dividida em upload, leitura, val
 |---|---|---|---|
 | 0.1 | 2026-07-26 | Minuta inicial | Substituída |
 | 1.0 | 2026-07-27 | Normalização e aprovação documental | Aprovada |
+| 1.1 | 2026-08-06 | Formalização do Plano Mestre das SDDs na hierarquia de desenvolvimento | Aprovada |
