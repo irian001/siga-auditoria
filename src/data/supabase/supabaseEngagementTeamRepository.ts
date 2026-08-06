@@ -3,7 +3,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import type { EngagementTeamPeriodsRepository } from "@/data/engagementTeamRepository";
 import type { OperationResult } from "@/domain/contracts";
 import type {
+  EngagementRoleOption,
   EngagementPeriodReadModel,
+  EngagementTeamMemberAssignmentInput,
   EngagementTeamMemberReadModel,
   EngagementTeamPeriodsQueryContext,
   EngagementTeamPeriodsReadModel,
@@ -44,6 +46,9 @@ type RoleRow = {
   name: string;
   status: string;
 };
+
+const TEAM_MEMBER_SELECT =
+  "id, organization_id, engagement_id, membership_id, engagement_role_id, active_from, active_to, status, organization_memberships!inner(id, organization_id, user_profile_id, user_profiles!inner(id, display_name, status)), engagement_roles!inner(id, organization_id, code, name, status)";
 
 type TeamMemberRow = {
   id: string;
@@ -102,7 +107,46 @@ function requireContext(
   return { ok: true, data: context };
 }
 
+function requireManageContext(
+  context: EngagementTeamPeriodsQueryContext,
+): { ok: true; data: EngagementTeamPeriodsQueryContext } | { ok: false; error: AppError } {
+  if (
+    !context.organizationId ||
+    !context.engagementId ||
+    context.authorization.status !== "active"
+  ) {
+    return failure(
+      createAppError("UNAUTHORIZED", "O contexto organizacional não está disponível."),
+    );
+  }
+
+  if (!can(context.authorization, "engagements.manage", context.organizationId)) {
+    return failure(
+      createAppError(
+        "FORBIDDEN",
+        "Você não possui permissão para associar equipe ao trabalho.",
+        true,
+      ),
+    );
+  }
+
+  return { ok: true, data: context };
+}
+
 function mapSupabaseError(error: SupabaseErrorLike): AppError {
+  if (error.code === "23505") {
+    return createAppError("CONFLICT", "Este usuário já está associado ao trabalho.", true, error);
+  }
+
+  if (error.code === "23503" || error.code === "23514") {
+    return createAppError(
+      "VALIDATION_ERROR",
+      "Os dados da associação não atendem às regras do trabalho.",
+      true,
+      error,
+    );
+  }
+
   if (error.code === "PGRST301" || error.status === 401) {
     return createAppError(
       "UNAUTHORIZED",
@@ -206,6 +250,16 @@ function mapPeriod(row: PeriodRow): EngagementPeriodReadModel {
   };
 }
 
+function mapRole(row: RoleRow): EngagementRoleOption {
+  return {
+    id: row.id,
+    organizationId: row.organization_id,
+    code: row.code,
+    name: row.name,
+    status: row.status,
+  };
+}
+
 export function createSupabaseEngagementTeamPeriodsRepository(
   supabase: SupabaseClient,
 ): EngagementTeamPeriodsRepository {
@@ -219,9 +273,7 @@ export function createSupabaseEngagementTeamPeriodsRepository(
       const teamResult = await execute<TeamMemberRow[]>(async () =>
         supabase
           .from("engagement_team_members")
-          .select(
-            "id, organization_id, engagement_id, membership_id, engagement_role_id, active_from, active_to, status, organization_memberships!inner(id, organization_id, user_profile_id, user_profiles!inner(id, display_name, status)), engagement_roles!inner(id, organization_id, code, name, status)",
-          )
+          .select(TEAM_MEMBER_SELECT)
           .eq("organization_id", authorized.data.organizationId)
           .eq("engagement_id", authorized.data.engagementId)
           .eq("organization_memberships.organization_id", authorized.data.organizationId)
@@ -247,6 +299,80 @@ export function createSupabaseEngagementTeamPeriodsRepository(
         .sort((left, right) => left.startDate.localeCompare(right.startDate));
 
       return { ok: true, data: { teamMembers, periods } as EngagementTeamPeriodsReadModel };
+    },
+
+    async listActiveRoles(
+      context: EngagementTeamPeriodsQueryContext,
+    ): Promise<OperationResult<EngagementRoleOption[]>> {
+      const authorized = requireContext(context);
+      if (!authorized.ok) return authorized;
+
+      const result = await execute<RoleRow[]>(async () =>
+        supabase
+          .from("engagement_roles")
+          .select("id, organization_id, code, name, status")
+          .eq("organization_id", authorized.data.organizationId)
+          .eq("status", "active"),
+      );
+      if (!result.ok) return result;
+
+      return {
+        ok: true,
+        data: (result.data ?? [])
+          .map(mapRole)
+          .sort((left, right) => left.name.localeCompare(right.name, "pt-BR")),
+      };
+    },
+
+    async assignMember(
+      context: EngagementTeamPeriodsQueryContext,
+      input: EngagementTeamMemberAssignmentInput,
+    ): Promise<OperationResult<EngagementTeamMemberReadModel>> {
+      const authorized = requireManageContext(context);
+      if (!authorized.ok) return authorized;
+
+      if (
+        input.organizationId !== authorized.data.organizationId ||
+        input.engagementId !== authorized.data.engagementId ||
+        !input.membershipId ||
+        !input.roleId ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(input.activeFrom)
+      ) {
+        return failure(
+          createAppError("VALIDATION_ERROR", "Os dados da associação são inválidos.", true),
+        );
+      }
+
+      const result = await execute<TeamMemberRow>(async () =>
+        supabase
+          .from("engagement_team_members")
+          .insert({
+            organization_id: input.organizationId,
+            engagement_id: input.engagementId,
+            membership_id: input.membershipId,
+            engagement_role_id: input.roleId,
+            active_from: input.activeFrom,
+            active_to: null,
+            status: "active",
+          })
+          .select(TEAM_MEMBER_SELECT)
+          .single(),
+      );
+      if (!result.ok) return result;
+      if (!result.data) {
+        return failure(
+          createAppError("CONFIGURATION_ERROR", "A associação foi criada sem retorno do registro."),
+        );
+      }
+
+      const member = mapTeamMember(result.data);
+      if (!member) {
+        return failure(
+          createAppError("CONFIGURATION_ERROR", "A associação criada não pôde ser consultada."),
+        );
+      }
+
+      return { ok: true, data: member };
     },
   };
 }

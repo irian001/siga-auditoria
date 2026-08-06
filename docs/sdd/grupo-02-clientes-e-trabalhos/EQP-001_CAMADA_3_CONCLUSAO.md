@@ -7,8 +7,8 @@ aliases:
 type: implementation-report
 domain: equipe-funcoes-periodos
 group: grupo-02-clientes-e-trabalhos
-status: em-homologacao
-version: 0.1
+status: homologado
+version: 1.0
 created: 2026-08-06
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -35,7 +35,7 @@ tags:
 
 ## 1. Situação
 
-A implementação técnica da Camada 3 foi concluída em branch própria e está em fase de homologação.
+A implementação técnica da Camada 3 foi concluída, revisada e homologada pelo responsável pelo projeto após a integração do PR #44 na `main`.
 
 O escopo entregue permite consultar, em modo somente leitura:
 
@@ -80,23 +80,25 @@ A migration cria somente `engagement_roles`, `engagement_team_members` e `engage
 - três tabelas sem registros artificiais;
 - migration remota registrada como `20260806130405_eqp_engagement_team_periods_readonly`.
 
-## 4. Pendências de homologação
+## 4. Registro da homologação
 
-- revisar o diff completo;
-- publicar a branch e abrir o PR;
-- executar o teste autenticado da consulta no sistema;
-- confirmar os estados vazios na tela;
-- aprovar o PR antes do merge na `main`;
-- reconciliar posteriormente o prefixo temporal local `20260806124615` com o identificador remoto `20260806130405`.
+- PR #44 integrado na `main`;
+- consulta somente leitura aprovada dentro do escopo;
+- estados vazios preservados, sem registros artificiais;
+- RLS e isolamento organizacional registrados nas validações;
+- homologação da Camada 3 autorizada pelo responsável em 2026-08-06.
+
+Permanece apenas uma pendência documental não bloqueante: reconciliar posteriormente o prefixo temporal local `20260806124615` com o identificador remoto `20260806130405`.
 
 ## 5. Declaração de escopo
 
 Não foram alterados autenticação, ACL, rotas, dependências, Lovable Cloud, cadastro de usuários, associação de equipe, períodos, painel ou funcionalidades de escrita.
 
-Este relatório não declara a Camada 3 como homologada. A homologação dependerá do teste autenticado e da aprovação do PR.
+Este relatório declara a Camada 3 homologada dentro do escopo aprovado. Associação de usuários, manutenção de participações, criação de períodos, histórico operacional e painel permanecem fora desta camada.
 
 ## 6. Histórico de alterações
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-08-06 | Registro da implementação técnica e das validações iniciais | Em homologação |
+| 1.0 | 2026-08-06 | Homologação após aprovação e integração do PR #44 | Homologada |
