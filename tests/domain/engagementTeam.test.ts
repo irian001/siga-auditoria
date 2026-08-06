@@ -11,6 +11,8 @@ describe("engagementTeam domain contract", () => {
 
     assert.match(source, /EngagementTeamPeriodsQueryContext/);
     assert.match(source, /EngagementTeamMemberReadModel/);
+    assert.match(source, /EngagementRoleOption/);
+    assert.match(source, /EngagementTeamMemberAssignmentInput/);
     assert.match(source, /EngagementPeriodReadModel/);
     assert.match(source, /EngagementTeamPeriodsReadModel/);
   });

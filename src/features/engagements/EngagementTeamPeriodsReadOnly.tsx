@@ -1,4 +1,5 @@
-import { CalendarDays, UsersRound } from "lucide-react";
+import { CalendarDays, Plus, UsersRound } from "lucide-react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { can, type AuthorizationContext } from "@/domain/authorization";
@@ -7,6 +8,8 @@ import { getSupabaseBrowserClient } from "@/data/supabase/supabaseClient";
 import { EmptyState } from "@/components/states/EmptyState";
 import { ErrorState } from "@/components/states/ErrorState";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { EngagementTeamMemberAssignment } from "@/features/engagements/EngagementTeamMemberAssignment";
 
 let repository: ReturnType<typeof createSupabaseEngagementTeamPeriodsRepository> | undefined;
 
@@ -26,6 +29,7 @@ export function EngagementTeamPeriodsReadOnly({
   engagementId,
   authorization,
 }: EngagementTeamPeriodsReadOnlyProps) {
+  const [assignmentOpen, setAssignmentOpen] = useState(false);
   const canView = Boolean(
     organizationId && authorization && can(authorization, "engagements.view", organizationId),
   );
@@ -71,16 +75,35 @@ export function EngagementTeamPeriodsReadOnly({
   }
 
   const { teamMembers, periods } = query.data;
+  const canManage = Boolean(
+    organizationId && authorization && can(authorization, "engagements.manage", organizationId),
+  );
 
   return (
     <section className="mt-6 space-y-5 border-t border-border pt-5" aria-label="Equipe e períodos">
-      <div>
-        <h3 className="text-sm font-semibold text-foreground">Equipe e períodos</h3>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Consulta somente leitura. Associação e manutenção serão disponibilizadas em camadas
-          posteriores.
-        </p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">Equipe e períodos</h3>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Consulte os vínculos existentes. A associação é permitida somente para usuários com a
+            autorização adequada.
+          </p>
+        </div>
+        {canManage ? (
+          <Button type="button" size="sm" onClick={() => setAssignmentOpen(true)}>
+            <Plus aria-hidden="true" />
+            Adicionar participante
+          </Button>
+        ) : null}
       </div>
+
+      <EngagementTeamMemberAssignment
+        open={assignmentOpen}
+        onOpenChange={setAssignmentOpen}
+        organizationId={organizationId}
+        engagementId={engagementId}
+        authorization={authorization}
+      />
 
       <div className="space-y-3">
         <h4 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">

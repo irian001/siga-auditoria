@@ -22,6 +22,22 @@ export type EngagementTeamMemberReadModel = {
   activeTo: string | null;
 };
 
+export type EngagementRoleOption = {
+  id: string;
+  organizationId: string;
+  code: string;
+  name: string;
+  status: string;
+};
+
+export type EngagementTeamMemberAssignmentInput = {
+  organizationId: string;
+  engagementId: string;
+  membershipId: string;
+  roleId: string;
+  activeFrom: string;
+};
+
 export type EngagementPeriodReadModel = {
   id: string;
   organizationId: string;

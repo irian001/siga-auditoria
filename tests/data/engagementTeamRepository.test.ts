@@ -65,6 +65,26 @@ function createRepository() {
         status: "active",
       },
     ],
+    roles: [
+      {
+        id: "role-reviewer",
+        organizationId,
+        code: "reviewer",
+        name: "Revisor",
+        status: "active",
+      },
+    ],
+    eligibleUsers: [
+      {
+        userProfileId: "profile-3",
+        displayName: "Carla Auditora",
+        membershipId: "membership-3",
+        organizationId,
+        membershipStatus: "active",
+        activeFrom: "2026-08-01T00:00:00.000Z",
+        activeTo: null,
+      },
+    ],
   });
 }
 
@@ -138,10 +158,90 @@ describe("MockEngagementTeamPeriodsRepository", () => {
     assert.equal(otherOrganization.ok, false);
   });
 
-  test("não oferece operações de escrita", () => {
+  test("expõe somente a escrita controlada de associação", () => {
     const repository = createRepository();
-    assert.equal("create" in repository, false);
+    assert.equal("assignMember" in repository, true);
     assert.equal("update" in repository, false);
     assert.equal("delete" in repository, false);
+  });
+
+  test("lista funções ativas e associa usuário elegível", async () => {
+    const repository = createRepository();
+    const context = {
+      organizationId,
+      engagementId,
+      authorization: authorization(["engagements.view", "engagements.manage"]),
+    };
+
+    const roles = await repository.listActiveRoles(context);
+    assert.deepEqual(roles, {
+      ok: true,
+      data: [
+        {
+          id: "role-reviewer",
+          organizationId,
+          code: "reviewer",
+          name: "Revisor",
+          status: "active",
+        },
+      ],
+    });
+
+    const result = await repository.assignMember(context, {
+      organizationId,
+      engagementId,
+      membershipId: "membership-3",
+      roleId: "role-reviewer",
+      activeFrom: "2026-08-06",
+    });
+
+    assert.equal(result.ok, true);
+    if (result.ok) {
+      assert.equal(result.data.displayName, "Carla Auditora");
+      assert.equal(result.data.status, "active");
+      assert.equal(result.data.roleCode, "reviewer");
+    }
+  });
+
+  test("bloqueia associação sem permissão ou em duplicidade ativa", async () => {
+    const repository = createRepository();
+    const input = {
+      organizationId,
+      engagementId,
+      membershipId: "membership-3",
+      roleId: "role-reviewer",
+      activeFrom: "2026-08-06",
+    };
+
+    const withoutPermission = await repository.assignMember(
+      {
+        organizationId,
+        engagementId,
+        authorization: authorization(["engagements.view"]),
+      },
+      input,
+    );
+    assert.equal(withoutPermission.ok, false);
+
+    const first = await repository.assignMember(
+      {
+        organizationId,
+        engagementId,
+        authorization: authorization(["engagements.view", "engagements.manage"]),
+      },
+      input,
+    );
+    assert.equal(first.ok, true);
+
+    const duplicate = await repository.assignMember(
+      {
+        organizationId,
+        engagementId,
+        authorization: authorization(["engagements.view", "engagements.manage"]),
+      },
+      input,
+    );
+    assert.equal(duplicate.ok, false);
+    if (!duplicate.ok) assert.equal(duplicate.error.code, "CONFLICT");
   });
 });

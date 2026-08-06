@@ -26,16 +26,24 @@ type FakeBuilder = {
   calls: Array<{ method: string; args: unknown[] }>;
   table: string;
   select: (columns: string) => FakeBuilder;
+  insert: (values: unknown) => FakeBuilder;
   eq: (column: string, value: unknown) => FakeBuilder;
+  single: () => Promise<unknown>;
   then: <TResult1 = unknown, TResult2 = never>(
     onfulfilled?: ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
     onrejected?: ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
   ) => Promise<TResult1 | TResult2>;
 };
 
-function createFakeSupabase(teamData: unknown, periodsData: unknown, error: unknown = null) {
+function createFakeSupabase(
+  teamData: unknown,
+  periodsData: unknown,
+  error: unknown = null,
+  insertedData: unknown = null,
+) {
   const calls: Array<{ method: string; args: unknown[] }> = [];
   let table = "";
+  let inserting = false;
   const builder: FakeBuilder = {
     calls,
     table,
@@ -43,12 +51,24 @@ function createFakeSupabase(teamData: unknown, periodsData: unknown, error: unkn
       calls.push({ method: "select", args: [columns] });
       return builder;
     },
+    insert(values) {
+      inserting = true;
+      calls.push({ method: "insert", args: [values] });
+      return builder;
+    },
     eq(column, value) {
       calls.push({ method: "eq", args: [column, value] });
       return builder;
     },
+    single() {
+      return Promise.resolve({ data: insertedData, error });
+    },
     then(onfulfilled, onrejected) {
-      const data = table === "engagement_team_members" ? teamData : periodsData;
+      const data = inserting
+        ? insertedData
+        : table === "engagement_team_members"
+          ? teamData
+          : periodsData;
       return Promise.resolve({ data, error }).then(onfulfilled, onrejected);
     },
   };
@@ -200,5 +220,50 @@ describe("SupabaseEngagementTeamPeriodsRepository", () => {
 
     assert.equal(result.ok, false);
     if (!result.ok) assert.equal(result.error.code, "FORBIDDEN");
+  });
+
+  test("associa participante somente com engagements.manage", async () => {
+    const fake = createFakeSupabase([], [], null, {
+      id: "team-2",
+      organization_id: organizationId,
+      engagement_id: engagementId,
+      membership_id: "membership-2",
+      engagement_role_id: "role-reviewer",
+      active_from: "2026-08-06",
+      active_to: null,
+      status: "active",
+      organization_memberships: {
+        id: "membership-2",
+        organization_id: organizationId,
+        user_profile_id: "profile-2",
+        user_profiles: { id: "profile-2", display_name: "Bruno Revisor", status: "active" },
+      },
+      engagement_roles: {
+        id: "role-reviewer",
+        organization_id: organizationId,
+        code: "reviewer",
+        name: "Revisor",
+        status: "active",
+      },
+    });
+    const repository = createSupabaseEngagementTeamPeriodsRepository(fake.client);
+    const result = await repository.assignMember(
+      {
+        organizationId,
+        engagementId,
+        authorization: authorization(["engagements.view", "engagements.manage"]),
+      },
+      {
+        organizationId,
+        engagementId,
+        membershipId: "membership-2",
+        roleId: "role-reviewer",
+        activeFrom: "2026-08-06",
+      },
+    );
+
+    assert.equal(result.ok, true);
+    assert.ok(fake.calls.some((call) => call.method === "insert"));
+    assert.ok(fake.calls.some((call) => call.method === "select"));
   });
 });
