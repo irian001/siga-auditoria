@@ -10,10 +10,10 @@ type: sdd
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
 status: aprovado
-implementation_status: nao-iniciada
-version: 1.0
+implementation_status: concluida-homologada
+version: 1.1
 created: 2026-08-05
-updated: 2026-08-05
+updated: 2026-08-06
 owner: responsavel-projeto
 responsible:
   planning: work
@@ -58,7 +58,7 @@ tags:
 
 Esta SDD define a capacidade de organizar a equipe, as funções e os períodos de um [[Trabalho de Auditoria]], preservando a organização usuária, os usuários autorizados e o ciclo de vida já implementado pela [[SDD-TRB-001]].
 
-A presente versão é uma minuta de especificação. Ela não autoriza código, migration, alteração de dados, publicação ou ativação do Lovable Cloud.
+A especificação foi implementada e homologada dentro do escopo aprovado. A administração completa de usuários, funções e períodos permanece fora desta SDD e deverá ser tratada em evolução própria.
 
 ## 2. Situação de origem
 
@@ -432,3 +432,4 @@ Um usuário está ativo na Audiconsult, mas não possui vínculo com o trabalho 
 |---|---|---|---|
 | 0.1 | 2026-08-05 | Criação da minuta da SDD-EQP-001 — equipe, funções e períodos | Em revisão |
 | 1.0 | 2026-08-05 | Aprovação da SDD com sete camadas e diretório administrativo somente leitura como pré-requisito | Aprovada |
+| 1.1 | 2026-08-06 | Conclusão e homologação das consultas de equipe e períodos e da associação controlada de usuário elegível a função válida; cadastro administrativo permanece fora do escopo | Aprovada |

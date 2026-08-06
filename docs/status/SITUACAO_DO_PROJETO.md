@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.4
+version: 2.5
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -90,7 +90,10 @@ Concluída e homologada:
 - índice de unicidade, função privada, grant de inserção e política RLS de `INSERT` verificados no banco oficial;
 - `authenticated` não recebeu permissões de atualização ou exclusão, `anon` não recebeu execução da função privada e nenhum registro artificial foi criado;
 - treze testes direcionados, lint dos arquivos da camada e build local aprovados;
-- publicação da branch e abertura do PR pendentes;
+- PR #46 integrado à `main` no merge `2ae6dfb3740576d6fa929651811b83f75cb65e65`;
+- homologação visual da Camada 4 aprovada pelo responsável do projeto;
+- associação a usuários elegíveis, função e período disponível;
+- cadastro administrativo de usuários, funções e períodos não foi incluído e permanece reservado a evolução própria;
 - Lovable e Superpowers não utilizados.
 
 As SDDs de painel e planejamento permanecem posteriores e dependem da sequência definida no Plano Mestre.
@@ -117,11 +120,12 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - não há pendência funcional conhecida na `SDD-TRB-001` dentro do escopo aprovado;
 - a Camada 3 está homologada e o PR #44 está integrado na `main`;
 - a migration local `20260806124615` possui identificador remoto `20260806130405`, pendência de reconciliação documental;
-- painel continua reservado à `SDD-PNL-001`.
+- não há pendência bloqueante conhecida na `SDD-EQP-001` dentro do escopo homologado;
+- `SDD-PNL-001` é a próxima e última SDD do Grupo 02.
 
 ## 6. Próximo passo exato
 
-Publicar a branch da Camada 4, abrir o PR e aguardar revisão e aprovação antes do merge na `main`.
+Revisar e aprovar a minuta da `SDD-PNL-001 — Painel básico do trabalho`; nenhuma implementação deverá começar antes dessa aprovação e do respectivo plano restritivo.
 
 ## 7. Histórico de alterações
 
@@ -142,3 +146,4 @@ Publicar a branch da Camada 4, abrir o PR e aguardar revisão e aprovação ante
 | 2.2 | 2026-08-06 | Minuta da Camada 4 aprovada e plano restritivo preparado para aprovação | Ativo |
 | 2.3 | 2026-08-06 | Plano da Camada 4 aprovado e implementação local controlada iniciada | Ativo |
 | 2.4 | 2026-08-06 | Migration da Camada 4 aplicada e verificada no Supabase oficial; publicação e PR pendentes | Ativo |
+| 2.5 | 2026-08-06 | Camada 4 homologada, EQP-001 concluída e abertura da especificação da SDD-PNL-001 | Ativo |
