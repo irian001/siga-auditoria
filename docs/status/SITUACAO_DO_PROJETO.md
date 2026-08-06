@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 1.9
+version: 2.0
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -17,6 +17,7 @@ related:
   - "[[SDD-ACL-001]]"
   - "[[SDD-CLI-001]]"
   - "[[SDD-ACE-001]]"
+  - "[[SDD-EQP-001]]"
 obsidian:
   note_type: project-status
   graph_role: operational-hub
@@ -70,19 +71,18 @@ Foram confirmados cadastro, consulta, pesquisa, filtros, edição, inativação,
 
 ### Grupo 02 — Clientes e trabalhos
 
-Em execução controlada:
+Em homologação controlada:
 
 - `SDD-EQP-001` — Equipe, funções e períodos do trabalho;
-- plano restritivo da EQP-001 aprovado;
-- Camada 1 de reconciliação concluída;
-- desenho de segurança da Camada 2 concluído;
-- contrato local, repositório simulado e adaptador oficial implementados;
-- dez testes locais de autorização, elegibilidade, isolamento e adaptador aprovados;
-- RLS oficial aplicada e validada no Supabase;
-- migrations remotas `20260806115405` e `20260806115823` aplicadas;
-- recursão de RLS identificada e corrigida dentro do mesmo Gate C;
-- preservação da separação entre equipe, períodos e painel;
-- Gate C tecnicamente concluído, aguardando revisão e merge do PR.
+- Camada 3 implementada localmente pelo Codex, sem Lovable;
+- consulta somente leitura de equipe e períodos integrada ao diálogo do trabalho;
+- migration oficial das três tabelas aplicada ao Supabase;
+- RLS habilitada e validada nas três tabelas;
+- política `SELECT` restrita a `authenticated` com `engagements.view`;
+- nenhum grant de escrita para `anon` ou `authenticated`;
+- nove testes direcionados, lint dos arquivos novos e build local aprovados;
+- tabelas sem registros artificiais, preservando os estados vazios;
+- PR e homologação autenticada ainda pendentes.
 
 As SDDs de painel e planejamento permanecem posteriores e dependem da sequência definida no Plano Mestre.
 
@@ -105,12 +105,13 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - não há bloqueio técnico conhecido para a integração real da `SDD-ACE-001`;
 - `SDD-TRB-001` foi implementada, publicada e homologada no PR #42;
 - não há pendência funcional conhecida na `SDD-TRB-001` dentro do escopo aprovado;
-- equipe, funções e períodos ainda não foram implementados e permanecem fora da Camada 2;
+- a Camada 3 está tecnicamente implementada, mas ainda aguarda homologação autenticada e aprovação do PR;
+- a migration local `20260806124615` possui identificador remoto `20260806130405`, pendência de reconciliação documental;
 - painel continua reservado à `SDD-PNL-001`.
 
 ## 6. Próximo passo exato
 
-Revisar o diff do Gate C, abrir o PR e aguardar a aprovação do merge. Após o merge, registrar a conclusão da Camada 2; não há nova subetapa prevista dentro dela.
+Revisar o diff da Camada 3, publicar a branch, abrir o PR e executar a homologação autenticada da consulta. O merge na `main` somente deverá ocorrer após a aprovação do responsável.
 
 ## 7. Histórico de alterações
 
@@ -126,3 +127,4 @@ Revisar o diff do Gate C, abrir o PR e aguardar a aprovação do merge. Após o 
 | 1.7 | 2026-08-05 | Conclusão da Camada 1 da EQP-001 e registro do bloqueio atual de diretório e entidades físicas | Ativo |
 | 1.8 | 2026-08-06 | Conclusão do desenho de segurança e do contrato local simulado da Camada 2; Gate C permanece pendente | Ativo |
 | 1.9 | 2026-08-06 | Conclusão técnica do Gate C com RLS, persistência oficial, adaptador real, correção de recursão e validação autenticada; PR pendente | Ativo |
+| 2.0 | 2026-08-06 | Implementação da Camada 3 da EQP-001, criação das tabelas de consulta somente leitura e abertura da etapa de homologação | Ativo |
