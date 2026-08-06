@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.7
+version: 2.8
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -122,12 +122,12 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - a migration local `20260806124615` possui identificador remoto `20260806130405`, pendência de reconciliação documental;
 - não há pendência bloqueante conhecida na `SDD-EQP-001` dentro do escopo homologado;
 - `SDD-PNL-001` é a última SDD do Grupo 02 e sua especificação foi aprovada;
-- o plano restritivo da `SDD-PNL-001` foi elaborado e permanece em revisão;
+- o plano restritivo da `SDD-PNL-001` foi revisado e aprovado;
 - nenhuma implementação da PNL-001 foi iniciada.
 
 ## 6. Próximo passo exato
 
-Revisar e aprovar o plano restritivo da `SDD-PNL-001 — Painel básico do trabalho`; após a aprovação, iniciar somente a Etapa 1 — rota e composição de leitura.
+Iniciar somente a Etapa 1 da `SDD-PNL-001 — Painel básico do trabalho`: rota protegida e composição de leitura, sem publicação ou avanço para a Etapa 2 antes da revisão técnica.
 
 ## 7. Histórico de alterações
 
@@ -151,3 +151,4 @@ Revisar e aprovar o plano restritivo da `SDD-PNL-001 — Painel básico do traba
 | 2.5 | 2026-08-06 | Camada 4 homologada, EQP-001 concluída e abertura da especificação da SDD-PNL-001 | Ativo |
 | 2.6 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próximo passo | Ativo |
 | 2.7 | 2026-08-06 | Elaboração do plano restritivo da PNL-001 em quatro etapas fechadas; implementação ainda não iniciada | Ativo |
+| 2.8 | 2026-08-06 | Aprovação do plano restritivo da PNL-001 e autorização da Etapa 1 como próximo passo | Ativo |

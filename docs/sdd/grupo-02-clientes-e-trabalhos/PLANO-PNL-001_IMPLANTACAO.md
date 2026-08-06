@@ -7,8 +7,8 @@ aliases:
 type: implementation-plan
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
-status: minuta
-version: 0.1
+status: aprovado
+version: 1.0
 created: 2026-08-06
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -43,7 +43,7 @@ Este plano transforma a [[SDD-PNL-001]] aprovada em uma execução curta, contro
 
 O objetivo é criar uma página própria para o painel básico do trabalho, composta exclusivamente por informações e operações já autorizadas nas SDDs do Grupo 02.
 
-Este plano não autoriza implementação antes de sua aprovação expressa. Sua aprovação autorizará somente as quatro etapas fechadas descritas neste documento.
+Este plano foi aprovado e autoriza somente as quatro etapas fechadas descritas neste documento, respeitados seus pontos de parada e critérios de interrupção.
 
 Não serão criadas subcamadas, planos intermediários ou desdobramentos adicionais sem bloqueio técnico real e decisão do responsável pelo projeto.
 
@@ -438,12 +438,11 @@ O usuário poderá compreender o contexto atual do trabalho e sua equipe. O Grup
 
 ## 17. Próximo passo
 
-Este plano deverá ser revisado e aprovado pelo responsável do projeto.
-
-Após a aprovação, será iniciada somente a Etapa 1 — rota e composição de leitura. Nenhum código, publicação ou uso do Lovable será iniciado antes dessa aprovação.
+O próximo passo autorizado é iniciar somente a Etapa 1 — rota e composição de leitura. Publicação e avanço para a Etapa 2 permanecem condicionados aos pontos de parada deste plano.
 
 ## 18. Histórico de alterações
 
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-08-06 | Criação do plano restritivo único de implantação da SDD-PNL-001 | Em revisão |
+| 1.0 | 2026-08-06 | Aprovação do plano restritivo em quatro etapas fechadas; Etapa 1 autorizada como próximo passo | Aprovado |
