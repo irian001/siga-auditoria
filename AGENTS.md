@@ -12,9 +12,9 @@
 # AGENTS.md — Diretrizes Operacionais do Projeto SIGA
 
 **Situação:** Aprovado  
-**Versão:** 1.1
+**Versão:** 1.2
 
-**Atualizado:** 2026-08-04
+**Atualizado:** 2026-08-06
 
 **Aplicação:** Todo o repositório SIGA
 
@@ -485,6 +485,22 @@ Ao final, o executor deverá informar de forma objetiva:
 
 O próximo passo deverá ser extraído do Plano Mestre e da Situação do Projeto e informado espontaneamente, sem depender de pergunta adicional do responsável pelo projeto.
 
+### 17.1 Próximo passo obrigatório em toda resposta de encerramento
+
+Toda resposta que encerre uma análise, planejamento, implementação, revisão, publicação, homologação ou retomada deverá terminar informando explicitamente o **próximo passo oficial do projeto**.
+
+Antes de informar esse próximo passo, o executor deverá conferir:
+
+1. o [Plano Mestre das SDDs do MVP](docs/sdd/00_PLANO_MESTRE_DAS_SDDS_DO_MVP.md);
+2. a [Situação do Projeto](docs/status/SITUACAO_DO_PROJETO.md);
+3. a SDD e o plano de implementação atualmente ativos;
+4. o que foi efetivamente concluído, aprovado, publicado ou homologado;
+5. pendências, bloqueios e aprovações ainda necessárias.
+
+Essa obrigação permanece válida após troca de modelo de inteligência artificial, retomada de sessão, compactação do histórico ou mudança de ferramenta. A memória da conversa não deverá ser utilizada como única base para indicar a continuidade do projeto.
+
+Quando não houver autorização para executar o próximo passo, ele deverá ser apenas informado, sem início automático. Quando o próximo passo depender de homologação ou decisão humana, essa dependência deverá ser declarada claramente.
+
 ## 18. Regra de interrupção
 
 O executor deverá interromper alterações irreversíveis ou fora do escopo quando encontrar:
@@ -506,3 +522,4 @@ A interrupção deverá explicar claramente o problema e a decisão necessária.
 |---|---|---|---|
 | 1.0 | 2026-07-29 | Aprovação inicial das diretrizes operacionais do SIGA | Substituída |
 | 1.1 | 2026-08-04 | Inclusão dos links oficiais, protocolo de retomada, implementação em camadas, fechamento documental das SDDs e classificação histórica dos arquivos Superpowers | Aprovada |
+| 1.2 | 2026-08-06 | Obrigatoriedade de conferir a documentação vigente e informar o próximo passo oficial em toda resposta de encerramento, inclusive após troca de modelo ou retomada | Aprovada |
