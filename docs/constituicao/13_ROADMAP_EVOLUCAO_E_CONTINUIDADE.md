@@ -7,9 +7,9 @@ aliases:
 type: documento-constitucional
 domain: estrategia-produto
 status: aprovado
-version: 1.0
+version: 1.1
 created: 2026-07-26
-updated: 2026-07-27
+updated: 2026-08-06
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -26,6 +26,7 @@ related:
   - "[[Qualidade, Testes e Validação do SIGA]]"
   - "[[Agentes de Inteligência Artificial, Skills e Automação Assistida do SIGA]]"
   - "[[Situação do Projeto]]"
+  - "[[Plano Mestre das SDDs do MVP do SIGA]]"
 tags: [siga, constituicao, roadmap, evolucao, continuidade, mvp]
 ---
 
@@ -41,6 +42,8 @@ tags: [siga, constituicao, roadmap, evolucao, continuidade, mvp]
 ## Função do roadmap
 
 O roadmap orienta fases, prioridades, dependências, marcos, riscos, bloqueios, dívida e continuidade. Não é especificação, backlog rígido, cronograma imutável ou promessa de datas.
+
+No MVP, suas diretrizes são desdobradas pelo [[Plano Mestre das SDDs do MVP do SIGA]], que transforma fases e prioridades em grupos ordenados de SDDs. Cada SDD continua responsável pelo escopo e pelas regras de sua funcionalidade.
 
 ## Prioridade e MVP
 
@@ -90,3 +93,4 @@ Estudo de caso: importação de balancete é priorizada antes de portal completo
 |---|---|---|---|
 | 0.1 | 2026-07-26 | Minuta inicial | Substituída |
 | 1.0 | 2026-07-27 | Normalização e aprovação documental | Aprovada |
+| 1.1 | 2026-08-06 | Ligação explícita entre roadmap, Plano Mestre e SDDs individuais | Aprovada |
