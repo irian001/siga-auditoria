@@ -65,6 +65,7 @@ import type {
 import { EngagementForm } from "@/features/engagements/EngagementForm";
 import { EngagementEditForm } from "@/features/engagements/EngagementEditForm";
 import { EngagementStatusDialog } from "@/features/engagements/EngagementStatusDialog";
+import { EngagementTeamPeriodsReadOnly } from "@/features/engagements/EngagementTeamPeriodsReadOnly";
 import {
   ENGAGEMENT_ACTIVATED_NOTICE,
   ENGAGEMENT_CANCELLED_NOTICE,
@@ -628,6 +629,13 @@ export function EngagementsPage() {
                 <dd className="mt-1 whitespace-pre-wrap text-foreground">
                   {selectedEngagement.scope}
                 </dd>
+              </div>
+              <div className="sm:col-span-2">
+                <EngagementTeamPeriodsReadOnly
+                  organizationId={access?.organization.id}
+                  engagementId={selectedEngagement.id}
+                  authorization={authorization}
+                />
               </div>
             </dl>
           ) : null}
