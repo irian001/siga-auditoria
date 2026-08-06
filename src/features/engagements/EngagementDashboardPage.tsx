@@ -1,10 +1,12 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getRouteApi } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
+import { ArrowLeft } from "lucide-react";
 
 import { PageHeader } from "@/components/layout/PageHeader";
 import { ErrorState } from "@/components/states/ErrorState";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { appEnvironment } from "@/config/env";
 import { createSupabaseAcceptanceRepository } from "@/data/supabase/supabaseAcceptanceRepository";
@@ -140,7 +142,7 @@ export function EngagementDashboardPage({ engagementId }: EngagementDashboardPag
   const { engagement, client, acceptance } = query.data;
 
   return (
-    <div className="space-y-6">
+    <div className="min-w-0 space-y-6 pb-10">
       <PageHeader
         title={engagement.title}
         description="Consulta protegida do contexto do trabalho."
@@ -152,8 +154,20 @@ export function EngagementDashboardPage({ engagementId }: EngagementDashboardPag
         }
       />
 
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="min-w-0 break-words text-sm text-muted-foreground">
+          Código {engagement.code} · Cliente {client.displayName}
+        </p>
+        <Button asChild variant="outline" size="sm">
+          <Link to="/trabalhos" aria-label="Voltar para a listagem de trabalhos">
+            <ArrowLeft aria-hidden="true" />
+            Voltar para trabalhos
+          </Link>
+        </Button>
+      </div>
+
       <section
-        className="rounded-lg border border-border bg-card p-5"
+        className="min-w-0 overflow-hidden rounded-lg border border-border bg-card p-5"
         aria-label="Resumo do trabalho"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -193,7 +207,7 @@ export function EngagementDashboardPage({ engagementId }: EngagementDashboardPag
       </section>
 
       <section
-        className="rounded-lg border border-border bg-card p-5"
+        className="min-w-0 overflow-hidden rounded-lg border border-border bg-card p-5"
         aria-label="Escopo preliminar"
       >
         <h2 className="text-sm font-semibold text-foreground">Escopo preliminar</h2>
