@@ -7,9 +7,9 @@ aliases:
 type: documento-constitucional
 domain: governanca-documental
 status: aprovado
-version: 1.0
+version: 1.1
 created: 2026-07-27
-updated: 2026-07-28
+updated: 2026-08-06
 owner: responsavel-projeto
 obsidian:
   note_type: constitutional-document
@@ -23,6 +23,7 @@ related:
   - "[[Governança do Desenvolvimento do SIGA]]"
   - "[[Conhecimento, Treinamento e Produção Educacional do SIGA]]"
   - "[[Situação do Projeto]]"
+  - "[[Plano Mestre das SDDs do MVP do SIGA]]"
 tags: [siga, constituicao, documentacao, governanca-documental, obsidian, github]
 ---
 
@@ -58,6 +59,8 @@ A [[Constituição do SIGA]] é a norma superior do projeto; os demais documento
 7. plano da sprint;
 8. instruções temporárias de execução.
 
+Para a execução do MVP, essa hierarquia é detalhada operacionalmente como: roadmap → [[Plano Mestre das SDDs do MVP do SIGA]] → SDD individual → plano de implementação → tarefa → prompt → código e testes. O Plano Mestre organiza a sequência e as dependências, mas não cria regras de negócio nem substitui documentos superiores.
+
 ## Situação do projeto
 
 O arquivo [[Situação do Projeto]] informa a última etapa concluída, as atividades em andamento, pendências, bloqueios, riscos, branch atual, último commit relevante e próximo passo exato. Para preservar a continuidade, referencia de forma rastreável os documentos, as tarefas e as decisões vigentes.
@@ -82,3 +85,4 @@ Exercício: a partir de uma atividade em andamento, identificar as informações
 |---|---|---|---|
 | 0.9 | 2026-07-27 | Criação do detalhamento dos artigos 39 a 44 | Substituída |
 | 1.0 | 2026-07-28 | Primeira versão constitucional consolidada e aprovada | Aprovada |
+| 1.1 | 2026-08-06 | Inclusão da posição documental do Plano Mestre das SDDs | Aprovada |

@@ -7,7 +7,7 @@ aliases:
 type: plano-mestre-sdd
 domain: governanca-desenvolvimento
 status: aprovado
-version: 2.4
+version: 2.5
 created: 2026-07-29
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -19,6 +19,7 @@ audience:
   - lovable
 related:
   - "[[Constituição do SIGA]]"
+  - "[[Matriz Mestra da Constituição do SIGA]]"
   - "[[Visão do Produto do SIGA]]"
   - "[[Glossário do SIGA]]"
   - "[[Modelo de Domínio do SIGA]]"
@@ -26,6 +27,8 @@ related:
   - "[[Governança do Desenvolvimento do SIGA]]"
   - "[[Roadmap, Evolução e Continuidade do SIGA]]"
   - "[[Qualidade, Testes e Validação do SIGA]]"
+  - "[[Documentação Mestre do SIGA]]"
+  - "[[Situação do Projeto]]"
 tags:
   - siga
   - mvp
@@ -54,6 +57,8 @@ Ele estabelece:
 - a etapa formal de testes e liberação.
 
 Este plano não substitui as SDDs individuais. Cada SDD detalhará uma parte delimitada do sistema.
+
+Na hierarquia documental, este plano é a ponte operacional entre o roadmap e as SDDs individuais. Ele organiza a execução do MVP, mas não altera a Constituição, as regras de negócio, a metodologia, o domínio, os dados ou a arquitetura aprovados.
 
 ## 2. Fontes e hierarquia
 
@@ -619,3 +624,4 @@ A sequência imediata será:
 | 2.2 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próxima etapa | Aprovada |
 | 2.3 | 2026-08-06 | Elaboração do plano restritivo único da SDD-PNL-001 em quatro etapas fechadas | Aprovada |
 | 2.4 | 2026-08-06 | Aprovação do plano da PNL-001 e reconciliação do andamento das SDDs dos Grupos 00 a 02 | Aprovada |
+| 2.5 | 2026-08-06 | Formalização do Plano Mestre como ponte entre roadmap, SDDs individuais e execução | Aprovada |

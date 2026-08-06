@@ -7,9 +7,9 @@ aliases:
 type: matriz-mestra
 domain: governanca-documental
 status: aprovado
-version: 1.2
+version: 1.3
 created: 2026-07-27
-updated: 2026-07-28
+updated: 2026-08-06
 owner: responsavel-projeto
 obsidian:
   note_type: hub
@@ -24,6 +24,7 @@ related:
   - "[[Matriz de Rastreabilidade do SIGA]]"
   - "[[Situação do Projeto]]"
   - "[[Roadmap do MVP]]"
+  - "[[Plano Mestre das SDDs do MVP do SIGA]]"
 tags: [siga, constituicao, matriz-mestra, hub, obsidian, governanca]
 ---
 
@@ -37,7 +38,7 @@ tags: [siga, constituicao, matriz-mestra, hub, obsidian, governanca]
 
 ## Função da matriz
 
-Esta nota é o hub de navegação e controle da Constituição. Não substitui a [[Constituição do SIGA]] nem os quinze documentos dos Títulos I a XV. Liga a Constituição aos documentos constitucionais, documentos estruturantes, SDDs, planos, tarefas e código.
+Esta nota é o hub de navegação e controle da Constituição. Não substitui a [[Constituição do SIGA]] nem os quinze documentos dos Títulos I a XV. Liga a Constituição aos documentos constitucionais, documentos estruturantes, ao [[Plano Mestre das SDDs do MVP do SIGA]], às SDDs individuais, planos de implementação, tarefas e código.
 
 ## Resumo constitucional
 
@@ -95,6 +96,7 @@ Esta nota é o hub de navegação e controle da Constituição. Não substitui a
 - [[Matriz de Rastreabilidade do SIGA]]
 - [[Situação do Projeto]]
 - [[Roadmap do MVP]]
+- [[Plano Mestre das SDDs do MVP do SIGA]]
 - [[Spec-Driven Development]]
 - [[Registro de Agentes do SIGA]]
 - [[Catálogo de Skills do SIGA]]
@@ -120,12 +122,12 @@ SORT id ASC
 Canvas conceitual:
 
 ```text
-Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturantes → SDDs → Tarefas → Código
+Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturantes → Plano Mestre das SDDs → SDD individual → Plano de implementação → Tarefa → Código e testes
 ```
 
 ## Pendências explícitas
 
-1. Os links para Modelo de Dados, Rastreabilidade, Situação, Roadmap detalhado, SDD, Registro de Agentes e Catálogo de Skills são notas futuras ainda não criadas.
+1. Permanecem como notas futuras apenas os links cujos arquivos ainda não tenham sido criados; a existência deverá ser verificada no GitHub antes de classificá-los como pendência.
 
 ## Histórico de alterações
 
@@ -135,3 +137,4 @@ Constituição → Matriz Mestra → Títulos I–XV → Documentos estruturante
 | 1.0 | 2026-07-27 | Normalização como hub Obsidian, aliases, navegação, matriz e pendências explícitas | Aprovada |
 | 1.1 | 2026-07-27 | Realinhamento ao conjunto canônico de 15 títulos, 82 artigos e Constituição central | Aprovada |
 | 1.2 | 2026-07-28 | Registro da aprovação da Constituição central e dos Títulos VII, XIV e XV na versão 1.0 | Aprovada |
+| 1.3 | 2026-08-06 | Inclusão do Plano Mestre das SDDs como ponte formal entre documentos estruturantes e execução | Aprovada |

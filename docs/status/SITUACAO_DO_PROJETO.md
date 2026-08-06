@@ -7,12 +7,15 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.8
+version: 2.9
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
 related:
   - "[[Constituição do SIGA]]"
+  - "[[Matriz Mestra da Constituição do SIGA]]"
+  - "[[Documentação Mestre do SIGA]]"
+  - "[[Roadmap, Evolução e Continuidade do SIGA]]"
   - "[[Plano Mestre das SDDs do MVP do SIGA]]"
   - "[[SDD-ACL-001]]"
   - "[[SDD-CLI-001]]"
@@ -129,6 +132,8 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 
 Iniciar somente a Etapa 1 da `SDD-PNL-001 — Painel básico do trabalho`: rota protegida e composição de leitura, sem publicação ou avanço para a Etapa 2 antes da revisão técnica.
 
+A hierarquia documental foi reconciliada antes desta implementação: Constituição e documentos superiores → roadmap → [[Plano Mestre das SDDs do MVP do SIGA]] → SDD individual → plano de implementação → tarefa → código e testes.
+
 ## 7. Histórico de alterações
 
 | Versão | Data | Alteração | Situação |
@@ -152,3 +157,4 @@ Iniciar somente a Etapa 1 da `SDD-PNL-001 — Painel básico do trabalho`: rota 
 | 2.6 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próximo passo | Ativo |
 | 2.7 | 2026-08-06 | Elaboração do plano restritivo da PNL-001 em quatro etapas fechadas; implementação ainda não iniciada | Ativo |
 | 2.8 | 2026-08-06 | Aprovação do plano restritivo da PNL-001 e autorização da Etapa 1 como próximo passo | Ativo |
+| 2.9 | 2026-08-06 | Reconciliação da hierarquia documental e dos links recíprocos do Plano Mestre | Ativo |
