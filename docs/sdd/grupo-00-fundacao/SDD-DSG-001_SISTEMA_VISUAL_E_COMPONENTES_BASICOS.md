@@ -8,8 +8,8 @@ aliases:
 type: sdd
 domain: sistema-visual
 group: grupo-00-fundacao
-status: aprovado
-version: 1.0
+status: em-revisao
+version: 1.1
 created: 2026-07-31
 updated: 2026-07-31
 owner: responsavel-projeto
@@ -286,6 +286,22 @@ Exemplos de termos permitidos:
 - Atenção;
 - Erro;
 - Indisponível.
+
+### 8.5 Diálogos e conteúdo extenso
+
+Todo diálogo que possa receber conteúdo variável, resumo detalhado, formulário ou seção adicional deverá possuir área de rolagem vertical própria.
+
+O componente compartilhado `DialogContent` deverá garantir, no mínimo:
+
+- altura máxima compatível com a janela visível;
+- `overflow-y-auto` ou comportamento equivalente;
+- preservação do botão de fechamento e do foco;
+- ausência de rolagem horizontal geral;
+- validação em desktop e em larguras menores.
+
+Nenhuma tela poderá depender da rolagem da página principal para revelar conteúdo que esteja dentro de um diálogo.
+
+Quando um diálogo crescer por causa de uma nova camada funcional, a implementação deverá verificar explicitamente o comportamento com conteúdo curto e longo.
 
 ## 9. Acessibilidade inicial
 
@@ -604,3 +620,4 @@ A SDD-DSG-001 será considerada concluída quando:
 |---|---|---|---|
 | 0.1 | 2026-07-31 | Criação da minuta inicial da SDD-DSG-001 | Em revisão |
 | 1.0 | 2026-07-31 | Primeira versão aprovada da SDD-DSG-001 | Aprovada |
+| 1.1 | 2026-08-06 | Inclusão da regra de rolagem vertical para diálogos extensos e aplicação no componente compartilhado | Em revisão |
