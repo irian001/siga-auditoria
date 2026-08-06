@@ -7,9 +7,9 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 1.3
+version: 1.9
 created: 2026-08-03
-updated: 2026-08-04
+updated: 2026-08-06
 owner: responsavel-projeto
 related:
   - "[[Constituição do SIGA]]"
@@ -29,7 +29,7 @@ tags: [siga, status, continuidade, mvp, sdd]
 
 ## 1. Estado atual
 
-Os Grupos 00 — Fundação e 01 — Organização e acesso estão concluídos. O Grupo 02 — Clientes e trabalhos está em andamento, com a `SDD-CLI-001` concluída e a `SDD-ACE-001` em validação de integração real.
+Os Grupos 00 — Fundação e 01 — Organização e acesso estão concluídos. O Grupo 02 — Clientes e trabalhos está em andamento, com `SDD-CLI-001`, `SDD-ACE-001` e `SDD-TRB-001` concluídas e homologadas.
 
 Situação confirmada pelo responsável pelo projeto:
 
@@ -60,7 +60,7 @@ O critério de avanço foi atendido: o usuário autorizado acessa somente a orga
 
 ### Grupo 02 — Clientes e trabalhos
 
-Concluída e validada:
+Concluídas e validadas:
 
 - `SDD-CLI-001` — Cadastro de clientes.
 
@@ -70,14 +70,21 @@ Foram confirmados cadastro, consulta, pesquisa, filtros, edição, inativação,
 
 ### Grupo 02 — Clientes e trabalhos
 
-Em validação:
+Em execução controlada:
 
-- `SDD-ACE-001` — Aceitação e continuidade simplificada;
-- persistência oficial e RLS aplicadas no Supabase;
-- adapter Supabase e interface real integrados localmente;
-- homologação autenticada ainda pendente.
+- `SDD-EQP-001` — Equipe, funções e períodos do trabalho;
+- plano restritivo da EQP-001 aprovado;
+- Camada 1 de reconciliação concluída;
+- desenho de segurança da Camada 2 concluído;
+- contrato local, repositório simulado e adaptador oficial implementados;
+- dez testes locais de autorização, elegibilidade, isolamento e adaptador aprovados;
+- RLS oficial aplicada e validada no Supabase;
+- migrations remotas `20260806115405` e `20260806115823` aplicadas;
+- recursão de RLS identificada e corrigida dentro do mesmo Gate C;
+- preservação da separação entre equipe, períodos e painel;
+- Gate C tecnicamente concluído, aguardando revisão e merge do PR.
 
-As SDDs de trabalho, equipe e painel permanecem não iniciadas e dependem da sequência definida no Plano Mestre.
+As SDDs de painel e planejamento permanecem posteriores e dependem da sequência definida no Plano Mestre.
 
 ## 4. Ambiente e referência técnica
 
@@ -96,12 +103,14 @@ As SDDs de trabalho, equipe e painel permanecem não iniciadas e dependem da seq
 
 - não há pendência funcional conhecida na `SDD-CLI-001`;
 - não há bloqueio técnico conhecido para a integração real da `SDD-ACE-001`;
-- falta homologação autenticada e abertura do PR técnico;
-- funcionalidades de trabalho, equipe e painel continuam bloqueadas pela sequência do Plano Mestre.
+- `SDD-TRB-001` foi implementada, publicada e homologada no PR #42;
+- não há pendência funcional conhecida na `SDD-TRB-001` dentro do escopo aprovado;
+- equipe, funções e períodos ainda não foram implementados e permanecem fora da Camada 2;
+- painel continua reservado à `SDD-PNL-001`.
 
 ## 6. Próximo passo exato
 
-Executar a homologação autenticada da `SDD-ACE-001`, revisar o diff final, abrir o PR técnico e aguardar aprovação humana antes do merge na `main`.
+Revisar o diff do Gate C, abrir o PR e aguardar a aprovação do merge. Após o merge, registrar a conclusão da Camada 2; não há nova subetapa prevista dentro dela.
 
 ## 7. Histórico de alterações
 
@@ -112,3 +121,8 @@ Executar a homologação autenticada da `SDD-ACE-001`, revisar o diff final, abr
 | 1.2 | 2026-08-03 | Registro da aprovação do plano CLI-001 e abertura da etapa de publicação e inspeção técnica | Ativo |
 | 1.3 | 2026-08-04 | Encerramento da SDD-CLI-001 após integração real, testes funcionais e reconciliação da migration; definição da SDD-ACE-001 como próximo passo | Ativo |
 | 1.4 | 2026-08-05 | Registro da aplicação remota da ACE-001, integração real local e abertura da etapa de homologação | Ativo |
+| 1.5 | 2026-08-05 | Registro da conclusão homologada da TRB-001 e preparação da SDD-EQP-001 | Ativo |
+| 1.6 | 2026-08-05 | Aprovação da EQP-001 e elaboração do plano restritivo com diretório de usuários somente leitura | Ativo |
+| 1.7 | 2026-08-05 | Conclusão da Camada 1 da EQP-001 e registro do bloqueio atual de diretório e entidades físicas | Ativo |
+| 1.8 | 2026-08-06 | Conclusão do desenho de segurança e do contrato local simulado da Camada 2; Gate C permanece pendente | Ativo |
+| 1.9 | 2026-08-06 | Conclusão técnica do Gate C com RLS, persistência oficial, adaptador real, correção de recursão e validação autenticada; PR pendente | Ativo |

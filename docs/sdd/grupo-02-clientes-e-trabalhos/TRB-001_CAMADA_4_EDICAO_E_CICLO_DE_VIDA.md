@@ -7,8 +7,9 @@ aliases:
   - Camada 4 da TRB-001
 type: camada-implementacao
 domain: trabalhos
-status: minuta
-version: 0.1
+status: aprovado
+implementation_status: concluida
+version: 1.0
 created: 2026-08-05
 updated: 2026-08-05
 owner: responsavel-projeto
@@ -363,3 +364,4 @@ Após a aprovação, será preparado o plano restritivo da Camada 4 com lista fe
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-08-05 | Criação da minuta da Camada 4 — edição e ciclo de vida | Em revisão |
+| 1.0 | 2026-08-05 | Aprovação, implementação e homologação da Camada 4 no PR #42 | Aprovada |
