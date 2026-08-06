@@ -7,9 +7,9 @@ aliases:
 type: plano-implantacao
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
-status: minuta
-implementation_status: nao-iniciada
-version: 0.1
+status: aprovado
+implementation_status: concluida
+version: 1.0
 created: 2026-08-05
 updated: 2026-08-05
 owner: responsavel-projeto
@@ -420,3 +420,4 @@ A criação ou alteração de dados no Supabase oficial, a publicação, a abert
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-08-05 | Criação do plano restritivo da Camada 4 | Em revisão |
+| 1.0 | 2026-08-05 | Plano aprovado, executado e homologado no PR #42 | Aprovada |

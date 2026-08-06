@@ -9,7 +9,7 @@ type: sdd
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
 status: aprovado
-implementation_status: nao-iniciada
+implementation_status: concluida
 version: 1.0
 created: 2026-08-05
 updated: 2026-08-05
@@ -608,3 +608,4 @@ O SIGA bloqueia a operação, informa que a avaliação ainda não está aprovad
 |---|---|---|---|
 | 0.1 | 2026-08-05 | Criação da minuta inicial da SDD-TRB-001 | Substituída |
 | 1.0 | 2026-08-05 | Aprovação da SDD-TRB-001 | Aprovada |
+| 1.1 | 2026-08-05 | Implementação concluída, homologada e integrada após o PR #42 | Aprovada |
