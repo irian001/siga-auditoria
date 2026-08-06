@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.5
+version: 2.6
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -121,11 +121,12 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - a Camada 3 está homologada e o PR #44 está integrado na `main`;
 - a migration local `20260806124615` possui identificador remoto `20260806130405`, pendência de reconciliação documental;
 - não há pendência bloqueante conhecida na `SDD-EQP-001` dentro do escopo homologado;
-- `SDD-PNL-001` é a próxima e última SDD do Grupo 02.
+- `SDD-PNL-001` é a última SDD do Grupo 02 e sua especificação foi aprovada;
+- o plano restritivo da `SDD-PNL-001` ainda não foi elaborado ou aprovado.
 
 ## 6. Próximo passo exato
 
-Revisar e aprovar a minuta da `SDD-PNL-001 — Painel básico do trabalho`; nenhuma implementação deverá começar antes dessa aprovação e do respectivo plano restritivo.
+Elaborar o plano restritivo da `SDD-PNL-001 — Painel básico do trabalho`, sem iniciar código, migration, publicação ou uso do Lovable antes da aprovação do plano.
 
 ## 7. Histórico de alterações
 
@@ -147,3 +148,4 @@ Revisar e aprovar a minuta da `SDD-PNL-001 — Painel básico do trabalho`; nenh
 | 2.3 | 2026-08-06 | Plano da Camada 4 aprovado e implementação local controlada iniciada | Ativo |
 | 2.4 | 2026-08-06 | Migration da Camada 4 aplicada e verificada no Supabase oficial; publicação e PR pendentes | Ativo |
 | 2.5 | 2026-08-06 | Camada 4 homologada, EQP-001 concluída e abertura da especificação da SDD-PNL-001 | Ativo |
+| 2.6 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próximo passo | Ativo |

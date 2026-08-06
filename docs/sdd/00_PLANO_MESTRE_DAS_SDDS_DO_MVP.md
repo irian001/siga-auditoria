@@ -7,7 +7,7 @@ aliases:
 type: plano-mestre-sdd
 domain: governanca-desenvolvimento
 status: aprovado
-version: 2.1
+version: 2.2
 created: 2026-07-29
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -250,7 +250,7 @@ Permitir o cadastro de clientes e a criação controlada dos trabalhos de audito
 | 2 | SDD-ACE-001 | Aceitação e continuidade simplificada | Concluída e homologada | Work + Lovable + Codex | SDD-CLI-001 |
 | 3 | SDD-TRB-001 | Criação e gestão do trabalho | Concluída e homologada | Lovable + Codex | SDD-ACE-001 |
 | 4 | SDD-EQP-001 | Equipe, funções e períodos | Concluída e homologada | Codex | SDD-TRB-001 |
-| 5 | SDD-PNL-001 | Painel básico do trabalho | Em especificação | Work + Codex | SDD-EQP-001 |
+| 5 | SDD-PNL-001 | Painel básico do trabalho | Especificação aprovada; plano pendente | Work + Codex | SDD-EQP-001 |
 
 ### Critério de avanço
 
@@ -571,7 +571,7 @@ A sequência imediata será:
 |---|---|---|
 | 00 — Fundação | Concluído | Manter a fundação estável durante os grupos seguintes |
 | 01 — Organização e acesso | Concluído | Preservar autenticação, vínculo organizacional e ACL já validados |
-| 02 — Clientes e trabalhos | Em andamento | Especificar e implementar a SDD-PNL-001 sem antecipar o Grupo 03 |
+| 02 — Clientes e trabalhos | Em andamento | Elaborar e aprovar o plano restritivo da SDD-PNL-001 |
 | 03 — Contabilidade e planejamento | Não iniciado | Aguardar Grupo 02 |
 | 04 — Riscos e procedimentos | Não iniciado | Aguardar Grupo 03 |
 | 05 — Documentos e evidências | Não iniciado | Aguardar Grupo 04 |
@@ -606,3 +606,4 @@ A sequência imediata será:
 | 1.9 | 2026-08-05 | Conclusão da Camada 1 da EQP-001 e registro do bloqueio de diretório por contrato e RLS | Aprovada |
 | 2.0 | 2026-08-06 | Conclusão do desenho de segurança e do contrato local simulado da Camada 2; persistência oficial permanece pendente | Aprovada |
 | 2.1 | 2026-08-06 | Registro da conclusão homologada da SDD-EQP-001 e abertura da especificação da SDD-PNL-001 | Aprovada |
+| 2.2 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próxima etapa | Aprovada |

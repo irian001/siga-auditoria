@@ -8,9 +8,9 @@ aliases:
 type: sdd
 domain: clientes-e-trabalhos
 group: grupo-02-clientes-e-trabalhos
-status: minuta
+status: aprovado
 implementation_status: nao-iniciada
-version: 0.1
+version: 1.0
 created: 2026-08-06
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -55,7 +55,7 @@ Esta SDD define o painel básico de um [[Trabalho de Auditoria]]. O painel dever
 
 O painel será uma visão operacional de entrada no trabalho. Ele não será um painel gerencial completo, não calculará indicadores metodológicos ainda inexistentes e não antecipará planejamento, riscos, procedimentos, evidências, papéis de trabalho ou relatórios.
 
-Esta minuta não autoriza código, migration, alteração de dados, publicação ou uso do Lovable.
+Esta especificação foi aprovada. Sua aprovação autoriza a elaboração do plano restritivo, mas não autoriza código, migration, alteração de dados, publicação ou uso do Lovable.
 
 ## 2. Situação de origem
 
@@ -424,3 +424,4 @@ Antes do plano de implementação, deverão ser confirmadas:
 | Versão | Data | Alteração | Situação |
 |---|---|---|---|
 | 0.1 | 2026-08-06 | Criação da minuta inicial da SDD-PNL-001 — Painel Básico do Trabalho | Em revisão |
+| 1.0 | 2026-08-06 | Aprovação da especificação funcional; implementação condicionada à elaboração e aprovação do plano restritivo | Aprovada |
