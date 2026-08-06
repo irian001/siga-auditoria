@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.6
+version: 2.7
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -122,11 +122,12 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - a migration local `20260806124615` possui identificador remoto `20260806130405`, pendência de reconciliação documental;
 - não há pendência bloqueante conhecida na `SDD-EQP-001` dentro do escopo homologado;
 - `SDD-PNL-001` é a última SDD do Grupo 02 e sua especificação foi aprovada;
-- o plano restritivo da `SDD-PNL-001` ainda não foi elaborado ou aprovado.
+- o plano restritivo da `SDD-PNL-001` foi elaborado e permanece em revisão;
+- nenhuma implementação da PNL-001 foi iniciada.
 
 ## 6. Próximo passo exato
 
-Elaborar o plano restritivo da `SDD-PNL-001 — Painel básico do trabalho`, sem iniciar código, migration, publicação ou uso do Lovable antes da aprovação do plano.
+Revisar e aprovar o plano restritivo da `SDD-PNL-001 — Painel básico do trabalho`; após a aprovação, iniciar somente a Etapa 1 — rota e composição de leitura.
 
 ## 7. Histórico de alterações
 
@@ -149,3 +150,4 @@ Elaborar o plano restritivo da `SDD-PNL-001 — Painel básico do trabalho`, sem
 | 2.4 | 2026-08-06 | Migration da Camada 4 aplicada e verificada no Supabase oficial; publicação e PR pendentes | Ativo |
 | 2.5 | 2026-08-06 | Camada 4 homologada, EQP-001 concluída e abertura da especificação da SDD-PNL-001 | Ativo |
 | 2.6 | 2026-08-06 | Aprovação da SDD-PNL-001 e definição do plano restritivo como próximo passo | Ativo |
+| 2.7 | 2026-08-06 | Elaboração do plano restritivo da PNL-001 em quatro etapas fechadas; implementação ainda não iniciada | Ativo |
