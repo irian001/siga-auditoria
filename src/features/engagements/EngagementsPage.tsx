@@ -1,10 +1,11 @@
-import { getRouteApi } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Ban,
   BriefcaseBusiness,
   CheckCircle2,
   Eye,
+  LayoutDashboard,
   LockKeyhole,
   Pencil,
   Plus,
@@ -517,6 +518,20 @@ export function EngagementsPage() {
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap justify-end gap-2">
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      aria-label={`Abrir painel do trabalho ${engagement.code}`}
+                    >
+                      <Link
+                        to="/trabalhos/$engagementId"
+                        params={{ engagementId: engagement.id }}
+                      >
+                        <LayoutDashboard aria-hidden="true" />
+                        Abrir painel
+                      </Link>
+                    </Button>
                     {canManage &&
                     (engagement.status === "draft" || engagement.status === "active") ? (
                       <Button
