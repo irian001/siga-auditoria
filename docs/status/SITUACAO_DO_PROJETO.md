@@ -7,7 +7,7 @@ aliases:
 type: status-projeto
 domain: governanca-desenvolvimento
 status: ativo
-version: 2.3
+version: 2.4
 created: 2026-08-03
 updated: 2026-08-06
 owner: responsavel-projeto
@@ -85,8 +85,12 @@ Concluída e homologada:
 - tabelas sem registros artificiais, preservando os estados vazios;
 - homologação da Camada 3 registrada pelo responsável;
 - pendência documental não bloqueante: reconciliação do identificador temporal da migration local e remota.
-- Camada 4 em implementação local controlada na branch `feat/eqp-001-camada-4-associacao`;
-- migration da Camada 4 preparada, ainda não aplicada no Supabase oficial;
+- Camada 4 implementada localmente na branch `feat/eqp-001-camada-4-associacao`;
+- migration da Camada 4 aplicada no Supabase oficial sob o identificador remoto `20260806162439_eqp_engagement_team_assignment`;
+- índice de unicidade, função privada, grant de inserção e política RLS de `INSERT` verificados no banco oficial;
+- `authenticated` não recebeu permissões de atualização ou exclusão, `anon` não recebeu execução da função privada e nenhum registro artificial foi criado;
+- treze testes direcionados, lint dos arquivos da camada e build local aprovados;
+- publicação da branch e abertura do PR pendentes;
 - Lovable e Superpowers não utilizados.
 
 As SDDs de painel e planejamento permanecem posteriores e dependem da sequência definida no Plano Mestre.
@@ -102,6 +106,7 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 - migration ACE-001 remota de tabelas: `20260805142219`;
 - migration ACE-001 remota de RPC: `20260805143933`;
 - migration ACE-001 remota de ACL: `20260805144054`;
+- migration EQP-001 Camada 4 remota: `20260806162439`;
 - repositório e GitHub permanecem como fontes oficiais de código e documentação.
 
 ## 5. Pendências e bloqueios
@@ -116,7 +121,7 @@ As SDDs de painel e planejamento permanecem posteriores e dependem da sequência
 
 ## 6. Próximo passo exato
 
-Revisar o diff local e a migration da Camada 4. A aplicação no Supabase oficial, publicação da branch e abertura do PR somente ocorrerão após essa revisão.
+Publicar a branch da Camada 4, abrir o PR e aguardar revisão e aprovação antes do merge na `main`.
 
 ## 7. Histórico de alterações
 
@@ -136,3 +141,4 @@ Revisar o diff local e a migration da Camada 4. A aplicação no Supabase oficia
 | 2.1 | 2026-08-06 | Homologação da Camada 3 após integração do PR #44 e abertura da preparação da Camada 4 | Ativo |
 | 2.2 | 2026-08-06 | Minuta da Camada 4 aprovada e plano restritivo preparado para aprovação | Ativo |
 | 2.3 | 2026-08-06 | Plano da Camada 4 aprovado e implementação local controlada iniciada | Ativo |
+| 2.4 | 2026-08-06 | Migration da Camada 4 aplicada e verificada no Supabase oficial; publicação e PR pendentes | Ativo |
